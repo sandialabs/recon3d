@@ -1,0 +1,317 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  PROJECT_NAME: python_template
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create logs directory
+        run: mkdir -p logs/
+
+      - name: Lint code
+        run: |
+          pip install pylint
+          pylint --output-format=text src/$PROJECT_NAME/ | tee logs/lint.log || pylint-exit $?
+
+      - name: Generate Lint Badge
+        run: |
+          pip install anybadge
+          test -d badges/ || mkdir -p badges/
+          if [ "${{ job.status }}" == "success" ]; then
+            PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' logs/lint.log)
+            echo "Extracted PYLINT_SCORE: $PYLINT_SCORE"  # Debug line
+            anybadge -o --label=lint --file=badges/lint.svg --value=${PYLINT_SCORE} 2=red 4=orange 8=yellow 10=green
+          else
+            anybadge -o -l lint -v failing -f badges/lint.svg -c gray
+          fi
+
+      - name: Upload Lint Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-badge
+          path: badges/lint.svg
+
+      - name: Upload Lint Log as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-log
+          path: logs/lint.log
+
+  version:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.event_name == 'push'
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+         pip install .
+
+
+      - name: Generate Version Badge
+        run: |
+          pip install anybadge
+          test -d badges/ || mkdir -p badges
+          VERSION=$(grep version pyproject.toml | cut -d "'" -f2)
+          echo $VERSION
+          anybadge --label=version --file=badges/version.svg --value=$VERSION --color=blue
+          
+      - name: Upload Version Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-badge
+          path: badges/version.svg
+
+  test_coverage:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.event_name == 'push'
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install .[dev]
+          echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: |
+          pytest --cov=src/$PROJECT_NAME --cov-report=xml:coverage_reports/coverage.xml --cov-report=html:coverage_reports/htmlcov --cov-report=term --debug=trace tests/
+          
+      - name: Generate Coverage Badge
+        run: |
+          pip install anybadge
+          test -d badges/ || mkdir -p badges/
+          if [ "${{ job.status }}" = "success" ]; then
+            LINES_COVERED=$(grep -oP 'lines-covered="\K[0-9]+' coverage_reports/coverage.xml)
+            LINES_VALID=$(grep -oP 'lines-valid="\K[0-9]+' coverage_reports/coverage.xml)
+            if [ "$LINES_VALID" -ne 0 ]; then
+              COVERAGE_PERCENTAGE=$(awk "BEGIN {printf \"%.1f\", ($LINES_COVERED / $LINES_VALID) * 100}")
+              COLOR=$(awk -v coverage="$COVERAGE_PERCENTAGE" 'BEGIN {
+                  if (coverage < 40) { print "red" }
+                  else if (coverage < 80) { print "orange" }
+                  else if (coverage < 90) { print "yellow" }
+                  else { print "green" }
+              }')
+              anybadge -o -l test-coverage -v "$COVERAGE_PERCENTAGE%" -f badges/test-coverage.svg -c "$COLOR"
+            else
+              echo "Lines Valid is zero, cannot calculate coverage percentage."
+            fi
+          else
+            anybadge -o -l test-coverage -v failing -f badges/test-coverage.svg -c gray
+          fi
+
+      - name: Upload Coverage Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: badges/test-coverage.svg
+
+      - name: Upload Coverage Reports as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: coverage_reports/
+
+  build_api_docs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+  
+      - name: Install dependencies
+        run: |
+          pip install .[dev]
+          # echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
+      - name: Build API docs
+        run: |
+          echo "Project Name: $PROJECT_NAME"
+          pdoc ./src/$PROJECT_NAME/  -o ./docs/api
+
+      - name: Generate API Badge
+        run: |
+          pip install anybadge
+          test -d badges/ || mkdir -p badges
+          if [ "${{ job.status }}" = "success" ]; then
+            anybadge -o -l api -v passing -f badges/api.svg -c green
+          else
+            anybadge -o -l api -v failing -f badges/api.svg -c red
+          fi
+
+      - name: Upload API Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-badge
+          path: badges/api.svg
+
+      - name: Upload API docs as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-docs
+          path: docs/api/
+
+  build_userguide:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install mdbook
+        run: cargo install mdbook
+
+      - name: Build User Guide
+        run: mdbook build ./docs/userguide/
+
+      - name: Generate User Guide Badge
+        run: |
+          test -d badges/ || mkdir -p badges
+          if [ "${{ job.status }}" = "success" ]; then
+            curl -L -o badges/userguide.svg "https://img.shields.io/badge/userguide-Book-blue?logo=mdbook&logoColor=FFFFFF"
+          else
+            curl -L -o badges/userguide.svg "https://img.shields.io/badge/userguide-failing-red?logo=mdbook&logoColor=FFFFFF"
+          fi
+
+      - name: Upload Userguide Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: userguide-badge
+          path: badges/userguide.svg
+
+      - name: Upload Book as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: userguide-book
+          path: docs/userguide/book/
+
+  pages:
+    runs-on: ubuntu-latest
+    needs: [linting, version, test_coverage, build_api_docs, build_userguide]  # Ensure this job runs after both previous jobs
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Lint Badge Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lint-badge
+          path: ./badges/
+
+      - name: Download Lint Log Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lint-log
+          path: ./logs/
+
+      - name: Download Version Badge Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: version-badge
+          path: ./badges/
+
+      - name: Download Coverage Badge Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-badge
+          path: ./badges/
+
+      - name: Download Coverage Reports Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-reports
+          path: ./coverage_reports/
+
+      - name: Download API Badge Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: api-badge
+          path: ./badges/
+
+      - name: Download API Badge Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: api-docs
+          path: ./docs/api/
+
+      - name: Download Userguide Badge Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: userguide-badge
+          path: ./badges/
+
+      - name: Download Userguide Book Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: userguide-book
+          path: ./docs/userguide/book/    
+
+      - name: Push badges and logs to GitHub Pages
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git checkout -B gh-pages  # Create or switch to gh-pages branch
+          
+          # Add the copied files to the Git index
+          git add -f logs/lint.log badges/lint.svg                 # linting
+          git add -f badges/version.svg                            # version
+          git add -f badges/test-coverage.svg coverage_reports/    # tests
+          git add -f badges/api.svg docs/api/                      # api
+          git add -f badges/userguide.svg docs/userguide/          # userguide
+          
+          # Commit the changes
+          git commit -m "Update badges and logs from linting and test coverage jobs" || echo "No changes to commit"
+          
+          # Push to the gh-pages branch
+          git push origin gh-pages --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

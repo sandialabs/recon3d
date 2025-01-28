@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python_template"
+authors = [
+  {email = "john_doe@github.com", name = "John Doe"},
+]
+description = "Python Template"
+readme = "README.md"
+requires-python = ">=3.11, <=3.12"
+dependencies = [
+    "h5py",
+]
+version = '0.1.0'
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    #"docstr-coverage",
+    #"docutils<0.18,>=0.14",
+    "flake8",
+    "pdbp",
+    "pytest==8.3.3",
+    "pytest-cov==5.0.0",
+    "pdoc",
+]
+
+[project.urls]
+#Documentation = ""
+#Repository = ""
+
+# CLI Entry Points
+# https://setuptools.pypa.io/en/latest/userguide/entry_point.html
+[project.scripts]
+#hello="python_template.command_line:hello"
+

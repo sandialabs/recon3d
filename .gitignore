@@ -1,0 +1,46 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Documentation output directories (comment these out if you want to push locally-built docs)
+docs/api/         
+docs/userguide/book/ 
+docs/userguide/target/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test results
+*.coverage
+*.cover
+nosetests.xml
+coverage.xml
+*.hypothesis/
+coverage_reports/          # Uncomment if you want to ignore API docs
+
+# Other files to ignore
+*.sqlite3
+*.db
