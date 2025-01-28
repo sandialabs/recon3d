@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  PROJECT_NAME: python_template
+  PROJECT_NAME: recon3d
 
 jobs:
   linting:

@@ -1,0 +1,39 @@
+cli_entry_points:
+- instance_analysis
+- image_to_voxel
+
+semantic_images_dir: tests/data/cylinder_machined_semantic # (str) path to images, e.g., /Users/chovey/recon3d/examples/fimage/
+semantic_images_type: .tif # (str) .tif | .tiff options are supported
+semantic_imagestack_name: machined_cylinder # (str) name for the image stack
+
+class_labels:
+  air:
+    value: 0
+    instance_analysis:
+      include: False 
+      min_feature_size: 0
+  metal:
+    value: 1
+    instance_analysis:
+      include: False
+      min_feature_size: 0
+  pore:
+    value: 2
+    instance_analysis:
+      include: True
+      min_feature_size: 12
+
+voxel_size:
+  dx: 1.0 # (float), real space units of the voxel size in x
+  dy: 1.0 # (float), real space units of the voxel size in y
+  dz: 1.0 # (float), real space units of the voxel size in z
+
+origin:
+  x0: 0.0 # (float), real space units of the origin in x
+  y0: 0.0 # (float), real space units of the origin in y
+  z0: 0.0 # (float), real space units of the origin in z
+
+pixel_units: micron # (str), real length dimension of eacah pixel
+
+out_dir: recon3d/data/output # output path for the processed files
+h5_filename: cylinder_machined # output h5 file name, no extension needed

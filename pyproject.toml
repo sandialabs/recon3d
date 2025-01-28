@@ -3,36 +3,80 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "python_template"
+name = "recon3d"
 authors = [
-  {email = "john_doe@github.com", name = "John Doe"},
+  {email = "apolon@sandia.gov", name = "Andrew Polonsky"},
+  {email = "chovey@sandia.gov", name = "Chad Hovey"},
+  {email = "jmemery@sandia.gov", name = "John Emery"},
+  {email = "pchao@sandia.gov", name = "Paul Chao"},
 ]
-description = "Python Template"
-readme = "README.md"
-requires-python = ">=3.11, <=3.12"
+requires-python = ">=3.11, <3.12"
 dependencies = [
-    "h5py",
+    "automesh==0.2.9",
+    "connected-components-3d==3.18.0",
+    "fastremap==1.14.1",
+    "h5py==3.11.0",
+    "matplotlib==3.9.0",
+    "numpy==1.26.4",
+    "scipy==1.14.0",
+    "scikit-image==0.24.0",
+    "scikit-learn==1.5.1",
+    "pillow==10.4.0",
+    "pyevtk==1.6.0",
+    "pyyaml==6.0.1",
 ]
-version = '0.1.0'
+version = '1.0.10'
 
 [project.optional-dependencies]
 dev = [
-    "black",
-    #"docstr-coverage",
-    #"docutils<0.18,>=0.14",
-    "flake8",
-    "pdbp",
-    "pytest==8.3.3",
+    "black==24.8.0",
+    "docstr-coverage==2.2.0",
+    "docutils<0.18,>=0.14",
+    "flake8==7.1.1",
+    "pdbp==1.5.4",
+    "pytest==8.3.2",
     "pytest-cov==5.0.0",
     "pdoc",
 ]
 
 [project.urls]
-#Documentation = ""
-#Repository = ""
+Documentation = "http://structmechtools.cee-gitlab.lan/recon3d"
+Repository = "https://cee-gitlab.sandia.gov/structMechTools/recon3d"
+
+
+[docstr-coverage]
+ignore = [
+    "tests/",
+]
 
 # CLI Entry Points
 # https://setuptools.pypa.io/en/latest/userguide/entry_point.html
 [project.scripts]
-#hello="python_template.command_line:hello"
+recon3d="recon3d.command_line:recon3d"
+hello="recon3d.command_line:hello"
 
+# unique yml required for each following CLI function
+# see tutorial 1
+binary_to_semantic="recon3d.utility:main_binary_to_semantic"
+semantic_to_binary="recon3d.utility:main_semantic_to_binary"
+
+# see tutorial 2
+image_to_voxel="recon3d.hdf_io:image_to_voxel_command_line"
+
+# see tutorial 3
+instance_analysis="recon3d.instance_analysis:main"
+
+# see tutorial 4
+voxel_to_image="recon3d.hdf_io:voxel_to_image_command_line"
+
+# see tutorial 5
+downscale="recon3d.downscale:main"
+
+# see tutorial 6, deprecated, npy_to_mesh is now voxel_to_mesh
+# npy_to_mesh="recon3d.npy_to_mesh:main"
+
+# see tutorial 6, refactored from npy_to_mesh
+voxel_to_mesh="recon3d.voxel_to_mesh:main"
+
+# tutorial to come
+void_descriptor="recon3d.void_descriptor:main"

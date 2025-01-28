@@ -1,0 +1,9 @@
+npy_input: ~/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.npy
+output_file: ~/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_two_material.exo
+remove: []
+scale_x: 10.0 # float
+scale_y: 10.0
+scale_z: 10.0
+translate_x: -15.0 # float
+translate_y: -25.0
+translate_z: -20.0
