@@ -1,0 +1,8 @@
+IMPORTANT NOTICE: At installation, recon3d accesses and installs
+certain open-source packages that are not part of recon3d package
+as distributed. “Fastremap 1.14.1” and “connected-components-3d 3.18.0”
+are governed by the GNU Lesser General Public License v3.0 (LGPL). 
+By installing recon3d, you are accepting these licenses for these 
+packages.  We strongly advise consulting with a legal expert or 
+attorney prior to any redistribution or modification of recon3d 
+software to ensure compliance with the applicable licensing terms.
