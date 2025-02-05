@@ -5,5 +5,5 @@ multilingual = false
 src = "src"
 title = "User Guide"
 
-[preprocessor.cmdrun]
 [preprocessor.include]
+[preprocessor.cmdrun]
