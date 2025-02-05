@@ -6,3 +6,4 @@ src = "src"
 title = "User Guide"
 
 [preprocessor.cmdrun]
+[preprocessor.include]
