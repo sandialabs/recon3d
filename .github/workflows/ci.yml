@@ -211,25 +211,22 @@ jobs:
           default: true
           toolchain: stable
           components: rustfmt
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      # - uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          pip install .[dev]
-          echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+      # - name: Install dependencies
+      #   run: |
+      #     pip install .[dev]
+      #     echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
 
       - name: Install mdbook
-        run: |
-          cargo install mdbook 
-          cargo install mdbook-cmdrun 
-          cargo install mdbook-katex
+        run: cargo install mdbook mdbook-cmdrun mdbook-katex
 
       - name: Build User Guide
         run: |
           echo $PATH
-          mdbook build ./docs/userguide/
+          mdbook build .
 
       - name: Generate User Guide Badge
         run: |
