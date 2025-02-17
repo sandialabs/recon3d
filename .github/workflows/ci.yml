@@ -221,7 +221,10 @@ jobs:
           echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
 
       - name: Install mdbook
-        run: cargo install mdbook mdbook-cmdrun mdbook-katex
+        run: |
+          cargo install mdbook 
+          cargo install mdbook-cmdrun 
+          cargo install mdbook-katex
 
       - name: Build User Guide
         run: |
