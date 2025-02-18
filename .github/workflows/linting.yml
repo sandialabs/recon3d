@@ -35,7 +35,8 @@ jobs:
       - name: Lint code
         run: |
           pip install pylint
-          pylint --output-format=text src/$PROJECT_NAME/ | tee logs/lint.log || pylint-exit $?
+          BRANCH_NAME=${{ github.ref_name }}  # Get the branch name
+          pylint --output-format=text src/$PROJECT_NAME/ | tee logs/lint-${BRANCH_NAME}.log || pylint-exit $?
 
       - name: Generate Lint Badge
         run: |
@@ -60,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lint-log-${{ github.ref_name }}  # Include branch name in artifact name
-          path: logs/${{ github.ref_name }}/lint.log  # Path to the log file for the specific branch
+          path: logs/lint-${{ github.ref_name }}.log  # Path to the log file for the specific branch
   
       - name: Deploy to GitHub Pages
         run: |
@@ -68,24 +69,24 @@ jobs:
           git config --local user.email "github-actions@github.com"
           git checkout -B gh-pages  # Create or switch to gh-pages branch
 
-          git add -f logs/${{ github.ref_name }}/lint.log badges/lint.svg                 # lint log
-          git add -f badges/lint-${{ github.ref_name }}.svg
-
-
-          # Commit the changes
-          git commit -m "Update badges and logs from linting" || echo "No changes to commit"
-          
-          # Push to the gh-pages branch
-          git push origin gh-pages --force
+          mkdir -p logs/ # create logs directory if it doesn't exist
+          cp logs/lint-${{ github.ref_name }}.log logs/  # Copy the log file to the appropriate directory
+          git add logs/lint-${{ github.ref_name }}.log  # Stage the log file for commit
+          git commit -m "Update lint log for branch ${{ github.ref_name }}" || echo "No changes to commit"
+          git push origin gh-pages --force  # Push changes to the gh-pages branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        #   mkdir -p logs/ # create logs directory if it doesn't exist
-        #   mkdir -p logs/${{ github.ref_name }}  # Create directory for logs if it doesn't exist
-        #   cp logs/${{ github.ref_name }}/lint.log logs/${{ github.ref_name }}/  # Copy the log file to the appropriate directory
-        #   git add logs/${{ github.ref_name }}/lint.log  # Stage the log file for commit
-        #   git commit -m "Update lint log for branch ${{ github.ref_name }}" || echo "No changes to commit"
-        #   git push origin gh-pages --force  # Push changes to the gh-pages branch
+
+          #   git add -f logs/${{ github.ref_name }}/lint.log badges/lint.svg                 # lint log
+        #   git add -f badges/lint-${{ github.ref_name }}.svg
+
+
+        #   # Commit the changes
+        #   git commit -m "Update badges and logs from linting job" || echo "No changes to commit"
+          
+        #   # Push to the gh-pages branch
+        #   git push origin gh-pages --force
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
