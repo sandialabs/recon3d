@@ -67,6 +67,7 @@ jobs:
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
           git checkout -B gh-pages  # Create or switch to gh-pages branch
+          mkdir -p logs/ # create logs directory if it doesn't exist
           mkdir -p logs/${{ github.ref_name }}  # Create directory for logs if it doesn't exist
           cp logs/${{ github.ref_name }}/lint.log logs/${{ github.ref_name }}/  # Copy the log file to the appropriate directory
           git add logs/${{ github.ref_name }}/lint.log  # Stage the log file for commit
