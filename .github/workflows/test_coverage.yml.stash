@@ -1,0 +1,87 @@
+name: Test Coverage
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install .[dev]
+          echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: |
+          pytest --cov=src/$PROJECT_NAME --cov-report=xml:coverage_reports/coverage.xml --cov-report=html:coverage_reports/htmlcov --cov-report=term --debug=trace tests/
+
+      - name: Generate Coverage Badge
+        run: |
+          pip install anybadge
+          test -d badges/ || mkdir -p badges/
+          BRANCH_NAME=${{ github.ref_name }}  # Get the branch name
+          if [ "${{ job.status }}" = "success" ]; then
+            LINES_COVERED=$(grep -oP 'lines-covered="\K[0-9]+' coverage_reports/coverage.xml)
+            LINES_VALID=$(grep -oP 'lines-valid="\K[0-9]+' coverage_reports/coverage.xml)
+            if [ "$LINES_VALID" -ne 0 ]; then
+              COVERAGE_PERCENTAGE=$(awk "BEGIN {printf \"%.1f\", ($LINES_COVERED / $LINES_VALID) * 100}")
+              COLOR=$(awk -v coverage="$COVERAGE_PERCENTAGE" 'BEGIN {
+                  if (coverage < 40) { print "red" }
+                  else if (coverage < 80) { print "orange" }
+                  else if (coverage < 90) { print "yellow" }
+                  else { print "green" }
+              }')
+              anybadge -o -l test-coverage -v "$COVERAGE_PERCENTAGE%" -f badges/test-coverage-${BRANCH_NAME}.svg -c "$COLOR"
+            else
+              echo "Lines Valid is zero, cannot calculate coverage percentage."
+            fi
+          else
+            anybadge -o -l test-coverage -v failing -f badges/test-coverage-${BRANCH_NAME}.svg -c gray
+          fi
+
+      - name: Upload Coverage Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge-${{ github.ref_name }}  # Include branch name in artifact name
+          path: badges/test-coverage-${{ github.ref_name }}.svg
+
+      - name: Upload Coverage Reports as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ github.ref_name }}  # Include branch name in artifact name
+          path: coverage_reports/
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git checkout -B gh-pages  # Create or switch to gh-pages branch
+          mkdir -p badges/${{ github.ref_name }}  # Create directory for badges if it doesn't exist
+          mkdir -p coverage_reports/${{ github.ref_name }}  # Create directory for coverage reports if it doesn't exist
+          cp badges/test-coverage-${{ github.ref_name }}.svg badges/${{ github.ref_name }}/  # Copy the badge
+          cp -r coverage_reports/* coverage_reports/${{ github.ref_name }}/  # Copy coverage reports
+          git add badges/${{ github.ref_name }}/* coverage_reports/${{ github.ref_name }}/  # Stage the files for commit
+          git commit -m "Update coverage badge and reports for branch ${{ github.ref_name }}" || echo "No changes to commit"
+          git push origin gh-pages --force  # Push changes to the gh-pages branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

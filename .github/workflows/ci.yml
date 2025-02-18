@@ -204,14 +204,27 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.event_name == 'push'
     steps:
-      - name: Checkout code
+      - name: checkout code
         uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install .[dev]
+      #    echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
 
       - name: Install mdbook
-        run: cargo install mdbook
+        run: cargo install mdbook mdbook-cmdrun mdbook-katex
 
       - name: Build User Guide
-        run: mdbook build ./docs/userguide/
+        run: mdbook build .
 
       - name: Generate User Guide Badge
         run: |

@@ -1,0 +1,59 @@
+name: Version
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install .
+
+      - name: Generate Version Badge
+        run: |
+          pip install anybadge
+          test -d badges/ || mkdir -p badges
+          BRANCH_NAME=${{ github.ref_name }}  # Get the branch name
+          VERSION=$(grep version pyproject.toml | cut -d "'" -f2)
+          echo $VERSION
+          anybadge --label=version --file=badges/version-${BRANCH_NAME}.svg --value=$VERSION --color=blue
+
+      - name: Upload Version Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-badge-${{ github.ref_name }}  # Include branch name in artifact name
+          path: badges/version-${{ github.ref_name }}.svg
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git checkout -B gh-pages  # Create or switch to gh-pages branch
+          mkdir -p badges/${{ github.ref_name }}  # Create directory for version badges if it doesn't exist
+          cp badges/version-${{ github.ref_name }}.svg badges/${{ github.ref_name }}/  # Copy the version badge
+          git add badges/${{ github.ref_name }}/*  # Stage the badge for commit
+          git commit -m "Update version badge for branch ${{ github.ref_name }}" || echo "No changes to commit"
+          git push origin gh-pages --force  # Push changes to the gh-pages branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

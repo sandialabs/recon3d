@@ -1,0 +1,97 @@
+name: Linting
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - dev
+
+env:
+  PROJECT_NAME: recon3d
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          default: true
+          toolchain: stable
+          components: rustfmt
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create logs directory
+        run: mkdir -p logs/
+
+      - name: Lint code
+        run: |
+          pip install pylint
+          BRANCH_NAME=${{ github.ref_name }}  # Get the branch name
+          pylint --output-format=text src/$PROJECT_NAME/ | tee logs/lint-${BRANCH_NAME}.log || pylint-exit $?
+
+      - name: Generate Lint Badge
+        run: |
+          pip install anybadge
+          test -d badges/ || mkdir -p badges/
+          BRANCH_NAME=${{ github.ref_name }}  # Get the branch name
+          if [ "${{ job.status }}" == "success" ]; then
+            PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' logs/lint-${BRANCH_NAME}.log)
+            echo "Extracted PYLINT_SCORE: $PYLINT_SCORE"  # Debug line
+            anybadge -o --label=lint --file=badges/lint-${BRANCH_NAME}.svg --value=${PYLINT_SCORE} 2=red 4=orange 8=yellow 10=green
+          else
+            anybadge -o -l lint -v failing -f badges/lint-${BRANCH_NAME}.svg -c gray
+          fi
+
+      - name: Upload Lint Badge as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-badge-${{ github.ref_name }}  # Include branch name in artifact name
+          path: badges/lint-${{ github.ref_name }}.svg
+
+      - name: Upload Lint Log as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-log-${{ github.ref_name }}  # Include branch name in artifact name
+          path: logs/lint-${{ github.ref_name }}.log  # Path to the log file for the specific branch
+  
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git checkout -B gh-pages  # Create or switch to gh-pages branch
+
+          mkdir -p logs/ 
+          mkdir -p badges/
+
+          git add -f logs/lint-${{ github.ref_name }}.log  # lint log
+          git add -f badges/lint-${{ github.ref_name }}.svg
+
+
+          # Commit the changes
+          git commit -m "Update badges and logs from linting job" || echo "No changes to commit"
+          
+          # Push to the gh-pages branch
+          git push origin gh-pages --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        #   mkdir -p logs/ # create logs directory if it doesn't exist
+        #   cp logs/lint-${{ github.ref_name }}.log logs/  # Copy the log file to the appropriate directory
+        #   git add logs/lint-${{ github.ref_name }}.log  # Stage the log file for commit
+        #   git commit -m "Update lint log for branch ${{ github.ref_name }}" || echo "No changes to commit"
+        #   git push origin gh-pages --force  # Push changes to the gh-pages branch
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+

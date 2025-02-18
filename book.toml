@@ -2,8 +2,10 @@
 authors = ["Andrew T. Polonsky"]
 language = "en"
 multilingual = false
-src = "src"
+src = "docs/userguide/src"
 title = "User Guide"
 
+[build]
+build-dir = "docs/userguide/book"
+
 [preprocessor.cmdrun]
-[preprocessor.include]
