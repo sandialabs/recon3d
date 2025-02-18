@@ -44,7 +44,7 @@ jobs:
           test -d badges/ || mkdir -p badges/
           BRANCH_NAME=${{ github.ref_name }}  # Get the branch name
           if [ "${{ job.status }}" == "success" ]; then
-            PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' logs/lint.log)
+            PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' logs/lint-${BRANCH_NAME}.log)
             echo "Extracted PYLINT_SCORE: $PYLINT_SCORE"  # Debug line
             anybadge -o --label=lint --file=badges/lint-${BRANCH_NAME}.svg --value=${PYLINT_SCORE} 2=red 4=orange 8=yellow 10=green
           else
