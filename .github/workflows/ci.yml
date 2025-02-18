@@ -224,7 +224,7 @@ jobs:
         run: cargo install mdbook mdbook-cmdrun mdbook-katex
 
       - name: Build User Guide
-        run: mdbook build ./docs/userguide/book/
+        run: mdbook build .
 
       - name: Generate User Guide Badge
         run: |
