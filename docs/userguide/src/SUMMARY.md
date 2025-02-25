@@ -15,4 +15,3 @@
 -----------
 
 [Contributors](contributors.md)
-
