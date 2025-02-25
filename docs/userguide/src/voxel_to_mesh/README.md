@@ -10,7 +10,13 @@ Consider, as an example, the following four images:
 
 letter_f_slice_0.tif | letter_f_slice_1.tif | letter_f_slice_2.tif | letter_f_slice_3.tif
 :---: | :---: | :---: | :---:
-![letter_f_slice_0.png](letter_f_slice_0.png) | ![letter_f_slice_1.png](letter_f_slice_1.png) | ![letter_f_slice_2.png](letter_f_slice_2.png) | ![letter_f_slice_3.png](letter_f_slice_3.png) | 
+
+<p align="center" width="100%">
+  <img src="letter_f_slice_0.png" alt="Slice_0" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="letter_f_slice_1.png" alt="Slice_1" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="letter_f_slice_2.png" alt="Slice_2" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="letter_f_slice_3.png" alt="Slice_3" width="20%" />
+</p>
 
 This stack of images as a NumPy array, saved to the `letter_f_3d.npy`, has the form:
 
@@ -59,6 +65,8 @@ Three `.yml` recipies are considered:
 
 Run `voxel_to_mesh` on `letter_f_3d.yml`,
 
+### STATIC
+
 ```sh
 (.venv)  recon3d> voxel_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d.yml
 This is /Users/chovey/recon3d/src/recon3d/voxel_to_mesh.py
@@ -70,6 +78,14 @@ mesh -i /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.npy -
 Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_xyz.npy
 Wrote output file: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.exo
 Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_xyz.npy
+```
+
+### DYNAMIC
+
+```sh
+voxel_to_mesh letter_f_3d.yml
+
+<!-- cmdrun voxel_to_mesh letter_f_3d.yml -->
 ```
 
 The resulting mesh appears in Cubit as
@@ -93,6 +109,8 @@ view from 1000 -500 1500
 
 Run `voxel_to_mesh` on `letter_f_3d_inverted.yml`,
 
+### STATIC
+
 ```sh
 (.venv)  recon3d> voxel_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
 This is /Users/chovey/recon3d/src/recon3d/voxel_to_mesh.py
@@ -104,6 +122,14 @@ mesh -i /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.npy -
 Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_xyz.npy
 Wrote output file: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_inverted.exo
 Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_xyz.npy
+```
+
+### DYNAMIC
+
+```sh
+voxel_to_mesh letter_f_3d_inverted.yml
+
+<!-- cmdrun voxel_to_mesh letter_f_3d_inverted.yml -->
 ```
 
 ![letter_f_3d_inverted.png](letter_f_3d_inverted.png)
@@ -118,6 +144,8 @@ Remark: For consistency with the following two-material case, we have changed th
 
 Run `voxel_to_mesh` on `letter_f_3d_inverted.yml`,
 
+### STATIC
+
 ```sh
 (.venv)  recon3d> voxel_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.yml
 This is /Users/chovey/recon3d/src/recon3d/voxel_to_mesh.py
@@ -129,6 +157,14 @@ mesh -i /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.npy -
 Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_xyz.npy
 Wrote output file: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_two_material.exo
 Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d_xyz.npy
+```
+
+### DYNAMIC
+
+```sh
+voxel_to_mesh letter_f_3d_two_material.yml
+
+<!-- voxel_to_mesh letter_f_3d_two_material.yml -->
 ```
 
 ![letter_f_3d_two_material.png](letter_f_3d_two_material.png)
