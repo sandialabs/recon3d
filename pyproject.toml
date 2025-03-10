@@ -25,8 +25,6 @@ dependencies = [
     "pyevtk==1.6.0",
     "pyyaml==6.0.1",
 ]
-# Do not manually update the version number.  Instead, make a branch, create
-# a release tag, push to the branch, and create a merge request.
 version = '2.0.0'
 
 [project.optional-dependencies]
