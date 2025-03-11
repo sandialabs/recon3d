@@ -1,5 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+# requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=76.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -25,7 +26,7 @@ dependencies = [
     "pyevtk==1.6.0",
     "pyyaml==6.0.1",
 ]
-version = '2.0.3'
+version = '2.0.4'
 
 [project.optional-dependencies]
 dev = [
@@ -41,7 +42,16 @@ dev = [
 ]
 
 [tool.setuptools]
+# By default, include-package-data is true in pyproject.toml,
+# so you do NOT have to specify this line.  It is here just for reference.
 include-package-data = true  # This is important to include non-Python files
+# include-package-data = false # This is important to include non-Python files
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+recon3d = ["*.txt", "*.rst", "*.npy", "*.py"]
 
 [project.urls]
 Documentation = "http://structmechtools.cee-gitlab.lan/recon3d"
