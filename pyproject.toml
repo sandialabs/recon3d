@@ -40,10 +40,12 @@ dev = [
     "pdoc",
 ]
 
+[tool.setuptools]
+include-package-data = true  # This is important to include non-Python files
+
 [project.urls]
 Documentation = "http://structmechtools.cee-gitlab.lan/recon3d"
 Repository = "https://cee-gitlab.sandia.gov/structMechTools/recon3d"
-
 
 [docstr-coverage]
 ignore = [
