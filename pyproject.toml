@@ -13,7 +13,7 @@ authors = [
 ]
 requires-python = ">=3.11, <3.12"
 dependencies = [
-    "automesh==0.2.9",
+    "automesh==0.3.1",
     "connected-components-3d==3.18.0",
     "fastremap==1.14.1",
     "h5py==3.11.0",
