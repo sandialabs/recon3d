@@ -60,7 +60,9 @@ git clone git@github.com:sandialabs/recon3d.git
 
 The preceding `git clone` command will clone the `recon3d` [repository](https://github.com/sandialabs/recon3d) into your current working directory by making a new folder called `recon3d`.
 
-Change into the `recond` directory,
+> **Note:** use of SSH for cloning *may* require the user to setup SSH keys in GitHub. Details of this process can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+
+Change into the `recon3d` directory,
 
 ```sh
 cd recon3d
@@ -77,41 +79,20 @@ pip install .
 Follow the instructions for the [Full Client Installation](#full-client-installation), replacing the `pip install .` command with the following:
 
 ```sh
-pip install .[dev]
+pip install -e .[dev]
 ```
 
-Git is required, and is present on most HPC hosts.  For a local host, install [Git](https://git-scm.com) if it is not present.
+The `-e` installs the code in editable form, suitable for development updates.
 
+## Minimal Client Installation
 
 Install `recon3d` from the [Python Package Index (PyPI)](https://pypi.org/project/recon3d/).
-
 
 ```sh
 pip install recon3d
 ```
 
-## Minimal Client Installation
-
 <!-- The simplest method to install the package is to utilize a wheel file, which can be found in the `dist` folder of the repository. This procedure should be platform independent and has been tested on macOS, Windows, and Linux. Download the wheel (`.whl` file) to install the pakage. -->
-
-To come.
-
-## Developer Installation
-
-
-Clone the repository into a location of your choice. The following will clone the repository into your current working directory by making a new folder entitled `recon3d`:
-
-```sh
-git clone git@github.com:sandialabs/recon3d.git
-```
-
-Note: use of SSH for cloning requires the user to setup SSH keys in GitHub. Details of this process can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
-
-Install the package in the editable (`-e` option):
-
-```sh
-pip install -e .[dev]
-```
 
 <!-- Install the wheel file, which includes all dependencies (internet connection required):
 
@@ -120,7 +101,9 @@ pip install -e .[dev]
 pip install .\dist\recon3d-1.0.7-py3-none-any.whl
 ``` -->
 
-Confirm the installation has succeeded succesffully by running the following from the command line:
+## All Installations
+
+Confirm the installation was successful by running the following from the command line:
 
 ```sh
 recon3d
