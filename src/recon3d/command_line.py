@@ -29,16 +29,16 @@ binary_to_semantic <path_to_file>.yml
 
     Example:
         # Edit path variables in
-        # ~/recon3d/recon3d/examples/binary_to_semantic.yml
-        (.venv) recon3d> downscale recon3d/examples/binary_to_semantic.yml
+        # ~/recon3d/docs/userguide/src/binary_to_semantic/binary_to_semantic.yml
+        (.venv) recon3d> binary_to_semantic binary_to_semantic.yml
 
 downscale <path_to_file>.yml
     Downscales images in a folder specified in the user input .yml file.
 
     Example:
         # Edit path variables in
-        # ~/recon3d/recon3d/examples/downscale_thunder.yml
-        (.venv) recon3d> downscale recon3d/examples/downscale_thunder.yml
+        # ~/recon3d/docs/userguide/src/downscale/downscale_thunder.yml
+        (.venv) recon3d> downscale downscale_thunder.yml
 
 hello
     Prints 'Hello world!' to the terminal to illustrate command line
@@ -51,8 +51,8 @@ image_to_voxel <path_to_file>.yml
 
     Example:
         # Edit path variables in
-        # ~/recon3d/recon3d/examples/image_to_voxel.yml
-        (.venv) recon3d> image_to_voxel recon3d/examples/image_to_voxel.yml
+        # ~/recon3d/docs/userguide/src/voxel_to_image/image_to_voxel.yml
+        (.venv) recon3d> image_to_voxel image_to_voxel.yml
 
 instance_analysis <path_to_file>.yml
     Digest a semantic segmention accessible as a folder containing an image
@@ -60,18 +60,8 @@ instance_analysis <path_to_file>.yml
 
     Example:
         # Edit path variables in
-        # ~/recon3d/recon3d/examples/instance_analysis.yml
-        (.venv) recon3d> instance_analysis recon3d/examples/instance_analysis.yml
-
-npy_to_mesh <path_to_file>.yml
-    Converts an instance or semantic segmentation, encoded as a .npy file,
-    to an Exodus II finite element mesh using automesh.
-    See https://autotwin.github.io/automesh/
-
-    Example:
-        # Edit path variables in
-        # ~/recon3d/tests/examples/letter_f_3d.yml
-        (.venv) recon3d> npy_to_mesh tests/examples/letter_f_3d.yml
+        # ~/recon3d/docs/userguide/src/instance_analysis/instance_analysis.yml
+        (.venv) recon3d> instance_analysis instance_analysis.yml
 
 semantic_to_binary <path_to_file>.yml
     Converts semantic image stack to series of binary image stacks in
@@ -79,18 +69,19 @@ semantic_to_binary <path_to_file>.yml
 
     Example:
         # Edit path variables in
-        # ~/recon3d/tests/examples/semantic_to_binary.yml
-        (.venv) recon3d> downscale recon3d/examples/semantic_to_binary.yml
+        # ~/recon3d/docs/userguide/src/binary_to_semantic/semantic_to_binary.yml
+        (.venv) recon3d> semantic_to_binary semantic_to_binary.yml
 
 void_descriptor <path_to_file>.yml
+    Work in progress.
     From a pore dataset contained within a hdf file specified by
     the input .yml file, compute the void descriptor attributes
     for the void descriptor function.
 
     Example:
         # Edit path variables in
-        # ~/recon3d/recon3d/examples/void_descriptor.yml
-        (.venv) recon3d> void_descriptor recon3d/examples/void_descriptor.yml
+        # ~/recon3d/docs/userguide/src/void_descriptor/void_descriptor.yml
+        (.venv) recon3d> void_descriptor void_descriptor.yml
 
 voxel_to_image <path_to_file>.yml
     From a dataset contained within a hdf file specified by the input
@@ -99,8 +90,19 @@ voxel_to_image <path_to_file>.yml
 
     Example:
         # Edit path variables in
+        # ~/recon3d/docs/userguide/src/voxel_to_image/voxel_to_image.yml
+        (.venv) recon3d> voxel_to_image voxel_to_image.yml
+
+voxel_to_mesh <path_to_file>.yml
+    Converts an instance or semantic segmentation, encoded as a .npy file,
+    to an Exodus II finite element mesh using automesh.
+    See https://autotwin.github.io/automesh/
+
+    Example:
+        # Edit path variables in
         # ~/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.yml
-        (.venv) recon3d> image_to_voxel docs/userguide/src/voxel_to_mesh/letter_f_3d.yml
+        (.venv) recon3d> voxel_to_mesh letter_f_3d.yml
+
 
 """
 

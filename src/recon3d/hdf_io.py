@@ -24,7 +24,8 @@ add_to_h5(data, hdf_path, hdf_group)
     Add data to an HDF5 file based on its type.
 
 image_to_voxel(yml_path)
-    Populate the HDF5 file with the semantic segmentation image stack specified in the YAML file, including metadata.
+    Populate the HDF5 file with the semantic segmentation image stack
+    specified in the YAML file, including metadata.
 
 image_to_voxel_command_line()
     The command line wrapper for the `image_to_voxel` function.
@@ -88,7 +89,8 @@ def create_hdf(hdf_path: Path, base_container: str) -> bool:
     """
     Prescribe foundational structure of the HDF5 file.
 
-    This function creates an HDF5 file at the specified path and initializes it with a base container group.
+    This function creates an HDF5 file at the specified path and initializes
+    it with a base container group.
 
     Parameters
     ----------
@@ -123,25 +125,31 @@ def modify_hdf_dataset(
     """
     Modify an existing HDF5 file to alter data within a container.
 
-    This function modifies an HDF5 file by creating, appending, or overwriting a dataset at the specified location.
+    This function modifies an HDF5 file by creating, appending, or overwriting
+    a dataset at the specified location.
 
     Parameters
     ----------
     hdf_path : Path
         The path to the location of the HDF5 file.
     dataset_loc : str
-        The internal path to the dataset in the HDF5 file (e.g., "file/container/container2/dataset").
+        The internal path to the dataset in the HDF5 file
+        (e.g., "file/container/container2/dataset").
     data : np.ndarray
-        The array to be written to the HDF5 file at the specified dataset location.
+        The array to be written to the HDF5 file at the specified dataset
+        location.
     dtype : type
-        The data type of the dataset (e.g., np.float64, np.int, np.uint16, for string: h5py.special_dtype(vlen=str)).
+        The data type of the dataset (e.g., np.float64, np.int, np.uint16,
+        for string: h5py.special_dtype(vlen=str)).
     operation : str
         The operation to perform on the dataset:
         - "create": create a new dataset
         - "append": append to an existing dataset along dimension 0
-        - "overwrite": overwrite an existing dataset along dimension 0 (e.g., shrinking dataset)
+        - "overwrite": overwrite an existing dataset along dimension 0
+          (e.g., shrinking dataset)
     mutable : bool
-        If True, the initial shape is zero in the first dimension, with no size limit.
+        If True, the initial shape is zero in the first dimension, with no
+        size limit.
 
     Returns
     -------
@@ -193,7 +201,8 @@ def modify_hdf_dataset(
                 )
                 return True
             else:
-                raise ValueError(f'Dataset already exists, cannot "{operation}"')
+                error_string = f"Dataset already exists, cannot {operation}"
+                raise ValueError(error_string)
 
         dataset = hdf_file[dataset_loc]
 
@@ -221,7 +230,8 @@ def write_attr_dict(hdf_path: Path, d: dict, dataset_loc: str) -> bool:
 
     hdf_path : path object to location of hdf file
     d: dict of attributes to add
-    dataset_loc: internal path to the dataset in the hdf file (e.g. "file/container/container2/dataset")
+    dataset_loc: internal path to the dataset in the hdf file
+    (e.g. "file/container/container2/dataset")
 
     """
 
@@ -285,8 +295,8 @@ def add_to_h5(
     """
     Add data to an HDF5 file.
 
-    This is a generic function that adds data to an HDF5 file. Specific implementations
-    are provided for different types of data.
+    This is a generic function that adds data to an HDF5 file. Specific
+    implementations are provided for different types of data.
 
     Parameters
     ----------
@@ -461,7 +471,8 @@ def _(
     """
     Add ellipsoid surface area data to an HDF5 file.
 
-    This function processes and adds ellipsoid surface area data to an HDF5 file.
+    This function processes and adds ellipsoid surface area data to an
+    HDF5 file.
 
     Parameters
     ----------
@@ -660,7 +671,8 @@ def _(
     raise NotImplementedError(
         "Ability to write out instance indices not yet implemented."
     )
-    # TODO: AP, write out as single variable length data instead of individual datasets (currently)
+    # TODO: AP, write out as single variable length data instead of
+    # individual datasets (currently)
     # https://docs.h5py.org/en/stable/special.html
     # dt = h5py.vlen_dtype(np.dtype('int32'))
     instance_indices = data
@@ -961,7 +973,8 @@ def voxel_to_image(yml_path: Path) -> Path:
     """
     Save the image data within the HDF5 file as TIFFs in a new directory.
 
-    This function reads the YAML file to obtain the necessary parameters, extracts the image data from the HDF5 file,
+    This function reads the YAML file to obtain the necessary parameters,
+    extracts the image data from the HDF5 file,
     and saves the images as TIFF files in a specified directory.
 
     Parameters
@@ -1030,8 +1043,9 @@ def voxel_to_image_command_line():
     """
     The command line wrapper for the `voxel_to_image` function.
 
-    This function sets up the command line argument parser, parses the input arguments,
-    and calls the `voxel_to_image` function with the provided YAML input file.
+    This function sets up the command line argument parser, parses the input
+    arguments, and calls the `voxel_to_image` function with the provided YAML
+    input file.
 
     Parameters
     ----------
