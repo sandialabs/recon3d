@@ -11,6 +11,8 @@ authors = [
   {email = "jmemery@sandia.gov", name = "John Emery"},
   {email = "pchao@sandia.gov", name = "Paul Chao"},
 ]
+readme = "README.md"  # Specify the README file for long description
+long_description_content_type = "text/markdown"  # Change to 'text/x-rst' if using reStructuredText
 requires-python = ">=3.11, <3.12"
 dependencies = [
     "automesh==0.3.1",
