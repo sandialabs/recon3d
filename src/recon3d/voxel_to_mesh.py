@@ -104,9 +104,7 @@ def validate_recipe(*, recipe: AutomeshRecipe) -> bool:
     all_ints = [isinstance(x, int) for x in removes]
     all_nonneg = [x >= 0 for x in removes]
     assert all(all_ints), f"{removes} must be a list of integers"
-    assert all(
-        all_nonneg
-    ), f"{removes} must be a list of non-negative integers"
+    assert all(all_nonneg), f"{removes} must be a list of non-negative integers"
 
     assert amr.scale_x > 0.0, f"{amr.scale_x} must be > 0.0"
     assert amr.scale_y > 0.0, f"{amr.scale_y} must be > 0.0"

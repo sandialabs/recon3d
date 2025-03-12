@@ -1,14 +1,18 @@
 """
-Basic workflow for processing grayscale image stacks to labeled images for feature property measurement.
+Basic workflow for processing grayscale image stacks to labeled images for
+feature property measurement.
 
-This module supports multiple phases (>2 phases) and includes simple segmentation for demonstration purposes. 
-It writes outputs as image directories, but can be integrated with HDF for internal dataset storage.
+This module supports multiple phases (>2 phases) and includes simple
+segmentation for demonstration purposes.
+
+It writes outputs as image directories, but can be integrated with HDF for
+internal dataset storage.
 """
 
 # TODO Integrate with HDF writing
 # TODO Integrate with feature measurements
 # TODO Use constants for Z axis in other module
-# TODO Simplify/Impose structure for image directory (would be dataset directory in HDF)
+# TODO Simplify/Impose structure for image directory (dataset directory in HDF)
 # to remove magic numbers and indexing of phase_paths and label_paths
 # TODO Devise better solution for multiphase support without if/else blocks
 
@@ -79,8 +83,10 @@ def calc_moment(
     Parameters
     ----------
     indices : np.ndarray[np.int32]
-        Array of [Z,Y,X] indices corresponding to the feature's voxel locations.
-        The shape of the array should be (n, 3), where n is the number of voxels of the feature.
+        Array of [Z,Y,X] indices corresponding to the feature's voxel
+        locations.
+        The shape of the array should be (n, 3), where n is the number of
+        voxels of the feature.
         Example: np.array([[Z1, Y1, X1], [Z2, Y2, X2], ..., [Zn, Yn, Xn]]).
     p : int
         Order of the moment for the X dimension.
@@ -94,7 +100,8 @@ def calc_moment(
     Returns
     -------
     float
-        The 3D central moment (translation invariant) in pixel units normalized by object volume.
+        The 3D central moment (translation invariant) in pixel units
+        normalized by object volume.
 
     Raises
     ------
@@ -142,8 +149,10 @@ def center_of_mass(
     Parameters
     ----------
     indices : np.ndarray[np.int32]
-        Array of [Z,Y,X] indices corresponding to the feature's voxel locations.
-        The shape of the array should be (n, 3), where n is the number of voxels of the feature.
+        Array of [Z,Y,X] indices corresponding to the feature's voxel
+        locations.
+        The shape of the array should be (n, 3), where n is the number of
+        voxels of the feature.
         Example: np.array([[Z1, Y1, X1], [Z2, Y2, X2], ..., [Zn, Yn, Xn]]).
     resolution : Resolution
         Resolution of the voxel grid in each dimension (dx, dy, dz).
@@ -330,7 +339,8 @@ def equivalent_spherical_diameter(
     Returns
     -------
     Length
-        The equivalent spherical diameter of the feature in the same units as the resolution.
+        The equivalent spherical diameter of the feature in the same units as
+        the resolution.
 
     Examples
     --------
@@ -370,14 +380,19 @@ def fit_ellipsoid(
     Parameters
     ----------
     indices : np.ndarray
-        Array of [Z,Y,X] indices corresponding to the feature's voxel locations.
-        The shape of the array should be (n, 3), where n is the number of voxels of the feature.
+        Array of [Z,Y,X] indices corresponding to the feature's voxel
+        locations.
+        The shape of the array should be (n, 3), where n is the number of
+        voxels of the feature.
     centroid : Centroid
-        Centroid location for X, Y, and Z axis, respectively, in spatial coordinates (e.g., microns).
+        Centroid location for X, Y, and Z axis, respectively, in spatial
+        coordinates (e.g., microns).
     resolution : Resolution
-        Voxel resolution for X, Y, and Z dimensions, respectively, in length units (e.g., microns).
+        Voxel resolution for X, Y, and Z dimensions, respectively, in length
+        units (e.g., microns).
     origin : Origin
-        Optional origin in spatial coordinates if the volume has been previously transformed.
+        Optional origin in spatial coordinates if the volume has been
+        previously transformed.
 
     Returns
     -------
@@ -435,11 +450,11 @@ def fit_ellipsoid(
             semi_ax_lengths_px[sort[2]] * resolution.dx.value,
         ]
     )
-    ## some axes lengths are NAN, should overwrite to 0.0
+    # some axes lengths are NAN, should overwrite to 0.0
     semi_ax_lengths = np.nan_to_num(semi_ax_lengths, nan=0.0)
 
-    ## from docs on np.linalg.eig: The normalized (unit “length”) eigenvectors,
-    ## such that the column eigenvectors[:,i] is the eigenvector corresponding to the eigenvalue eigenvalues[i].
+    # from docs on np.linalg.eig: The normalized (unit “length”) eigenvectors,
+    # such that the column eigenvectors[:,i] is the eigenvector corresponding to the eigenvalue eigenvalues[i].
     ax_vectors = np.array(
         [
             eig_vec[:, sort[0]],
