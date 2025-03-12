@@ -136,14 +136,3 @@ which will provide the following output:
 ```sh
 <!-- cmdrun recon3d -->
 ```
-
-## Deployment Notes
-
-On some HPC systems, `automesh` must be compiled for the specific machine if
-the HPC `rust` compilers are out-of-date, or if the HPC does not have an outside
-internet connection.  From the `recon3d` directory,
-
-```sh
-# example
-module load ...
-```
