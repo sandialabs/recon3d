@@ -1,38 +1,103 @@
 # Installation
 
-Choose one of the two installation types below, [Client](#client-installation) or [Developer](#developer-installation).
+Choose one of the installation types, 
 
-This module currently requires Python 3.11, which can be installed from [python.org](https://www.python.org/downloads).
+1. [Full Client](#full-client-installation),
+2. [Developer](#developer-installation), or
+3. [Minimial Client](#minimal-client-installation).
 
----
+The **Client Installations** are recommended for users who will **use** `recon3d` in an analysis workflow.
+  - Knowledge of the Python programming language is not necessary.
+  - The Full Client includes the tutorial files.
+  - The Minimal Client does *not* include the tutorial files.
+
+The **Developer Installation** is recommended for users who will **create** or **update** functionality.  Knowledge of the Python programming language is required.
+
+<div class="warning">
+<strong>Warning:</strong> 
+For all installations, <a href="https://www.python.org/downloads">Python 3.11</a> is required.  Most HPC hosts have this version of Python.  If your host does not have this version, install it before proceeding.
+Git is required as well (except for the Minimal Client installation).  Git is present on most HPC hosts.  For a local host, install <a href="https://git-scm.com">Git</a> if it is not present.
+</div>
+
 ## Virtual Environment
 
-For both installation types,
-use of a [virtual environment](https://docs.python.org/3/library/venv.html) is recommended but not necessary.
+For all installations,
+a [virtual environment](https://docs.python.org/3/library/venv.html)
+is recommended but not necessary.
+
+HPC users may have to load a module to use Python 3.11, e.g.,
 
 ```sh
-python3.11 -m venv .venv # module requires python3.11
+module load python3.11  # or similar command specific to your host
+```
 
-# Activate the venv with one of the following:
+Select an installation path.  For example, these instructions show how to install to your home (`~`) directory.
+
+```sh
+cd ~                       # change to the destination directory, e.g., home (~)
+deactivate                 # deactivate any active virtual environment
+rm -rf .venv               # remove any previous virtual environment, e.g., ".venv"
+python3.11 -m venv .venv   # create a new virtual environment called ".venv"
+                           # with Python version 3.11
+```
+
+Activate the virtual environment based on your shell type,
+
+```sh
 source .venv/bin/activate       # for bash shell
 source .venv/bin/activate.csh   # for c shell
 source .venv/bin/activate.fish  # for fish shell
 .\.venv\Scripts\activate        # for powershell
 ```
 
----
-## Client Installation
+## Full Client Installation
+
+Clone the repository,
+
+```sh
+git clone git@github.com:sandialabs/recon3d.git
+```
+
+The preceding `git clone` command will clone the `recon3d` [repository](https://github.com/sandialabs/recon3d) into your current working directory by making a new folder called `recon3d`.
+
+Change into the `recond` directory,
+
+```sh
+cd recon3d
+```
+
+Install the `recon3d` module,
+
+```sh
+pip install .
+```
+
+## Developer Installation
+
+Follow the instructions for the [Full Client Installation](#full-client-installation), replacing the `pip install .` command with the following:
+
+```sh
+pip install .[dev]
+```
+
+Git is required, and is present on most HPC hosts.  For a local host, install [Git](https://git-scm.com) if it is not present.
 
 
 Install `recon3d` from the [Python Package Index (PyPI)](https://pypi.org/project/recon3d/).
+
 
 ```sh
 pip install recon3d
 ```
 
-## Developer Installation
+## Minimal Client Installation
 
 <!-- The simplest method to install the package is to utilize a wheel file, which can be found in the `dist` folder of the repository. This procedure should be platform independent and has been tested on macOS, Windows, and Linux. Download the wheel (`.whl` file) to install the pakage. -->
+
+To come.
+
+## Developer Installation
+
 
 Clone the repository into a location of your choice. The following will clone the repository into your current working directory by making a new folder entitled `recon3d`:
 
