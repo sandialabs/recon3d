@@ -63,7 +63,7 @@ Three `.yml` recipies are considered:
 <!-- cmdrun cat letter_f_3d.yml -->
 ```
 
-Run `voxel_to_mesh` on `letter_f_3d.yml`,
+`voxel_to_mesh letter_f_3d.yml` produces:
 
 ### STATIC
 
