@@ -1,7 +1,6 @@
 include MANIFEST.in
 include pyproject.toml
 include *.md
-include *.txt
 include *.rst
-recursive-include tests/data *
-recursive-include tests/examples *
+include *.txt
+recursive-include src/recon3d/tutorials *

@@ -1,0 +1,64 @@
+name: Package
+on:
+  pull_request:
+    branches: main
+  release:
+    types: published
+jobs:
+  Source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Requirements
+        run: pip install --upgrade build pip twine
+      - name: Build
+        run: python -m build .
+      - name: Check
+        run: twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+  #Wheel:
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      os: [macos-latest, ubuntu-latest, windows-latest]
+  #  runs-on: ${{ matrix.os }}
+  #  steps:
+  #    - name: Checkout
+  #      uses: actions/checkout@v4
+  #    - name: Python
+  #      uses: actions/setup-python@v5
+  #      with:
+  #        python-version: 3.12
+  #    - name: Requirements
+  #      run: pip install --upgrade build pip twine
+  #    - name: Wheel
+  #      run: python -m build . --wheel
+  #    - name: Check
+  #      run: twine check dist/*
+  #    - uses: actions/upload-artifact@v4
+  #      with:
+  #        name: ${{ matrix.os }}-dist
+  #        path: dist
+  Twine:
+    # needs: [Source, Wheel]
+    needs: Source
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+      - uses: actions/setup-python@v5
+        with:
+          check-latest: true
+          python-version: 3.12
+      - name: Requirements
+        run: pip install --upgrade pip twine
+      - name: Upload
+        if: github.event_name == 'release'
+        run: twine upload -u __token__ -p ${{ secrets.PYPI_RECON3D_TOKEN }} dist/*
