@@ -19,7 +19,25 @@ For all installations, <a href="https://www.python.org/downloads">Python 3.11</a
 Git is required as well (except for the Minimal Client installation).  Git is present on most HPC hosts.  For a local host, install <a href="https://git-scm.com">Git</a> if it is not present.
 </div>
 
-## Virtual Environment
+## Full Client Installation
+
+Clone the repository,
+
+```sh
+git clone git@github.com:sandialabs/recon3d.git
+```
+
+The preceding `git clone` command will clone the `recon3d` [repository](https://github.com/sandialabs/recon3d) into your current working directory by making a new folder called `recon3d`.
+
+> **Note:** use of SSH for cloning *may* require the user to setup SSH keys in GitHub. Details of this process can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+
+Change into the `recon3d` directory,
+
+```sh
+cd recon3d
+```
+
+### Virtual Environment
 
 For all installations,
 a [virtual environment](https://docs.python.org/3/library/venv.html)
@@ -50,23 +68,27 @@ source .venv/bin/activate.fish  # for fish shell
 .\.venv\Scripts\activate        # for powershell
 ```
 
-## Full Client Installation
+### `automesh` Prerequisite
 
-Clone the repository,
+If the host has an out-of-date `rust` compiler, then `automesh` Python wheel
+must be built for the specific host,
 
 ```sh
+cd ~/temp
 git clone git@github.com:sandialabs/recon3d.git
+module load ...
+python3.11 -m venv .venv
+# pip install build
+# python -m build  # makes the .whl
+pip install maturin
+python3.11 -m maturin build --release -F python -i /usr/bin/python3.11
+pip install . --force-reinstall --no-cache-dir
+pip install automesh-0.3.1-cp311-cp311-manylinux_2_28_x86_64.whl
+twine upload automesh-0.3.1-cp311-cp311-manylinux_2_28_x86_64.whl
+pip install --trusted-host pypi.org automesh-0.3.1-cp311-cp311-manylinux_2_28_x86_64.whl
 ```
 
-The preceding `git clone` command will clone the `recon3d` [repository](https://github.com/sandialabs/recon3d) into your current working directory by making a new folder called `recon3d`.
-
-> **Note:** use of SSH for cloning *may* require the user to setup SSH keys in GitHub. Details of this process can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
-
-Change into the `recon3d` directory,
-
-```sh
-cd recon3d
-```
+### Install `recon3d`
 
 Install the `recon3d` module,
 
@@ -113,4 +135,15 @@ which will provide the following output:
 
 ```sh
 <!-- cmdrun recon3d -->
+```
+
+## Deployment Notes
+
+On some HPC systems, `automesh` must be compiled for the specific machine if
+the HPC `rust` compilers are out-of-date, or if the HPC does not have an outside
+internet connection.  From the `recon3d` directory,
+
+```sh
+# example
+module load ...
 ```
