@@ -11,6 +11,7 @@ authors = [
   {email = "jmemery@sandia.gov", name = "John Emery"},
   {email = "pchao@sandia.gov", name = "Paul Chao"},
 ]
+readme = "README.md"  # Specify the README file for long description
 requires-python = ">=3.11, <3.12"
 dependencies = [
     "automesh==0.3.1",
