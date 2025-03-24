@@ -1,8 +1,10 @@
 cli_entry_points:
 - image_to_voxel
+
 semantic_images_dir: tests/data/letter_f
 semantic_images_type: .tif
 semantic_imagestack_name: letter_f_test
+
 voxel_size:
   dx: 1.0
   dy: 1.0
@@ -12,5 +14,6 @@ origin:
   y0: 0.0 # (float), real space units of the origin in y
   z0: 0.0 # (float), real space units of the origin in z
 pixel_units: "voxel"
+
 out_dir: recon3d/data/temp
 h5_filename: letter_f_test

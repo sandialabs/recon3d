@@ -4,7 +4,7 @@ Choose one of the installation types,
 
 1. [Full Client](#full-client-installation),
 2. [Developer](#developer-installation), or
-3. [Minimial Client](#minimal-client-installation).
+3. [Minimal Client](#minimal-client-installation).
 
 The **Client Installations** are recommended for users who will **use** `recon3d` in an analysis workflow.
   - Knowledge of the Python programming language is not necessary.
@@ -114,7 +114,7 @@ Install `recon3d` from the [Python Package Index (PyPI)](https://pypi.org/projec
 pip install recon3d
 ```
 
-<!-- The simplest method to install the package is to utilize a wheel file, which can be found in the `dist` folder of the repository. This procedure should be platform independent and has been tested on macOS, Windows, and Linux. Download the wheel (`.whl` file) to install the pakage. -->
+<!-- The simplest method to install the package is to utilize a wheel file, which can be found in the `dist` folder of the repository. This procedure should be platform independent and has been tested on macOS, Windows, and Linux. Download the wheel (`.whl` file) to install the package. -->
 
 <!-- Install the wheel file, which includes all dependencies (internet connection required):
 

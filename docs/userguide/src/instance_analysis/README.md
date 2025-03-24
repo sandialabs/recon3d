@@ -2,7 +2,7 @@
 
 ---
 
-`instance_analysis` takes a semantic image stack and generates an instance image stack for one semantic label at a time, as well as statistics on those instaces, such as size, shape from a best-fit ellispoid, as well as neighborhood metrics.
+`instance_analysis` takes a semantic image stack and generates an instance image stack for one semantic label at a time, as well as statistics on those instances, such as size, shape from a best-fit ellipsoid, as well as neighborhood metrics.
 
 ---
 
