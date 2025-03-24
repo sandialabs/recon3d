@@ -12,6 +12,10 @@
 - [`downscale`](downscale/README.md)
 - [`voxel_to_mesh`](voxel_to_mesh/README.md)
 
+# Appendices
+
+- [Deployment](deployment.md)
+
 -----------
 
 [Contributors](contributors.md)

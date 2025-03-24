@@ -51,7 +51,7 @@ array([[[1, 1, 1],
 
 where there are four `z` images, and each image is spanned by the `y-x` plane.
 
-Three `.yml` recipies are considered:
+Three `.yml` recipes are considered:
 
 * A mesh composed of only of material 1 (`ID=1` in the segmentation)
 * A mesh composed only of material 0 (`ID=0`), and

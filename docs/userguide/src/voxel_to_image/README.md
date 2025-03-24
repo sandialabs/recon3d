@@ -6,7 +6,7 @@ The `image_to_voxel` function converts image data into a voxel representation su
 
 ---
 
-Some analyses may require the extraction of voxel data contained within an hdf file and conversion to an internal python type. One extension of this application is the direct conversion of a voxel array into an image stack, which may be utilized for subseqeunt downscaling and meshing activities.
+Some analyses may require the extraction of voxel data contained within an hdf file and conversion to an internal python type. One extension of this application is the direct conversion of a voxel array into an image stack, which may be utilized for subsequent downscaling and meshing activities.
 
 With ``recon3d`` installed in a virtual environment called `.venv`, the `image_to_voxel` and `voxel_to_image` functionality is provided as a command line interface. Providing a HDF file with voxel dataset of interest, image data can be extracted to a separate folder (and vice versa).
 

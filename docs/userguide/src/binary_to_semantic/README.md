@@ -28,7 +28,7 @@ Here an example image from a x-ray CT cross-section of a metal cylinder with voi
 </p>
 </figure>
 
-Semantic image stacks are one of the key datatypes used in the `recon3d` module, and are a key class of segmented data in the broader field of image processing. To perform statistical analyses on the metal or the pores independently for these images, we must convert binary image stacks to a semantic image stack, in which each separate constituent (air, metal, and porosity) is labelled with a unique integer label. In this way, semantic images group objects based on defined categories. Following the example above, the classes are labeled as air = 0 ***(black)***, metal = 1 ***(gray)*** and internal porosity = 2 ***(white)***.
+Semantic image stacks are one of the key data types used in the `recon3d` module, and are a key class of segmented data in the broader field of image processing. To perform statistical analyses on the metal or the pores independently for these images, we must convert binary image stacks to a semantic image stack, in which each separate constituent (air, metal, and porosity) is labelled with a unique integer label. In this way, semantic images group objects based on defined categories. Following the example above, the classes are labeled as air = 0 ***(black)***, metal = 1 ***(gray)*** and internal porosity = 2 ***(white)***.
 
 <figure>
 <p align="center" width="100%">
@@ -62,7 +62,7 @@ To further illustrate the semantic image stack, binary images from the class lab
   <img src="binary_pores.png" alt="Pores" width="30%" />
 </p>
 
-With `recon3d` installed in a virtual environment called `.venv`, the `instance_analysis` functionality is provided as a command line interface. Provided a segmented image stack containing a continious phase, such as the metal, containing pores, the semantic image stack can be generated.
+With `recon3d` installed in a virtual environment called `.venv`, the `instance_analysis` functionality is provided as a command line interface. Provided a segmented image stack containing a continuous phase, such as the metal, containing pores, the semantic image stack can be generated.
 
 `binary_to_semantic binary_to_semantic.yml` produces:
 
