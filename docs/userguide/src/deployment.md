@@ -1,6 +1,6 @@
 # Deployment
 
-The purpose of this section is to describe deployment from on Linux system with internet connection (machine 1) to a second similar Linux system without internet connection (machine 2).
+The purpose of this section is to describe deployment from a Linux system with internet connection (machine 1) to a second similar Linux system without internet connection (machine 2).
 
 ## Prerequisites
 
