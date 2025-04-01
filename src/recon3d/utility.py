@@ -875,15 +875,16 @@ def date_time_utc() -> str:
 
 def underline() -> str:
     """
-    Return a CTH commented underline composed of 78 dashes ('-') and a newline character ('\\n').
+    Return a commented underline composed of 78 dashes ('-') and a newline character ('\\n').
 
-    This function generates a string that represents a commented underline for CTH (a computational tool),
-    consisting of 78 dashes prefixed with a comment character ('* ') and followed by a newline character.
+    This function generates a string that represents a commented underline
+    consisting of 78 dashes prefixed with a comment character ('* ') and
+    followed by a newline character.
 
     Returns
     -------
     str
-        A string representing a CTH commented underline.
+        A string representing a commented underline.
 
     Examples
     --------
@@ -1235,10 +1236,8 @@ def read_images(
     file_type: str = ".tif",
 ) -> np.ndarray:
     """
-    Read images from a directory and return a NumPy array representation of the images.
-
-    This function reads images from the specified directory and returns a NumPy array
-    representation of the images.
+    Read images from a directory and return a NumPy array representation of
+    the images.
 
     Parameters
     ----------

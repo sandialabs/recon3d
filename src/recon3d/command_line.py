@@ -40,6 +40,14 @@ downscale <path_to_file>.yml
         # ~/recon3d/docs/userguide/src/downscale/downscale_thunder.yml
         (.venv) recon3d> downscale downscale_thunder.yml
 
+grayscale_image_stack_to_segmentation <path_to_file>.yml
+    Converts a series of grayscale images to a segmentation.
+
+    Example:
+        # Edit path variables in
+        # ~/recon3d/docs/userguide/src/utilities/grayscale_image_stack_to_segmentation.yml
+        (.venv) recon3d> grayscale_image_stack_to_segmentation grayscale_image_stack_to_segmentation.yml
+
 hello
     Prints 'Hello world!' to the terminal to illustrate command line
     entry points.
@@ -54,8 +62,17 @@ image_to_voxel <path_to_file>.yml
         # ~/recon3d/docs/userguide/src/voxel_to_image/image_to_voxel.yml
         (.venv) recon3d> image_to_voxel image_to_voxel.yml
 
+image_stack_to_array <path_to_file>.yml
+    From a series of images in a folder specified in the user input
+    .yml file, creates a npy file in the specified output folder.
+
+    Example:
+        # Edit path variables in
+        # ~/recon3d/docs/userguide/src/utilities/image_stack_to_array.yml
+        (.venv) recon3d> image_stack_to_array image_stack_to_array.yml
+
 instance_analysis <path_to_file>.yml
-    Digest a semantic segmention accessible as a folder containing an image
+    Digest a semantic segmentation accessible as a folder containing an image
     stack specified in the user input .yml file.
 
     Example:
@@ -130,8 +147,8 @@ def hello() -> str:
     """
     Simple example of a function hooked to a command line entry point.
 
-    This function serves as an example of how to hook a function to a command line
-    entry point. When called, it returns the canonical "Hello world!" string.
+    This function serves as an example of how to hook a function to a command
+    line entry point. When called, it returns the "Hello world!" string.
 
     Parameters
     ----------
@@ -150,9 +167,9 @@ def module_version():
     """
     Prints the module version and the yml_schema_version.
 
-    This function retrieves the version of the module and the YAML schema version
-    from the `Constants` class in the `cs` module. It prints these versions to the
-    command window and returns the module version.
+    This function retrieves the version of the module and the YAML schema
+    version from the `Constants` class in the `cs` module. It prints these
+    versions to the command window and returns the module version.
 
     Parameters
     ----------
