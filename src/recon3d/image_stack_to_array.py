@@ -3,8 +3,8 @@
 import argparse
 from pathlib import Path
 from typing import NamedTuple
-import numpy as np
 
+import numpy as np
 import yaml
 
 import recon3d.utility as ut
@@ -22,16 +22,16 @@ class Recipe(NamedTuple):
     out_dir: Path
 
 
-def save_image_stack_to_array(image_dir: Path, file_extension: str, save_dir: Path):
+def save_image_stack_to_array(image_dir: Path, file_extension: str, out_dir: Path):
     """
     Reads all images with a specified file extension from a directory,
     stores them in a numpy array, and saves the array to a .npy file in the
     specified directory.
 
     Parameters:
-        image_dir (Path): The directory from which to read images.
-        file_extension (str): The file extension of the images to read.
-        save_dir (Path): The directory where the .npy file will be saved.
+        image_dir: The directory from which to read images.
+        file_extension: The file extension of the images to read.
+        out_dir: The directory where the .npy file will be saved.
     """
     try:
         # Assuming 'ut.read_images' is a valid function that reads images and
@@ -39,7 +39,7 @@ def save_image_stack_to_array(image_dir: Path, file_extension: str, save_dir: Pa
         array_data = ut.read_images(image_dir, file_extension)
 
         # Correctly form the output file path
-        out_file_path = save_dir.joinpath(f"{image_dir.name}.npy")
+        out_file_path = out_dir.joinpath(f"{image_dir.name}.npy")
 
         # Save the numpy array to a .npy file
         np.save(out_file_path, array_data)
@@ -149,7 +149,7 @@ def image_to_stack_array(*, yml_input_file: Path) -> bool:
     save_image_stack_to_array(
         image_dir=recipe.image_dir,
         file_extension=recipe.image_type,
-        save_dir=recipe.out_dir,
+        out_dir=recipe.out_dir,
     )
 
     return True  # success

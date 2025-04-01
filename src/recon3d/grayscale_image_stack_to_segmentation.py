@@ -5,7 +5,11 @@ import argparse
 from pathlib import Path
 from typing import NamedTuple
 
+import numpy as np
+import skimage.filters as filter
 import yaml
+
+import recon3d.utility as ut
 
 
 class Recipe(NamedTuple):
@@ -14,7 +18,93 @@ class Recipe(NamedTuple):
     Attributes
     ----------
     """
-    # To come.
+
+    image_dir: Path
+    image_type: str
+    threshold: int | None
+    out_dir: Path
+
+
+def validate_recipe(*, recipe: Recipe) -> bool:
+    """Validate the given recipe.
+
+    Ensures that all values in the Recipe NamedTuple are valid.
+
+    Parameters
+    ----------
+    recipe : Recipe
+        The recipe to validate.
+
+    Raises
+    ------
+    AssertionError
+        If any of the recipe attributes are invalid.
+
+    Examples
+    --------
+    >>> recipe = Recipe(
+    ...     input_path=Path("path/to/input"),
+    ...     input_file_type=".tif",
+    ...     output_path=Path("path/to/output")
+    ... )
+    >>> validate_recipe(recipe)
+    True
+    """
+    assert isinstance(recipe.image_dir, Path), "image_dir must be a Path object"
+    assert recipe.image_dir.is_dir(), "image_dir must be a directory"
+    assert isinstance(recipe.image_type, str), "image_type must be a string"
+    assert recipe.image_type in [
+        ".tif",
+        ".tiff",
+    ], "image_type must be .tif or .tiff"
+    assert isinstance(recipe.out_dir, Path), "out_path must be a Path object"
+    assert recipe.out_dir.is_dir(), "out_path must be a directory"
+
+    assert isinstance(recipe.threshold, int | None), "threshold must be an int or None"
+    if recipe.threshold:
+        assert 0 < recipe.threshold, "0 < threshold"
+    else:
+        assert recipe.threshold is None
+
+    return True
+
+
+def segment_image_stack_save(
+    image_dir: Path, file_extension: str, out_dir: Path, threshold: int | None
+):
+    """
+    Reads all images with a specified file extension from a directory,
+    stores them in a numpy array, and saves the array to a .npy file in the
+    specified directory.
+
+    Parameters:
+        image_dir: The directory from which to read images.
+        file_extension: The file extension of the images to read.
+        out_dir: The directory where the .npy file will be saved.
+        threshold: cut off value between the two materials
+    """
+    try:
+        # Assuming 'ut.read_images' is a valid function that reads images and
+        # returns a numpy array
+        array_data = ut.read_images(image_dir, file_extension)
+
+        if threshold is None:
+            # overwrite
+            threshold = filter.threshold_otsu(array_data)
+        # Apply threshold: pixels greater than threshold are
+        # set to 1, others set to 0
+        binary_image = (array_data > threshold).astype(int)
+
+        # Correctly form the output file path
+        out_file_path = out_dir.joinpath(f"{image_dir.name}_segmentation.npy")
+
+        # Save the numpy array to a .npy file
+        np.save(out_file_path, binary_image)
+
+        print(f"Images from {image_dir} saved to {out_file_path}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 def grayscale_image_stack_to_segmentation(*, yml_input_file: Path) -> bool:
@@ -66,7 +156,24 @@ def grayscale_image_stack_to_segmentation(*, yml_input_file: Path) -> bool:
 
     print(f"Success: database created from file: {fin}")
     print(db)
-    breakpoint()
+
+    recipe = Recipe(
+        image_dir=Path(db["image_dir"]).expanduser(),
+        image_type=db["image_type"],
+        threshold=db.get("threshold", None),
+        out_dir=Path(db["out_dir"]).expanduser(),
+    )
+
+    validate_recipe(recipe=recipe)
+
+    segment_image_stack_save(
+        image_dir=recipe.image_dir,
+        file_extension=recipe.image_type,
+        threshold=recipe.threshold,
+        out_dir=recipe.out_dir,
+    )
+
+    return True  # success
 
 
 def main():
