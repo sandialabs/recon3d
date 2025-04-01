@@ -92,5 +92,10 @@ downscale="recon3d.downscale:main"
 # see tutorial 6, refactored from npy_to_mesh
 voxel_to_mesh="recon3d.voxel_to_mesh:main"
 
+# utilities
+image_stack_to_array="recon3d.image_stack_to_array:main"
+#
+grayscale_image_stack_to_segmentation="recon3d.grayscale_image_stack_to_segmentation:main"
+
 # tutorial to come
 void_descriptor="recon3d.void_descriptor:main"

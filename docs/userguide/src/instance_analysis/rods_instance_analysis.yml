@@ -28,7 +28,7 @@ origin:
   y0: 0.0 # (float), real space units of the origin in y
   z0: 0.0 # (float), real space units of the origin in z
 
-pixel_units: micron # (str), real length dimension of eacah pixel
+pixel_units: micron # (str), real length dimension of each pixel
 
 out_dir: recon3d/tests/data/output # output path for the processed files
 h5_filename: rods # output h5 file name, no extension needed

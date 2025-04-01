@@ -1,5 +1,5 @@
 cli_entry_points:
-- downscale  
+- downscale
 downscale_tolerance: 0.0001
 image_dir: tests/data/thunder_gray
 image_limit_factor: 2.0
