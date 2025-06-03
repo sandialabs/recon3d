@@ -60,6 +60,15 @@ hdf_to_image <path_to_file>.yml
         # ~/recon3d/docs/userguide/src/hdf_to_image/hdf_to_image.yml
         (.venv) recon3d> hdf_to_image hdf_to_image.yml
 
+image_stack_to_array <path_to_file>.yml
+    From a series of images in a folder specified in the user input
+    .yml file, creates a npy file in the specified output folder.
+
+    Example:
+        # Edit path variables in
+        # ~/recon3d/docs/userguide/src/utilities/image_stack_to_array.yml
+        (.venv) recon3d> image_stack_to_array image_stack_to_array.yml
+
 image_to_hdf <path_to_file>.yml
     From a single image (or image stack) in a folder specified in the
     user input .yml file, creates a hdf file in the specified
@@ -69,15 +78,6 @@ image_to_hdf <path_to_file>.yml
         # Edit path variables in
         # ~/recon3d/docs/userguide/src/image_to_hdf/image_to_hdf.yml
         (.venv) recon3d> image_to_hdf image_to_hdf.yml
-
-image_stack_to_array <path_to_file>.yml
-    From a series of images in a folder specified in the user input
-    .yml file, creates a npy file in the specified output folder.
-
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/utilities/image_stack_to_array.yml
-        (.venv) recon3d> image_stack_to_array image_stack_to_array.yml
 
 instance_analysis <path_to_file>.yml
     Digest a semantic segmentation accessible as a folder containing an image
@@ -117,7 +117,6 @@ void_descriptor <path_to_file>.yml
         # Edit path variables in
         # ~/recon3d/docs/userguide/src/void_descriptor/void_descriptor.yml
         (.venv) recon3d> void_descriptor void_descriptor.yml
-
 """
 
 
