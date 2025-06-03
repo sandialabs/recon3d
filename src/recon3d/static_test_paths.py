@@ -10,8 +10,8 @@ DOWNSCALE_YML = RECON3D_PATH.joinpath(
     "docs", "userguide", "src", "downscale", "downscale.yml"
 )
 
-IMAGE_TO_VOXEL_YML = RECON3D_PATH.joinpath(
-    "docs", "userguide", "src", "voxel_to_image", "image_to_voxel.yml"
+IMAGE_TO_HDF_YML = RECON3D_PATH.joinpath(
+    "docs", "userguide", "src", "image_to_hdf", "image_to_hdf.yml"
 )
 INSTANCE_ANALYSIS_YML = RECON3D_PATH.joinpath(
     "docs", "userguide", "src", "instance_analysis", "instance_analysis.yml"
@@ -29,6 +29,6 @@ SEMANTIC_TO_BINARY_YML = RECON3D_PATH.joinpath(
     "docs", "userguide", "src", "binary_to_semantic", "semantic_to_binary.yml"
 )
 
-VOXEL_TO_IMAGE_YML = RECON3D_PATH.joinpath(
-    "docs", "userguide", "src", "voxel_to_image", "voxel_to_image.yml"
+HDF_TO_IMAGE_YML = RECON3D_PATH.joinpath(
+    "docs", "userguide", "src", "hdf_to_image", "hdf_to_image.yml"
 )

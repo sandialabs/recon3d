@@ -76,7 +76,6 @@ def test_modify_hdf():
     )
 
     with h5py.File(hdf_path, "r") as hdf_file:
-
         found_dataset = hdf_file[dataset_loc]
         assert found_dataset.shape == (10, 30, 5)
         assert found_dataset.dtype == test_data_dtype
@@ -90,7 +89,6 @@ def test_modify_hdf():
     )
 
     with h5py.File(hdf_path, "r") as hdf_file:
-
         found_dataset = hdf_file[dataset_loc]
         assert found_dataset.shape == (22, 30, 5)
         assert found_dataset.dtype == test_data_dtype
@@ -102,7 +100,6 @@ def test_modify_hdf():
     )
 
     with h5py.File(hdf_path, "r") as hdf_file:
-
         found_dataset = hdf_file[dataset_loc]
         assert found_dataset.shape == (12, 30, 5)
         assert found_dataset.dtype == test_data_dtype
@@ -140,7 +137,6 @@ def test_write_attr_dict():
     hio.write_attr_dict(hdf_path, attr_dict, dataset_loc)
 
     with h5py.File(hdf_path, "r") as hdf_file:
-
         found_attrs_keys = dict(hdf_file[dataset_loc].attrs.items())
 
         assert attr_dict == found_attrs_keys
@@ -155,7 +151,7 @@ def test_add_to_h5():
 
     test_instance_analysis_yml = INSTANCE_ANALYSIS_YML
 
-    output_voxeldata_path = hio.image_to_voxel(test_instance_analysis_yml)
+    output_voxeldata_path = hio.image_to_hdf(test_instance_analysis_yml)
 
     # InstanceImageStack
     instance_name = "air"
@@ -257,24 +253,23 @@ def test_add_to_h5():
 
 
 ### CONVERT BETWEEN H5 <-> FOLDER OF IMAGES   ###
-def test_image_to_voxel():
+def test_image_to_hdf():
     """Check the images can be properly added to the h5"""
 
-    input_yml = VOXEL_TO_IMAGE_YML  # Path(__file__).parent.joinpath("examples", "voxel_to_image.yml")
+    input_yml = HDF_TO_IMAGE_YML  # Path(__file__).parent.joinpath("examples", "voxel_to_image.yml")
 
     with pytest.raises(ValueError) as err:
-        output_voxeldata_path = hio.image_to_voxel(input_yml)
-    err_msg = 'Error. Incorrect yml format. \n                This function requires the "cli_entry_points" key to contain "image_to_voxel", \n                but currently contains the following options: [\'voxel_to_image\'] '
+        output_voxeldata_path = hio.image_to_hdf(input_yml)
+    err_msg = 'Error. Incorrect yml format. \n                This function requires the "cli_entry_points" key to contain "image_to_hdf", \n                but currently contains the following options: [\'hdf_to_image\'] '
     assert err.type == ValueError
     assert err.value.args[0] == err_msg
 
     # overwrite
-    input_yml = IMAGE_TO_VOXEL_YML  # Path(__file__).parent.joinpath("examples", "image_to_voxel.yml")
+    input_yml = IMAGE_TO_HDF_YML  # Path(__file__).parent.joinpath("examples", "image_to_voxel.yml")
 
-    output_voxeldata_path = hio.image_to_voxel(input_yml)
+    output_voxeldata_path = hio.image_to_hdf(input_yml)
 
     with h5py.File(output_voxeldata_path, "r") as hdf_file:
-
         found_dataset = hdf_file["/VoxelData/letter_f_test"]
         assert found_dataset.shape == (4, 5, 3)
 
@@ -283,17 +278,17 @@ def test_image_to_voxel():
 
     """Check the images from the h5 file can be properly extracted"""
 
-    input_yml = IMAGE_TO_VOXEL_YML  # Path(__file__).parent.joinpath("examples", "image_to_voxel.yml")
+    input_yml = IMAGE_TO_HDF_YML  # Path(__file__).parent.joinpath("examples", "image_to_voxel.yml")
 
     with pytest.raises(ValueError) as err:
-        hio.voxel_to_image(input_yml)
-    err_msg = 'Error. Incorrect yml format. \n            This function requires the "cli_entry_points" key to contain "voxel_to_image", \n            but currently contains the following options: [\'image_to_voxel\'] '
+        hio.hdf_to_image(input_yml)
+    err_msg = 'Error. Incorrect yml format.\n            This function requires the "cli_entry_points" key to contain "hdf_to_image", \n            but currently contains the following options: [\'image_to_hdf\'] '
     assert err.type == ValueError
     assert err.value.args[0] == err_msg
 
-    input_yml = VOXEL_TO_IMAGE_YML  # Path(__file__).parent.joinpath("examples", "voxel_to_image.yml")
+    input_yml = HDF_TO_IMAGE_YML  # Path(__file__).parent.joinpath("examples", "voxel_to_image.yml")
 
-    output_images_path = hio.voxel_to_image(input_yml)
+    output_images_path = hio.hdf_to_image(input_yml)
 
     # There should be 4 images written out
     assert len(list(output_images_path.rglob("*.tif"))) == 21
