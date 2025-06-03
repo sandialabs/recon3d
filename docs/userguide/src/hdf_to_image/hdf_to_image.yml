@@ -1,7 +1,7 @@
 cli_entry_points:
-- voxel_to_image
+- hdf_to_image
 
-voxel_data_path: tests/data/machined_cylinder.h5 #input hdf file
+hdf_data_path: tests/data/machined_cylinder.h5 #input hdf file
 voxel_data_location: VoxelData/machined_cylinder #internal dataset path in hdf file
 
 image_parent_dir: tests/data/output/ # folder to contain folder of images

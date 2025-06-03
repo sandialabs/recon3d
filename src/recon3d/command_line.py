@@ -13,9 +13,7 @@ from typing import Final
 from importlib.metadata import version
 import recon3d.constants as cs
 
-CLI_DOCS: Final[
-    str
-] = """
+CLI_DOCS: Final[str] = """
 --------
 recon3d
 --------
@@ -52,15 +50,15 @@ hello
     Prints 'Hello world!' to the terminal to illustrate command line
     entry points.
 
-image_to_voxel <path_to_file>.yml
+image_to_hdf <path_to_file>.yml
     From a single image (or image stack) in a folder specified in the
     user input .yml file, creates a hdf file in the specified
     output folder.
 
     Example:
         # Edit path variables in
-        # ~/recon3d/docs/userguide/src/voxel_to_image/image_to_voxel.yml
-        (.venv) recon3d> image_to_voxel image_to_voxel.yml
+        # ~/recon3d/docs/userguide/src/image_to_hdf/image_to_hdf.yml
+        (.venv) recon3d> image_to_hdf image_to_hdf.yml
 
 image_stack_to_array <path_to_file>.yml
     From a series of images in a folder specified in the user input

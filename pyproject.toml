@@ -75,25 +75,32 @@ binary_to_semantic="recon3d.utility:main_binary_to_semantic"
 semantic_to_binary="recon3d.utility:main_semantic_to_binary"
 
 # see tutorial 2
-image_to_voxel="recon3d.hdf_io:image_to_voxel_command_line"
+# image_to_voxel="recon3d.hdf_io:image_to_voxel_command_line" # deprecated
+image_to_hdf="recon3d.hdf_io:image_to_hdf_command_line"
 
 # see tutorial 3
 instance_analysis="recon3d.instance_analysis:main"
 
 # see tutorial 4
-voxel_to_image="recon3d.hdf_io:voxel_to_image_command_line"
+# voxel_to_image="recon3d.hdf_io:voxel_to_image_command_line" # deprecated
+hdf_to_image="recon3d.hdf_io:hdf_to_image_command_line"
+
+# new tutorial 4b
+# image_to_npy # formerly image_stack_to_array
+# hdf_to_npy # see note on hdf_io.voxel_to_image function
 
 # see tutorial 5
 downscale="recon3d.downscale:main"
 
-# see tutorial 6, deprecated, npy_to_mesh is now voxel_to_mesh
+# see tutorial 6, deprecated, npy_to_mesh is now voxel_to_mesh # deprecated
 # npy_to_mesh="recon3d.npy_to_mesh:main"
 
-# see tutorial 6, refactored from npy_to_mesh
-voxel_to_mesh="recon3d.voxel_to_mesh:main"
+# see tutorial 6, refactored from npy_to_mesh # deprecated
+# voxel_to_mesh="recon3d.voxel_to_mesh:main" # deprecated
+npy_to_mesh="recon3d.npy_to_mesh:main" # new
 
 # utilities
-image_stack_to_array="recon3d.image_stack_to_array:main"
+# image_stack_to_array="recon3d.image_stack_to_array:main" # deprecated, now image_to_npy
 #
 grayscale_image_stack_to_segmentation="recon3d.grayscale_image_stack_to_segmentation:main"
 
