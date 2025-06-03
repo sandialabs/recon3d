@@ -13,9 +13,7 @@ from typing import Final
 from importlib.metadata import version
 import recon3d.constants as cs
 
-CLI_DOCS: Final[
-    str
-] = """
+CLI_DOCS: Final[str] = """
 --------
 recon3d
 --------
@@ -52,15 +50,15 @@ hello
     Prints 'Hello world!' to the terminal to illustrate command line
     entry points.
 
-image_to_voxel <path_to_file>.yml
-    From a single image (or image stack) in a folder specified in the
-    user input .yml file, creates a hdf file in the specified
-    output folder.
+hdf_to_image <path_to_file>.yml
+    From a dataset contained within a hdf file specified by the input
+    .yml file, creates an image stack with the same dataset name in
+    the specified parent output folder.
 
     Example:
         # Edit path variables in
-        # ~/recon3d/docs/userguide/src/voxel_to_image/image_to_voxel.yml
-        (.venv) recon3d> image_to_voxel image_to_voxel.yml
+        # ~/recon3d/docs/userguide/src/hdf_to_image/hdf_to_image.yml
+        (.venv) recon3d> hdf_to_image hdf_to_image.yml
 
 image_stack_to_array <path_to_file>.yml
     From a series of images in a folder specified in the user input
@@ -71,6 +69,16 @@ image_stack_to_array <path_to_file>.yml
         # ~/recon3d/docs/userguide/src/utilities/image_stack_to_array.yml
         (.venv) recon3d> image_stack_to_array image_stack_to_array.yml
 
+image_to_hdf <path_to_file>.yml
+    From a single image (or image stack) in a folder specified in the
+    user input .yml file, creates a hdf file in the specified
+    output folder.
+
+    Example:
+        # Edit path variables in
+        # ~/recon3d/docs/userguide/src/image_to_hdf/image_to_hdf.yml
+        (.venv) recon3d> image_to_hdf image_to_hdf.yml
+
 instance_analysis <path_to_file>.yml
     Digest a semantic segmentation accessible as a folder containing an image
     stack specified in the user input .yml file.
@@ -79,6 +87,16 @@ instance_analysis <path_to_file>.yml
         # Edit path variables in
         # ~/recon3d/docs/userguide/src/instance_analysis/instance_analysis.yml
         (.venv) recon3d> instance_analysis instance_analysis.yml
+
+npy_to_mesh <path_to_file>.yml
+    Converts an instance or semantic segmentation, encoded as a .npy file,
+    to an Exodus II finite element mesh using automesh.
+    See https://autotwin.github.io/automesh/
+
+    Example:
+        # Edit path variables in
+        # ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+        (.venv) recon3d> npy_to_mesh letter_f_3d.yml
 
 semantic_to_binary <path_to_file>.yml
     Converts semantic image stack to series of binary image stacks in
@@ -99,28 +117,6 @@ void_descriptor <path_to_file>.yml
         # Edit path variables in
         # ~/recon3d/docs/userguide/src/void_descriptor/void_descriptor.yml
         (.venv) recon3d> void_descriptor void_descriptor.yml
-
-voxel_to_image <path_to_file>.yml
-    From a dataset contained within a hdf file specified by the input
-    .yml file, creates an image stack with the same dataset name in
-    the specified parent output folder.
-
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/voxel_to_image/voxel_to_image.yml
-        (.venv) recon3d> voxel_to_image voxel_to_image.yml
-
-voxel_to_mesh <path_to_file>.yml
-    Converts an instance or semantic segmentation, encoded as a .npy file,
-    to an Exodus II finite element mesh using automesh.
-    See https://autotwin.github.io/automesh/
-
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.yml
-        (.venv) recon3d> voxel_to_mesh letter_f_3d.yml
-
-
 """
 
 

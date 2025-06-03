@@ -1,5 +1,4 @@
-"""The module test the voxel_to_mesh module.
-"""
+"""The module test the npy_to_mesh module."""
 
 # python standard libraries
 from pathlib import Path
@@ -8,7 +7,7 @@ from pathlib import Path
 import pytest
 
 # local libraries
-from recon3d import voxel_to_mesh as vm
+from recon3d import npy_to_mesh as vm
 from recon3d import static_test_paths as test_paths
 
 
@@ -17,7 +16,7 @@ def test_letter_f_3d():
     path_yml = test_paths.LETTER_F_3D_YML
     path_exo = test_paths.LETTER_F_3D_EXO
 
-    result = vm.voxel_to_mesh(yml_input_file=path_yml)
+    result = vm.npy_to_mesh(yml_input_file=path_yml)
 
     assert result  # success
 

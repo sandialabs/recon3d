@@ -1,8 +1,8 @@
-#npy_input: ~/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.npy
+#npy_input: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy
 # npy_input: ~/recon3d/tests/data/letter_f_3d.npy
-# output_file: ~/recon3d/docs/userguide/src/voxel_to_mesh/letter_f_3d.exo
+# output_file: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo
 npy_input: tests/data/letter_f_3d.npy
-output_file: docs/userguide/src/voxel_to_mesh/letter_f_3d.exo
+output_file: docs/userguide/src/npy_to_mesh/letter_f_3d.exo
 remove: [0,]
 scale_x: 10.0 # float
 scale_y: 10.0

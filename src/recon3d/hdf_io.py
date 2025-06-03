@@ -23,12 +23,12 @@ write_h5(hdf_path, data)
 add_to_h5(data, hdf_path, hdf_group)
     Add data to an HDF5 file based on its type.
 
-image_to_voxel(yml_path)
+image_to_hdf(yml_path)
     Populate the HDF5 file with the semantic segmentation image stack
     specified in the YAML file, including metadata.
 
-image_to_voxel_command_line()
-    The command line wrapper for the `image_to_voxel` function.
+image_to_hdf_command_line()
+    The command line wrapper for the `image_to_hdf` function.
 
 voxel_to_image(yml_path)
     Save the image data within the HDF5 file as TIFFs in a new directory.
@@ -78,7 +78,18 @@ import h5py
 from functools import singledispatch
 
 # from recon3d.feature_analysis import SemanticImageStack
-from recon3d.types import *
+# from recon3d.types import *
+from recon3d.types import (
+    BestFitEllipsoids,
+    Centroids,
+    EllipsoidSurfaceAreas,
+    EllipsoidVolumes,
+    InstanceImageStack,
+    InstanceIndices,
+    InstanceProperties,
+    NthNearestNeighbors,
+    SemanticImageStack,
+)
 import recon3d.utility as ut
 import recon3d.instance_analysis as ia
 import recon3d.types as cs
@@ -188,8 +199,8 @@ def modify_hdf_dataset(
     with h5py.File(hdf_path, "r+") as hdf_file:
         # with h5py.File(hdf_path, "r+", locking=False) as hdf_file:
         if operation == "create":
-            if not dataset_loc in hdf_file:
-
+            # if not dataset_loc in hdf_file:
+            if dataset_loc not in hdf_file:
                 dataset = hdf_file.create_dataset(
                     name=dataset_loc,
                     data=data,
@@ -837,7 +848,6 @@ def _(
     >>> add_to_h5(neighbors, Path("output.h5"), "group_name")
     """
 
-    aa = 2
     units = data.distances[0].unit.value
 
     distance_list = data.distances
@@ -886,7 +896,7 @@ def _(
 
 
 ### CONVERT BETWEEN H5 <-> FOLDER OF IMAGES   ###
-def image_to_voxel(yml_path: Path) -> Path:
+def image_to_hdf(yml_path: Path) -> Path:
     """
     Populate the HDF5 file with the semantic segmentation image stack specified in the YAML file, including metadata.
 
@@ -905,12 +915,12 @@ def image_to_voxel(yml_path: Path) -> Path:
     Raises
     ------
     ValueError
-        If the "cli_entry_points" key in the YAML file does not contain "image_to_voxel".
+        If the "cli_entry_points" key in the YAML file does not contain "image_to_hdf".
 
     Examples
     --------
     >>> yml_path = Path("config.yml")
-    >>> hdf5_path = image_to_voxel(yml_path)
+    >>> hdf5_path = image_to_hdf(yml_path)
     Wrote output file: /path/to/output.h5
     >>> print(hdf5_path)
     /path/to/output.h5
@@ -920,10 +930,10 @@ def image_to_voxel(yml_path: Path) -> Path:
     yml_vals = ut.yaml_to_dict(yml_path)
 
     # check cli_entry_points is valid
-    if "image_to_voxel" not in yml_vals["cli_entry_points"]:
+    if "image_to_hdf" not in yml_vals["cli_entry_points"]:
         raise ValueError(
             f"""Error. Incorrect yml format. 
-                This function requires the "cli_entry_points" key to contain "image_to_voxel", 
+                This function requires the "cli_entry_points" key to contain "image_to_hdf", 
                 but currently contains the following options: {yml_vals["cli_entry_points"]} """
         )
     semantic_stack_save = ia.process_image_stack(yml_path)
@@ -940,12 +950,12 @@ def image_to_voxel(yml_path: Path) -> Path:
     return path_file_output
 
 
-def image_to_voxel_command_line():
+def image_to_hdf_command_line():
     """
-    The command line wrapper for the `image_to_voxel` function.
+    The command line wrapper for the `image_to_hdf` function.
 
     This function sets up the command line argument parser, parses the input arguments,
-    and calls the `image_to_voxel` function with the provided YAML input file.
+    and calls the `image_to_hdf` function with the provided YAML input file.
 
     Parameters
     ----------
@@ -959,17 +969,18 @@ def image_to_voxel_command_line():
     --------
     To run this function from the command line:
 
-        $ python -m your_module_name input_file.yml
+        $ python -m image_to_hdf_command_line input_file.yml
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("input_file", help="the .yml user input file")
     args = parser.parse_args()
     input_file = args.input_file
 
-    image_to_voxel(yml_path=input_file)
+    image_to_hdf(yml_path=input_file)
 
 
-def voxel_to_image(yml_path: Path) -> Path:
+# def voxel_to_image(yml_path: Path) -> Path:  # deprecated
+def hdf_to_image(yml_path: Path) -> Path:
     """
     Save the image data within the HDF5 file as TIFFs in a new directory.
 
@@ -990,13 +1001,13 @@ def voxel_to_image(yml_path: Path) -> Path:
     Raises
     ------
     ValueError
-        If the "cli_entry_points" key in the YAML file does not contain "voxel_to_image".
+        If the "cli_entry_points" key in the YAML file does not contain "hdf_to_image".
         If the specified slicing direction is not valid.
 
     Examples
     --------
     >>> yml_path = Path("config.yml")
-    >>> image_dir = voxel_to_image(yml_path)
+    >>> image_dir = hdf_to_image(yml_path)
     >>> print(image_dir)
     /path/to/output/images
     """
@@ -1004,14 +1015,14 @@ def voxel_to_image(yml_path: Path) -> Path:
     yml_vals = ut.yaml_to_dict(yml_path)
 
     # check cli_entry_points is valid
-    if "voxel_to_image" not in yml_vals["cli_entry_points"]:
+    if "hdf_to_image" not in yml_vals["cli_entry_points"]:
         raise ValueError(
-            f"""Error. Incorrect yml format. 
-            This function requires the "cli_entry_points" key to contain "voxel_to_image", 
+            f"""Error. Incorrect yml format.
+            This function requires the "cli_entry_points" key to contain "hdf_to_image", 
             but currently contains the following options: {yml_vals["cli_entry_points"]} """
         )
 
-    hdf_path = Path(yml_vals["voxel_data_path"]).expanduser()
+    hdf_path = Path(yml_vals["hdf_data_path"]).expanduser()
     # TODO add alternative to ingest npy data dir
 
     hdf_dataset_location = yml_vals["voxel_data_location"]
@@ -1039,12 +1050,13 @@ def voxel_to_image(yml_path: Path) -> Path:
     return output_image_dir.joinpath(hdf_path.stem)
 
 
-def voxel_to_image_command_line():
+# def voxel_to_image_command_line():  # deprecated
+def hdf_to_image_command_line():
     """
-    The command line wrapper for the `voxel_to_image` function.
+    The command line wrapper for the `hdf_to_image` function.
 
     This function sets up the command line argument parser, parses the input
-    arguments, and calls the `voxel_to_image` function with the provided YAML
+    arguments, and calls the `hdf_to_image` function with the provided YAML
     input file.
 
     Parameters
@@ -1059,13 +1071,118 @@ def voxel_to_image_command_line():
     --------
     To run this function from the command line:
 
-        $ python -m your_module_name input_file.yml
+        $ python -m hdf_to_image_command_line input_file.yml
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("input_file", help="the .yml user input file")
     args = parser.parse_args()
     input_file = args.input_file
 
-    new_path = voxel_to_image(yml_path=input_file)
+    new_path = hdf_to_image(yml_path=input_file)
 
     print(f"\nVoxel data extracted to the following relative directory:'{new_path}'")
+
+
+def hdf_to_npy(yml_path: Path) -> Path:
+    """
+    Save the image data within the HDF5 file a NumPy .npy file.
+
+    This function reads the YAML file to obtain the necessary parameters,
+    extracts the image data from the HDF5 file,
+    and saves the images as .npy file in a specified directory.
+
+    Parameters
+    ----------
+    yml_path : Path
+        The path to the YAML file containing the configuration and parameters.
+
+    Returns
+    -------
+    Path
+        The path to the npy file.
+
+    Raises
+    ------
+    ValueError
+        If the "cli_entry_points" key in the YAML file does not contain "hdf_to_npy".
+        If the specified slicing direction is not valid.
+
+    Examples
+    --------
+    >>> yml_path = Path("config.yml")
+    >>> npy_file = hdf_to_npy(yml_path)
+    >>> print(npy_file)
+    /path/to/output/npy_file.npy
+    """
+
+    yml_vals = ut.yaml_to_dict(yml_path)
+
+    # check cli_entry_points is valid
+    if "hdf_to_npy" not in yml_vals["cli_entry_points"]:
+        raise ValueError(
+            f"""Error. Incorrect yml format.
+            This function requires the "cli_entry_points" key to contain "hdf_to_npy", 
+            but currently contains the following options: {yml_vals["cli_entry_points"]} """
+        )
+
+    hdf_path = Path(yml_vals["hdf_data_path"]).expanduser()
+
+    hdf_dataset_location = yml_vals["voxel_data_location"]
+    output_dir = Path(yml_vals["output_dir"]).expanduser()
+    output_type = yml_vals["output_type"]
+    output_path = output_dir.joinpath(hdf_path.stem + output_type)
+
+    # slice_normal = yml_vals["image_slice_normal"]
+    # valid_slice_normal = set(item.name for item in cs.CartesianAxis3D)
+    # if slice_normal not in valid_slice_normal:
+    #     raise ValueError(
+    #         f"Error, '{slice_normal}' is not a valid slicing direction, accepted units are: {valid_slice_normal}"
+    #     )
+    # slice_axis = cs.CartesianAxis3D[slice_normal]
+
+    with h5py.File(hdf_path, "r") as f:
+        data = np.squeeze(f[hdf_dataset_location][:])
+
+        np.save(output_path, data)
+
+    # ut.ndarray_to_img(
+    #     data=data,
+    #     parent_dir=output_image_dir,
+    #     folder_name=Path(hdf_dataset_location).stem,
+    #     file_type=output_image_type,
+    #     slice_axis=slice_axis,
+    # )
+
+    return output_path
+
+
+def hdf_to_npy_command_line():
+    """
+    The command line wrapper for the `hdf_to_npy` function.
+
+    This function sets up the command line argument parser, parses the input
+    arguments, and calls the `hdf_to_npy` function with the provided YAML
+    input file.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    To run this function from the command line:
+
+        $ python -m hdf_to_npy_command_line input_file.yml
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_file", help="the .yml user input file")
+    args = parser.parse_args()
+    input_file = args.input_file
+
+    new_path = hdf_to_npy(yml_path=input_file)
+
+    print(f"\nVoxel data extracted to:'{new_path}'")

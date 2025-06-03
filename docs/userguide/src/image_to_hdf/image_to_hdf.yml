@@ -1,5 +1,5 @@
 cli_entry_points:
-- image_to_voxel
+- image_to_hdf
 
 semantic_images_dir: tests/data/letter_f
 semantic_images_type: .tif

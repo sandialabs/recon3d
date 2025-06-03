@@ -8,7 +8,7 @@ Example:
 
     cd ~/recon3d/
     source .venv/bin/activate
-    cd ~/recon3d/docs/userguide/src/voxel_to_mesh/
+    cd ~/recon3d/docs/userguide/src/npy_to_mesh/
     python voxel_letter_f.py
 """
 
