@@ -1,5 +1,4 @@
-"""Converts a semantic segmentation into a finite element mesh.
-"""
+"""Converts a semantic segmentation into a finite element mesh."""
 
 import argparse
 
@@ -113,7 +112,7 @@ def validate_recipe(*, recipe: AutomeshRecipe) -> bool:
     return True
 
 
-def voxel_to_mesh(*, yml_input_file: Path) -> bool:
+def npy_to_mesh(*, yml_input_file: Path) -> bool:
     """
     Convert a .npy file specified in a yml recipe to a finite element mesh.
 
@@ -138,7 +137,7 @@ def voxel_to_mesh(*, yml_input_file: Path) -> bool:
     Examples
     --------
     >>> yml_input_file = Path("/path/to/recipe.yml")
-    >>> voxel_to_mesh(yml_input_file=yml_input_file)
+    >>> npy_to_mesh(yml_input_file=yml_input_file)
     0
     """
 
@@ -273,7 +272,7 @@ def main():
     input_file = args.input_file
     input_file = Path(input_file).expanduser()
 
-    voxel_to_mesh(yml_input_file=input_file)
+    npy_to_mesh(yml_input_file=input_file)
 
 
 if __name__ == "__main__":

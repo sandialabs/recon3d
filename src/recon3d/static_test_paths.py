@@ -18,11 +18,11 @@ INSTANCE_ANALYSIS_YML = RECON3D_PATH.joinpath(
 )
 
 LETTER_F_3D_EXO = RECON3D_PATH.joinpath(
-    "docs", "userguide", "src", "voxel_to_mesh", "letter_f_3d.exo"
+    "docs", "userguide", "src", "npy_to_mesh", "letter_f_3d.exo"
 )
 
 LETTER_F_3D_YML = RECON3D_PATH.joinpath(
-    "docs", "userguide", "src", "voxel_to_mesh", "letter_f_3d.yml"
+    "docs", "userguide", "src", "npy_to_mesh", "letter_f_3d.yml"
 )
 
 SEMANTIC_TO_BINARY_YML = RECON3D_PATH.joinpath(
