@@ -23,12 +23,12 @@ write_h5(hdf_path, data)
 add_to_h5(data, hdf_path, hdf_group)
     Add data to an HDF5 file based on its type.
 
-image_to_voxel(yml_path)
+image_to_hdf(yml_path)
     Populate the HDF5 file with the semantic segmentation image stack
     specified in the YAML file, including metadata.
 
-image_to_voxel_command_line()
-    The command line wrapper for the `image_to_voxel` function.
+image_to_hdf_command_line()
+    The command line wrapper for the `image_to_hdf` function.
 
 voxel_to_image(yml_path)
     Save the image data within the HDF5 file as TIFFs in a new directory.
@@ -78,7 +78,18 @@ import h5py
 from functools import singledispatch
 
 # from recon3d.feature_analysis import SemanticImageStack
-from recon3d.types import *
+# from recon3d.types import *
+from recon3d.types import (
+    BestFitEllipsoids,
+    Centroids,
+    EllipsoidSurfaceAreas,
+    EllipsoidVolumes,
+    InstanceImageStack,
+    InstanceIndices,
+    InstanceProperties,
+    NthNearestNeighbors,
+    SemanticImageStack,
+)
 import recon3d.utility as ut
 import recon3d.instance_analysis as ia
 import recon3d.types as cs
@@ -188,8 +199,8 @@ def modify_hdf_dataset(
     with h5py.File(hdf_path, "r+") as hdf_file:
         # with h5py.File(hdf_path, "r+", locking=False) as hdf_file:
         if operation == "create":
-            if not dataset_loc in hdf_file:
-
+            # if not dataset_loc in hdf_file:
+            if dataset_loc not in hdf_file:
                 dataset = hdf_file.create_dataset(
                     name=dataset_loc,
                     data=data,
@@ -837,7 +848,6 @@ def _(
     >>> add_to_h5(neighbors, Path("output.h5"), "group_name")
     """
 
-    aa = 2
     units = data.distances[0].unit.value
 
     distance_list = data.distances
