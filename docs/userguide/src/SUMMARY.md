@@ -1,8 +1,7 @@
 # Summary
 
 [Introduction](introduction.md)
-
-- [Installation](installation.md)
+[Installation](installation.md)
 
 # Tutorials
 
@@ -10,6 +9,7 @@
 - [`image_to_hdf`](image_to_hdf/README.md)
 - [`instance_analysis`](instance_analysis/README.md)
 - [`hdf_to_image`](hdf_to_image/README.md)
+- [`*_to_npy`](to_npy/README.md)
 - [`downscale`](downscale/README.md)
 - [`npy_to_mesh`](npy_to_mesh/README.md)
 

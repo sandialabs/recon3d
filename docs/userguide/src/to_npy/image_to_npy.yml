@@ -1,5 +1,5 @@
 cli_entry_points:
-- image_stack_to_array
+- image_to_numpy
 
 # (str) absolute path to images
 image_dir: ~/recon3d/tests/data/cylinder_machined_grayscale
