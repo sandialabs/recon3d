@@ -133,6 +133,132 @@ recon3d
 
 which will provide the following output:
 
+<!-- No longer use the ```sh cmdrun recon3d ``` because mdbook cannot format ANSI codes -->
+<!-- So this is hardcoded and needs to be manually updated each time the API changes. -->
+
 ```sh
-<!-- cmdrun recon3d -->
+--------
+recon3d
+--------
+
+recon3d
+
+  (this command) Lists the recon3d command line entry points
+
+binary_to_semantic <path_to_file>.yml
+
+  Converts binary image stack to semantic image stack in a
+  folder specified in the user input .yml file.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/binary_to_semantic/binary_to_semantic.yml
+  (.venv) recon3d> binary_to_semantic binary_to_semantic.yml
+
+downscale <path_to_file>.yml
+
+  Downscales images in a folder specified in the user input .yml file.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/downscale/downscale_thunder.yml
+  (.venv) recon3d> downscale downscale_thunder.yml
+
+grayscale_image_stack_to_segmentation <path_to_file>.yml
+
+  Converts a series of grayscale images to a segmentation.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/utilities/grayscale_image_stack_to_segmentation.yml
+  (.venv) recon3d> grayscale_image_stack_to_segmentation grayscale_image_stack_to_segmentation.yml
+
+hello
+
+  Prints 'Hello world!' to the terminal to illustrate a command line entry point.
+
+hdf_to_image <path_to_file>.yml
+
+  From a dataset contained within a .hdf file specified by the input
+  .yml file, creates an image stack with the same dataset name in
+  the specified parent output folder.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/hdf_to_image/hdf_to_image.yml
+  (.venv) recon3d> hdf_to_image hdf_to_image.yml
+
+hdf_to_npy <path_to_file>.yml
+
+  From a dataset contained within a .hdf file specified by the input
+  .yml file, creates a NumPy .npy file from the segmentation data.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/to_npy/hdf_to_npy.yml
+  (.venv) recon3d> hdf_to_npy hdf_to_npy.yml
+
+image_to_hdf <path_to_file>.yml
+
+  From a single image (or image stack) in a folder specified in the
+  user input .yml file, creates a .hdf file in the specified
+  output folder.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/image_to_hdf/image_to_hdf.yml
+  (.venv) recon3d> image_to_hdf image_to_hdf.yml
+
+image_to_npy <path_to_file>.yml
+
+  From a series of images in a folder specified in the user input
+  .yml file, creates a NumPy .npy file in the specified output folder.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/to_npy/image__to_npy.yml
+  (.venv) recon3d> image_to_npy image_to_npy.yml
+
+instance_analysis <path_to_file>.yml
+
+  Digest a semantic segmentation accessible as a folder containing an image
+  stack specified in the user input .yml file.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/instance_analysis/instance_analysis.yml
+  (.venv) recon3d> instance_analysis instance_analysis.yml
+
+npy_to_mesh <path_to_file>.yml
+
+  Converts an instance or semantic segmentation, encoded as a .npy file,
+  to an Exodus II finite element mesh using automesh.
+  See https://autotwin.github.io/automesh/
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+  (.venv) recon3d> npy_to_mesh letter_f_3d.yml
+
+semantic_to_binary <path_to_file>.yml
+
+  Converts semantic image stack to series of binary image stacks in
+  a folder specified in the user input .yml file
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/binary_to_semantic/semantic_to_binary.yml
+  (.venv) recon3d> semantic_to_binary semantic_to_binary.yml
+
+void_descriptor <path_to_file>.yml
+
+  Work in progress, not yet implemented.
+  From a pore dataset contained within a hdf file specified by
+  the input .yml file, compute the void descriptor attributes
+  for the void descriptor function.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/void_descriptor/void_descriptor.yml
+  (.venv) recon3d> void_descriptor void_descriptor.yml
 ```

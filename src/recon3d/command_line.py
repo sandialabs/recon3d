@@ -20,9 +20,7 @@ RESET = "\033[0m"
 BLUE = "\033[34m"
 DARK_GRAY = "\033[90m"
 
-CLI_DOCS: Final[
-    str
-] = f"""
+CLI_DOCS: Final[str] = f"""
 --------
 recon3d
 --------
@@ -31,7 +29,7 @@ recon3d
 
   (this command) Lists the recon3d command line entry points
 
-{BOLD}{UNDERLINE}{BLUE}brinary_to_semantic{RESET} <path_to_file>.yml
+{BOLD}{UNDERLINE}{BLUE}binary_to_semantic{RESET} <path_to_file>.yml
 
   Converts binary image stack to semantic image stack in a
   folder specified in the user input .yml file.
