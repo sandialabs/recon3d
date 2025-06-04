@@ -10,7 +10,7 @@ class_labels:
   air:
     value: 0
     instance_analysis:
-      include: False 
+      include: False
       min_feature_size: 0
   rods:
     value: 1

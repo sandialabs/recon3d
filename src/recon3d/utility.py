@@ -1,4 +1,4 @@
-""" 
+"""
 This module holds utilties that can be reused across other modules
 """
 
@@ -187,8 +187,8 @@ def validate_yml(yml_input_file: Path, cli_entry_point: str) -> tuple[Path, Path
     # check cli_entry_points is valid
     if cli_entry_point not in yml_vals["cli_entry_points"]:
         raise ValueError(
-            f"""Error. Incorrect yml format. 
-                         This function requires the "cli_entry_points" key to contain {cli_entry_point}, 
+            f"""Error. Incorrect yml format.
+                         This function requires the "cli_entry_points" key to contain {cli_entry_point},
                          but currently contains the following options: {yml_vals["cli_entry_points"]} """
         )
 

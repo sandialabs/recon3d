@@ -2,34 +2,34 @@
 
 IMPORTANT NOTICE: At installation, recon3d accesses and installs
 certain open-source packages that are not part of recon3d package
-as distributed, which follow below. By installing recon3d, you 
+as distributed, which follow below. By installing recon3d, you
 are accepting these licenses for these packages.  We strongly
-advise consulting with a legal expert or attorney prior to any 
-redistribution or modification of recon3d software to ensure 
+advise consulting with a legal expert or attorney prior to any
+redistribution or modification of recon3d software to ensure
 compliance with the applicable licensing terms.
 
-## AutoMesh License 
+## AutoMesh License
 
 Reference: [AutoMesh License](https://github.com/autotwin/automesh/blob/main/LICENSE)
 
-Automesh is goverend by the GNU Lesser General Public License v3.0 
+Automesh is goverend by the GNU Lesser General Public License v3.0
 (LGPL), which can be found here: [https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text](https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text)
 
-## Connected-Components-3D License 
+## Connected-Components-3D License
 
 Reference: [Connected-Components-3D License](https://github.com/seung-lab/connected-components-3d/blob/master/COPYING.LESSER)
 
-Connected-Componets-3D is goverend by the GNU Lesser General Public License v3.0 
+Connected-Componets-3D is goverend by the GNU Lesser General Public License v3.0
 (LGPL), which can be found here: [https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text](https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text)
 
-## FastRemap License 
+## FastRemap License
 
 Reference: [FastRemap License](https://github.com/seung-lab/fastremap/blob/master/LICENSE)
 
-FastRemap is goverend by the GNU Lesser General Public License v3.0 
+FastRemap is goverend by the GNU Lesser General Public License v3.0
 (LGPL), which can be found here: [https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text](https://www.gnu.org/licenses/lgpl-3.0.en.html#license-text)
 
-## H5Py License 
+## H5Py License
 
 Reference: [H5Py License](https://github.com/h5py/h5py/blob/master/LICENSE)
 
@@ -64,7 +64,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-## MatPlotLib License 
+## MatPlotLib License
 
 Reference: [MatPlotLib License](https://github.com/matplotlib/matplotlib/blob/main/LICENSE/LICENSE)
 
@@ -168,7 +168,7 @@ products or services of Licensee, or any third party.
 Licensee agrees to be bound by the terms and conditions of this License
 Agreement.
 
-## Numpy License 
+## Numpy License
 
 Reference: [Numpy License](https://github.com/numpy/numpy/blob/main/LICENSE.txt)
 
@@ -203,7 +203,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-## SciPy License 
+## SciPy License
 
 Reference: [SciPy License](https://github.com/scipy/scipy/blob/main/LICENSE.txt)
 
@@ -238,7 +238,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-## SciKit-Image License 
+## SciKit-Image License
 
 Reference: [SciKit-Image License](https://github.com/scikit-image/scikit-image/blob/main/LICENSE.txt)
 
@@ -395,7 +395,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## SciKit-Learn License 
+## SciKit-Learn License
 
 Reference: [SciKit-Learn License](https://github.com/scikit-learn/scikit-learn?tab=BSD-3-Clause-1-ov-file)
 
@@ -429,7 +429,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-## Pillow License 
+## Pillow License
 
 Reference: [Pillow License](https://github.com/python-pillow/Pillow/blob/main/LICENSE)
 
@@ -464,7 +464,7 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
 OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
-## PyEvtk License 
+## PyEvtk License
 
 Reference: [PyEvtk License](https://github.com/pyscience-projects/pyevtk/blob/master/LICENSE.txt)
 
@@ -493,7 +493,7 @@ Reference: [PyEvtk License](https://github.com/pyscience-projects/pyevtk/blob/ma
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                    *
 ***********************************************************************************
 
-## PyYaml License 
+## PyYaml License
 
 Reference: [PyYaml License](https://github.com/yaml/pyyaml/blob/main/LICENSE)
 
@@ -544,7 +544,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## DocStr-Coverage License 
+## DocStr-Coverage License
 
 Reference: [DocStr-Coverage License](https://github.com/HunterMcGushion/docstr_coverage/blob/master/LICENSE.txt)
 
@@ -570,13 +570,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## DocUtils License 
+## DocUtils License
 
 Reference: [DocUtils License](https://sourceforge.net/projects/docutils/)
 
 DocUtils is licensed under the Open Source Initiative in the Public Domain
 
-## Flake8 License 
+## Flake8 License
 
 Reference: [Flake8 License](https://github.com/PyCQA/flake8/blob/main/LICENSE)
 
@@ -603,7 +603,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Pre-Commit License 
+## Pre-Commit License
 
 Reference: [Pre-Commit License](https://github.com/pre-commit/pre-commit/blob/main/LICENSE)
 
@@ -627,7 +627,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-## Pdbp License 
+## Pdbp License
 
 Reference: [Pdbp License](https://github.com/mdmintz/pdbp/blob/master/LICENSE)
 
@@ -971,7 +971,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-## PDoc License 
+## PDoc License
 
 Reference: [PDpc License](https://github.com/mitmproxy/pdoc/blob/main/LICENSE)
 
@@ -980,4 +980,3 @@ Copyright 2024 Maximilian Hils
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-

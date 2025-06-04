@@ -62,14 +62,14 @@ jobs:
         with:
           name: lint-log-${{ github.ref_name }}  # Include branch name in artifact name
           path: logs/lint-${{ github.ref_name }}.log  # Path to the log file for the specific branch
-  
+
       - name: Deploy to GitHub Pages
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
           git checkout -B gh-pages  # Create or switch to gh-pages branch
 
-          mkdir -p logs/ 
+          mkdir -p logs/
           mkdir -p badges/
 
           git add -f logs/lint-${{ github.ref_name }}.log  # lint log
@@ -78,7 +78,7 @@ jobs:
 
           # Commit the changes
           git commit -m "Update badges and logs from linting job" || echo "No changes to commit"
-          
+
           # Push to the gh-pages branch
           git push origin gh-pages --force
         env:
@@ -91,7 +91,3 @@ jobs:
         #   git push origin gh-pages --force  # Push changes to the gh-pages branch
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-

@@ -16,8 +16,8 @@ dist/
 build/
 
 # Documentation output directories (comment these out if you want to push locally-built docs)
-docs/api/         
-docs/userguide/book/ 
+docs/api/
+docs/userguide/book/
 docs/userguide/target/
 
 # IDE and editor files

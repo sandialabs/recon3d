@@ -13,110 +13,140 @@ from typing import Final
 from importlib.metadata import version
 import recon3d.constants as cs
 
-CLI_DOCS: Final[str] = """
+# ANSI escape codes for formatting
+BOLD = "\033[1m"
+UNDERLINE = "\033[4m"
+RESET = "\033[0m"
+BLUE = "\033[34m"
+DARK_GRAY = "\033[90m"
+
+CLI_DOCS: Final[
+    str
+] = f"""
 --------
 recon3d
 --------
 
-recon3d
-    (this command)
+{BOLD}{UNDERLINE}{BLUE}recon3d{RESET}
 
-binary_to_semantic <path_to_file>.yml
-    Converts binary image stack to semantic image stack in a
-    folder specified in the user input .yml file.
+  (this command) Lists the recon3d command line entry points
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/binary_to_semantic/binary_to_semantic.yml
-        (.venv) recon3d> binary_to_semantic binary_to_semantic.yml
+{BOLD}{UNDERLINE}{BLUE}brinary_to_semantic{RESET} <path_to_file>.yml
 
-downscale <path_to_file>.yml
-    Downscales images in a folder specified in the user input .yml file.
+  Converts binary image stack to semantic image stack in a
+  folder specified in the user input .yml file.
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/downscale/downscale_thunder.yml
-        (.venv) recon3d> downscale downscale_thunder.yml
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/binary_to_semantic/binary_to_semantic.yml{RESET}
+  (.venv) recon3d> binary_to_semantic binary_to_semantic.yml
 
-grayscale_image_stack_to_segmentation <path_to_file>.yml
-    Converts a series of grayscale images to a segmentation.
+{BOLD}{UNDERLINE}{BLUE}downscale{RESET} <path_to_file>.yml
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/utilities/grayscale_image_stack_to_segmentation.yml
-        (.venv) recon3d> grayscale_image_stack_to_segmentation grayscale_image_stack_to_segmentation.yml
+  Downscales images in a folder specified in the user input .yml file.
 
-hello
-    Prints 'Hello world!' to the terminal to illustrate command line
-    entry points.
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/downscale/downscale_thunder.yml{RESET}
+  (.venv) recon3d> downscale downscale_thunder.yml
 
-hdf_to_image <path_to_file>.yml
-    From a dataset contained within a hdf file specified by the input
-    .yml file, creates an image stack with the same dataset name in
-    the specified parent output folder.
+{BOLD}{UNDERLINE}{BLUE}grayscale_image_stack_to_segmentation{RESET} <path_to_file>.yml
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/hdf_to_image/hdf_to_image.yml
-        (.venv) recon3d> hdf_to_image hdf_to_image.yml
+  Converts a series of grayscale images to a segmentation.
 
-image_stack_to_array <path_to_file>.yml
-    From a series of images in a folder specified in the user input
-    .yml file, creates a npy file in the specified output folder.
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/utilities/grayscale_image_stack_to_segmentation.yml{RESET}
+  (.venv) recon3d> grayscale_image_stack_to_segmentation grayscale_image_stack_to_segmentation.yml
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/utilities/image_stack_to_array.yml
-        (.venv) recon3d> image_stack_to_array image_stack_to_array.yml
+{BOLD}{UNDERLINE}{BLUE}hello{RESET}
 
-image_to_hdf <path_to_file>.yml
-    From a single image (or image stack) in a folder specified in the
-    user input .yml file, creates a hdf file in the specified
-    output folder.
+  Prints 'Hello world!' to the terminal to illustrate a command line entry point.
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/image_to_hdf/image_to_hdf.yml
-        (.venv) recon3d> image_to_hdf image_to_hdf.yml
+{BOLD}{UNDERLINE}{BLUE}hdf_to_image{RESET} <path_to_file>.yml
 
-instance_analysis <path_to_file>.yml
-    Digest a semantic segmentation accessible as a folder containing an image
-    stack specified in the user input .yml file.
+  From a dataset contained within a .hdf file specified by the input
+  .yml file, creates an image stack with the same dataset name in
+  the specified parent output folder.
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/instance_analysis/instance_analysis.yml
-        (.venv) recon3d> instance_analysis instance_analysis.yml
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/hdf_to_image/hdf_to_image.yml{RESET}
+  (.venv) recon3d> hdf_to_image hdf_to_image.yml
 
-npy_to_mesh <path_to_file>.yml
-    Converts an instance or semantic segmentation, encoded as a .npy file,
-    to an Exodus II finite element mesh using automesh.
-    See https://autotwin.github.io/automesh/
+{BOLD}{UNDERLINE}{BLUE}hdf_to_npy{RESET} <path_to_file>.yml
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
-        (.venv) recon3d> npy_to_mesh letter_f_3d.yml
+  From a dataset contained within a .hdf file specified by the input
+  .yml file, creates a NumPy .npy file from the segmentation data.
 
-semantic_to_binary <path_to_file>.yml
-    Converts semantic image stack to series of binary image stacks in
-    a folder specified in the user input .yml file
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/to_npy/hdf_to_npy.yml{RESET}
+  (.venv) recon3d> hdf_to_npy hdf_to_npy.yml
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/binary_to_semantic/semantic_to_binary.yml
-        (.venv) recon3d> semantic_to_binary semantic_to_binary.yml
+{BOLD}{UNDERLINE}{BLUE}image_to_hdf{RESET} <path_to_file>.yml
 
-void_descriptor <path_to_file>.yml
-    Work in progress.
-    From a pore dataset contained within a hdf file specified by
-    the input .yml file, compute the void descriptor attributes
-    for the void descriptor function.
+  From a single image (or image stack) in a folder specified in the
+  user input .yml file, creates a .hdf file in the specified
+  output folder.
 
-    Example:
-        # Edit path variables in
-        # ~/recon3d/docs/userguide/src/void_descriptor/void_descriptor.yml
-        (.venv) recon3d> void_descriptor void_descriptor.yml
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/image_to_hdf/image_to_hdf.yml{RESET}
+  (.venv) recon3d> image_to_hdf image_to_hdf.yml
+
+{BOLD}{UNDERLINE}{BLUE}image_to_npy{RESET} <path_to_file>.yml
+
+  From a series of images in a folder specified in the user input
+  .yml file, creates a NumPy .npy file in the specified output folder.
+
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/to_npy/image__to_npy.yml{RESET}
+  (.venv) recon3d> image_to_npy image_to_npy.yml
+
+{BOLD}{UNDERLINE}{BLUE}instance_analysis{RESET} <path_to_file>.yml
+
+  Digest a semantic segmentation accessible as a folder containing an image
+  stack specified in the user input .yml file.
+
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/instance_analysis/instance_analysis.yml{RESET}
+  (.venv) recon3d> instance_analysis instance_analysis.yml
+
+{BOLD}{UNDERLINE}{BLUE}npy_to_mesh{RESET} <path_to_file>.yml
+
+  Converts an instance or semantic segmentation, encoded as a .npy file,
+  to an Exodus II finite element mesh using automesh.
+  See https://autotwin.github.io/automesh/
+
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml{RESET}
+  (.venv) recon3d> npy_to_mesh letter_f_3d.yml
+
+{BOLD}{UNDERLINE}{BLUE}semantic_to_binary{RESET} <path_to_file>.yml
+
+  Converts semantic image stack to series of binary image stacks in
+  a folder specified in the user input .yml file
+
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/binary_to_semantic/semantic_to_binary.yml{RESET}
+  (.venv) recon3d> semantic_to_binary semantic_to_binary.yml
+
+{BOLD}{UNDERLINE}{BLUE}void_descriptor{RESET} <path_to_file>.yml
+
+  Work in progress, not yet implemented.
+  From a pore dataset contained within a hdf file specified by
+  the input .yml file, compute the void descriptor attributes
+  for the void descriptor function.
+
+  Example:
+  {DARK_GRAY}# Edit path variables in
+  # ~/recon3d/docs/userguide/src/void_descriptor/void_descriptor.yml{RESET}
+  (.venv) recon3d> void_descriptor void_descriptor.yml
 """
 
 

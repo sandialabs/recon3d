@@ -1,5 +1,5 @@
 """
-This module contains functions related to the `downscale` command line argument 
+This module contains functions related to the `downscale` command line argument
 with a provided input file.
 
 Functions
