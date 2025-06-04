@@ -15,6 +15,7 @@ import h5py
 import recon3d.instance_analysis as ia
 import recon3d.hdf_io as hio
 import recon3d.utility as ut
+
 # from recon3d.types import *  # unused import, avoid * imports
 
 from tests.test_instance_analysis import create_instance_stack
@@ -267,7 +268,7 @@ def test_image_to_hdf():
     assert err.value.args[0] == err_msg
 
     # overwrite
-    input_yml = IMAGE_TO_HDF_YML  # Path(__file__).parent.joinpath("examples", "image_to_voxel.yml")
+    input_yml = IMAGE_TO_HDF_YML  # Path(__file__).parent.joinpath("examples", "image_to_hdf.yml")
 
     output_voxeldata_path = hio.image_to_hdf(input_yml)
 
@@ -280,7 +281,7 @@ def test_image_to_hdf():
 
     """Check the images from the h5 file can be properly extracted"""
 
-    input_yml = IMAGE_TO_HDF_YML  # Path(__file__).parent.joinpath("examples", "image_to_voxel.yml")
+    input_yml = IMAGE_TO_HDF_YML  # Path(__file__).parent.joinpath("examples", "image_to_hdf.yml")
 
     with pytest.raises(ValueError) as err:
         hio.hdf_to_image(input_yml)

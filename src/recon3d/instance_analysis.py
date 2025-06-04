@@ -16,7 +16,6 @@ internal dataset storage.
 # to remove magic numbers and indexing of phase_paths and label_paths
 # TODO Devise better solution for multiphase support without if/else blocks
 
-
 import argparse
 import glob
 from typing import Final, NamedTuple, Tuple, Type, List
@@ -1229,12 +1228,11 @@ def process(yml_file: Path) -> bool:
     n_semantic_labels = np.unique(semantic_stack.data)
 
     # create h5
-    h5_path = hio.image_to_voxel(yml_file)
+    h5_path = hio.image_to_hdf(yml_file)
 
     # start instance analysis
     db = ut.yaml_to_dict(yml_file)
     for instance_name in db["class_labels"]:
-
         # # check yml values match the labels in the semantic image stack
         # for semantic_label in n_semantic_labels:
 

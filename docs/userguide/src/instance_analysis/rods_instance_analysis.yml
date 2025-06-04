@@ -1,6 +1,6 @@
 cli_entry_points:
 - instance_analysis
-- image_to_voxel
+- image_to_hdf
 
 semantic_images_dir: tests/data/rods # (str) path to images, e.g., /Users/chovey/recon3d/examples/fimage/
 semantic_images_type: .tif # (str) .tif | .tiff options are supported
