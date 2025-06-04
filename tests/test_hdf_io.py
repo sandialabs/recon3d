@@ -1,9 +1,7 @@
 """Tests functionality provided by hdf_io.py."""
 
-from pathlib import Path
-
 # Python standard libarires
-import glob
+# import glob  # unused import
 from pathlib import Path
 
 # Third party libraries
@@ -13,14 +11,18 @@ import h5py
 
 # local libraries
 # import recon3d.feature_analysis as fa
-import recon3d.constants as cs
+# import recon3d.constants as cs  # unused import
 import recon3d.instance_analysis as ia
 import recon3d.hdf_io as hio
 import recon3d.utility as ut
-from recon3d.types import *
+# from recon3d.types import *  # unused import, avoid * imports
 
 from tests.test_instance_analysis import create_instance_stack
-from recon3d.static_test_paths import *
+from recon3d.static_test_paths import (
+    HDF_TO_IMAGE_YML,
+    IMAGE_TO_HDF_YML,
+    INSTANCE_ANALYSIS_YML,
+)
 
 
 # @pytest.fixture
@@ -260,8 +262,8 @@ def test_image_to_hdf():
 
     with pytest.raises(ValueError) as err:
         output_voxeldata_path = hio.image_to_hdf(input_yml)
-    err_msg = 'Error. Incorrect yml format. \n                This function requires the "cli_entry_points" key to contain "image_to_hdf", \n                but currently contains the following options: [\'hdf_to_image\'] '
-    assert err.type == ValueError
+    err_msg = 'Error. Incorrect yml format.\n                This function requires the "cli_entry_points" key to contain "image_to_hdf",\n                but currently contains the following options: [\'hdf_to_image\'] '
+    assert err.type is ValueError
     assert err.value.args[0] == err_msg
 
     # overwrite
@@ -282,8 +284,8 @@ def test_image_to_hdf():
 
     with pytest.raises(ValueError) as err:
         hio.hdf_to_image(input_yml)
-    err_msg = 'Error. Incorrect yml format.\n            This function requires the "cli_entry_points" key to contain "hdf_to_image", \n            but currently contains the following options: [\'image_to_hdf\'] '
-    assert err.type == ValueError
+    err_msg = 'Error. Incorrect yml format.\n            This function requires the "cli_entry_points" key to contain "hdf_to_image",\n            but currently contains the following options: [\'image_to_hdf\'] '
+    assert err.type is ValueError
     assert err.value.args[0] == err_msg
 
     input_yml = HDF_TO_IMAGE_YML  # Path(__file__).parent.joinpath("examples", "voxel_to_image.yml")
