@@ -31,7 +31,7 @@ The preceding `git clone` command will clone the `recon3d` [repository](https://
 
 <div class="note">
 <strong>Note:</strong>
-Use of SSH for cloning *may* require the user to setup SSH keys in GitHub. Details of this process can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+Use of SSH for cloning <em>may</em> require the user to setup SSH keys in GitHub. Details of this process can be found <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">here</a>.
 </div>
 
 Change into the `recon3d` directory,
