@@ -29,7 +29,10 @@ git clone git@github.com:sandialabs/recon3d.git
 
 The preceding `git clone` command will clone the `recon3d` [repository](https://github.com/sandialabs/recon3d) into your current working directory by making a new folder called `recon3d`.
 
-> **Note:** use of SSH for cloning *may* require the user to setup SSH keys in GitHub. Details of this process can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+<div class="note">
+<strong>Note:</strong>
+Use of SSH for cloning *may* require the user to setup SSH keys in GitHub. Details of this process can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+</div>
 
 Change into the `recon3d` directory,
 
@@ -216,7 +219,7 @@ image_to_npy <path_to_file>.yml
 
   Example:
   # Edit path variables in
-  # ~/recon3d/docs/userguide/src/to_npy/image__to_npy.yml
+  # ~/recon3d/docs/userguide/src/to_npy/image_to_npy.yml
   (.venv) recon3d> image_to_npy image_to_npy.yml
 
 instance_analysis <path_to_file>.yml

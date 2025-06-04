@@ -102,7 +102,7 @@ recon3d
 
   Example:
   {DARK_GRAY}# Edit path variables in
-  # ~/recon3d/docs/userguide/src/to_npy/image__to_npy.yml{RESET}
+  # ~/recon3d/docs/userguide/src/to_npy/image_to_npy.yml{RESET}
   (.venv) recon3d> image_to_npy image_to_npy.yml
 
 {BOLD}{UNDERLINE}{BLUE}instance_analysis{RESET} <path_to_file>.yml

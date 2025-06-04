@@ -89,7 +89,7 @@ def validate_recipe(*, recipe: AutomeshRecipe) -> bool:
     True
     """
 
-    amr = recipe
+    amr = recipe  # automesh recipe (amr)
 
     # Assure the .npy input file can be found
     assert amr.npy_input.is_file(), f"Cannot find {amr.npy_input}"

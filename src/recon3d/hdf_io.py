@@ -55,20 +55,20 @@ To add data to an HDF5 file based on its type:
 To populate an HDF5 file with image stack data from a YAML file:
 
     >>> yml_path = Path("config.yml")
-    >>> hdf5_path = image_to_voxel(yml_path)
+    >>> hdf5_path = image_to_hdf(yml_path)
 
 To convert voxel data in an HDF5 file to image files:
 
     >>> yml_path = Path("config.yml")
     >>> image_dir = voxel_to_image(yml_path)
 
-To run the `image_to_voxel` function from the command line:
+To run the `image_to_hdf` function from the command line:
 
-    $ python -m your_module_name input_file.yml
+    $ python -m image_to_hdf input_file.yml
 
-To run the `voxel_to_image` function from the command line:
+To run the `hdf_to_image` function from the command line:
 
-    $ python -m your_module_name input_file.yml
+    $ python -m hdf_to_image input_file.yml
 """
 
 import argparse
