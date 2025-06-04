@@ -20,10 +20,12 @@ RESET = "\033[0m"
 BLUE = "\033[34m"
 DARK_GRAY = "\033[90m"
 
-CLI_DOCS: Final[str] = f"""
---------
+CLI_DOCS: Final[
+    str
+] = f"""
+-------
 recon3d
---------
+-------
 
 {BOLD}{UNDERLINE}{BLUE}recon3d{RESET}
 

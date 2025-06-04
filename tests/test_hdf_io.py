@@ -15,6 +15,7 @@ import h5py
 import recon3d.instance_analysis as ia
 import recon3d.hdf_io as hio
 import recon3d.utility as ut
+
 # from recon3d.types import *  # unused import, avoid * imports
 
 from tests.test_instance_analysis import create_instance_stack
