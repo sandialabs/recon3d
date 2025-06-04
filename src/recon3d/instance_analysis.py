@@ -280,7 +280,9 @@ def ellipsoid_surface_area(ellipsoid: BestFitEllipsoid) -> Area:
     )
 
     surface_area = (
-        4 * math.pi * ((((a**p * b**p) + (a**p * c**p) + (b**p * c**p)) / 3) ** (1 / p))
+        4
+        * math.pi
+        * ((((a**p * b**p) + (a**p * c**p) + (b**p * c**p)) / 3) ** (1 / p))
     )
     return Area(value=surface_area, unit_squared=unit)
 
@@ -615,7 +617,7 @@ def minimum_size_filter(
 
     if not initial_stack.name == initial_indices.source_name:
         raise ValueError(
-            f"""Initial InstanceImageStack name ({initial_stack.name}) and 
+            f"""Initial InstanceImageStack name ({initial_stack.name}) and
             InstanceIndices name ({initial_indices.source_name}) do not match.
             Function inputs must be from same dataset."""
         )

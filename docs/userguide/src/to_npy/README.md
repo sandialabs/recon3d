@@ -6,7 +6,7 @@ The `hdf_to_npy` function converts a hdf representation into a NumPy .npy file.
 
 ---
 
-Some analyses may require the extraction of voxel data contained within an hdf file and conversion to an internal Python type. 
+Some analyses may require the extraction of voxel data contained within an hdf file and conversion to an internal Python type.
 
 The `hdf_to_npy` functionality is provided as a command line interface. Providing a HDF file with voxel dataset of interest, image data can be extracted to a separate folder.
 
@@ -28,7 +28,7 @@ The `image_to_npy` function converts an image stack into a NumPy .npy file.
 
 ---
 
-Some analyses may require the extraction of image stacks to an internal Python type. 
+Some analyses may require the extraction of image stacks to an internal Python type.
 
 The `image_to_npy` functionality is provided as a command line interface. Providing an image stack path with voxel dataset of interest, image data can be extracted to a separate folder.
 

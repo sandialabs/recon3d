@@ -1,8 +1,8 @@
 """
 This module stores constant values in a single location for recon3d.
 
-This module defines various constants and conversion factors that are used 
-throughout the recon3d application. It provides a centralized location for 
+This module defines various constants and conversion factors that are used
+throughout the recon3d application. It provides a centralized location for
 these constants, making the code more maintainable and easier to understand.
 
 Classes

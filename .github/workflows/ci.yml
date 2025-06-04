@@ -73,7 +73,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
+
       - name: Install dependencies
         run: |
          pip install .
@@ -86,7 +86,7 @@ jobs:
           VERSION=$(grep version pyproject.toml | cut -d "'" -f2)
           echo $VERSION
           anybadge --label=version --file=badges/version.svg --value=$VERSION --color=blue
-          
+
       - name: Upload Version Badge as Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -116,7 +116,7 @@ jobs:
       - name: Run tests
         run: |
           pytest --cov=src/$PROJECT_NAME --cov-report=xml:coverage_reports/coverage.xml --cov-report=html:coverage_reports/htmlcov --cov-report=term --debug=trace tests/
-          
+
       - name: Generate Coverage Badge
         run: |
           pip install anybadge
@@ -167,7 +167,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-  
+
       - name: Install dependencies
         run: |
           pip install .[dev]
@@ -306,24 +306,24 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: userguide-book
-          path: ./docs/userguide/book/    
+          path: ./docs/userguide/book/
 
       - name: Push badges and logs to GitHub Pages
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
           git checkout -B gh-pages  # Create or switch to gh-pages branch
-          
+
           # Add the copied files to the Git index
           git add -f logs/lint.log badges/lint.svg                 # linting
           git add -f badges/version.svg                            # version
           git add -f badges/test-coverage.svg coverage_reports/    # tests
           git add -f badges/api.svg docs/api/                      # api
           git add -f badges/userguide.svg docs/userguide/          # userguide
-          
+
           # Commit the changes
           git commit -m "Update badges and logs from linting and test coverage jobs" || echo "No changes to commit"
-          
+
           # Push to the gh-pages branch
           git push origin gh-pages --force
         env:

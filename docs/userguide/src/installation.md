@@ -1,6 +1,6 @@
 # Installation
 
-Choose one of the installation types, 
+Choose one of the installation types,
 
 1. [Full Client](#full-client-installation),
 2. [Developer](#developer-installation), or
@@ -14,7 +14,7 @@ The **Client Installations** are recommended for users who will **use** `recon3d
 The **Developer Installation** is recommended for users who will **create** or **update** functionality.  Knowledge of the Python programming language is required.
 
 <div class="warning">
-<strong>Warning:</strong> 
+<strong>Warning:</strong>
 For all installations, <a href="https://www.python.org/downloads">Python 3.11</a> is required.  Most HPC hosts have this version of Python.  If your host does not have this version, install it before proceeding.
 Git is required as well (except for the Minimal Client installation).  Git is present on most HPC hosts.  For a local host, install <a href="https://git-scm.com">Git</a> if it is not present.
 </div>

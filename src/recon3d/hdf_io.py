@@ -932,8 +932,8 @@ def image_to_hdf(yml_path: Path) -> Path:
     # check cli_entry_points is valid
     if "image_to_hdf" not in yml_vals["cli_entry_points"]:
         raise ValueError(
-            f"""Error. Incorrect yml format. 
-                This function requires the "cli_entry_points" key to contain "image_to_hdf", 
+            f"""Error. Incorrect yml format.
+                This function requires the "cli_entry_points" key to contain "image_to_hdf",
                 but currently contains the following options: {yml_vals["cli_entry_points"]} """
         )
     semantic_stack_save = ia.process_image_stack(yml_path)
@@ -1018,7 +1018,7 @@ def hdf_to_image(yml_path: Path) -> Path:
     if "hdf_to_image" not in yml_vals["cli_entry_points"]:
         raise ValueError(
             f"""Error. Incorrect yml format.
-            This function requires the "cli_entry_points" key to contain "hdf_to_image", 
+            This function requires the "cli_entry_points" key to contain "hdf_to_image",
             but currently contains the following options: {yml_vals["cli_entry_points"]} """
         )
 
@@ -1121,7 +1121,7 @@ def hdf_to_npy(yml_path: Path) -> Path:
     if "hdf_to_npy" not in yml_vals["cli_entry_points"]:
         raise ValueError(
             f"""Error. Incorrect yml format.
-            This function requires the "cli_entry_points" key to contain "hdf_to_npy", 
+            This function requires the "cli_entry_points" key to contain "hdf_to_npy",
             but currently contains the following options: {yml_vals["cli_entry_points"]} """
         )
 
