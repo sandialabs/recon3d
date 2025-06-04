@@ -1,15 +1,5 @@
 # Utilities
 
-## `image_stack_to_array`
-
-Takes all the images in a directory and saves it as a NumPy (`.npy`) file.
-
-Contents of `image_stack_to_array`:
-
-```yml
-<!-- cmdrun cat image_stack_to_array.yml -->
-```
-
 ## `grayscale_image_stack_to_segmentation`
 
 This utility takes
