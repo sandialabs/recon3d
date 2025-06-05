@@ -9,4 +9,4 @@
 
 ## Getting Started
 
-Installation instructions and more can be found in the [User Guide](https://sandialabs.github.io/recon3d/docs/userguide/book/index.html).
+Installation instructions and tutorials can be found in the [User Guide](https://sandialabs.github.io/recon3d/docs/userguide/book/index.html).
