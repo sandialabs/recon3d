@@ -1,0 +1,375 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>npy_to_mesh - User Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="npy_to_mesh"><a class="header" href="#npy_to_mesh"><code>npy_to_mesh</code></a></h1>
+<hr />
+<p><code>npy_to_image</code> takes a semantic segmentation, encoded as a <code>.npy</code> file, plus a <code>.yml</code> recipe that holds configuration details, and create an Exodus finite element mesh, suitable for analysis with Sierra Solid Mechanics (SSM).</p>
+<hr />
+<p>Consider, as an example, the following four images:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">letter_f_slice_0.tif</th><th style="text-align: center">letter_f_slice_1.tif</th><th style="text-align: center">letter_f_slice_2.tif</th><th style="text-align: center">letter_f_slice_3.tif</th></tr></thead><tbody>
+</tbody></table>
+</div><p align="center" width="100%">
+  <img src="letter_f_slice_0.png" alt="Slice_0" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="letter_f_slice_1.png" alt="Slice_1" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="letter_f_slice_2.png" alt="Slice_2" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="letter_f_slice_3.png" alt="Slice_3" width="20%" />
+</p>
+<p>This stack of images as a NumPy array, saved to the <code>letter_f_3d.npy</code>, has the form:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; aa = np.load("letter_f_3d.npy")
+&gt;&gt;&gt; aa
+array([[[1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]],
+
+       [[1, 0, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [1, 0, 0],
+        [1, 1, 1]],
+
+       [[1, 0, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [1, 0, 0],
+        [1, 1, 1]],
+
+       [[1, 0, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [1, 0, 0],
+        [1, 1, 1]]], dtype=uint8)
+</code></pre>
+<p>where there are four <code>z</code> images, and each image is spanned by the <code>y-x</code> plane.</p>
+<p>Three <code>.yml</code> recipes are considered:</p>
+<ul>
+<li>A mesh composed of only of material 1 (<code>ID=1</code> in the segmentation)</li>
+<li>A mesh composed only of material 0 (<code>ID=0</code>), and</li>
+<li>A mesh composed of bht materials (<code>ID=0</code> and <code>ID=1</code>).</li>
+</ul>
+<h2 id="segmentation-id1"><a class="header" href="#segmentation-id1">Segmentation <code>ID=1</code></a></h2>
+<pre><code class="language-yml">#npy_input: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy
+# npy_input: ~/recon3d/tests/data/letter_f_3d.npy
+# output_file: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo
+npy_input: tests/data/letter_f_3d.npy
+output_file: docs/userguide/src/npy_to_mesh/letter_f_3d.exo
+remove: [0,]
+scale_x: 10.0 # float
+scale_y: 10.0
+scale_z: 10.0
+translate_x: -15.0 # float
+translate_y: -25.0
+translate_z: -20.0
+</code></pre>
+<p><code>npy_to_mesh letter_f_3d.yml</code> produces:</p>
+<h3 id="static"><a class="header" href="#static">STATIC</a></h3>
+<pre><code class="language-sh">(.venv)  recon3d&gt; npy_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+This is /Users/chovey/recon3d/src/recon3d/npy_to_mesh.py
+Processing file: /Users/chovey/recon3d/docs/userguide/src/numpy_to_mesh/letter_f_3d.yml
+Success: database created from file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo', 'remove': [0], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+Running automesh with the following command:
+mesh -i /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy -o /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo -r 0 --xscale 10.0 --yscale 10.0 --zscale 10.0 --xtranslate -15.0 --ytranslate -25.0 --ztranslate -20.0
+Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+Wrote output file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo
+Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+</code></pre>
+<h3 id="dynamic"><a class="header" href="#dynamic">DYNAMIC</a></h3>
+<pre><code class="language-sh">npy_to_mesh letter_f_3d.yml
+
+This is /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/site-packages/recon3d/npy_to_mesh.py
+Processing file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+Success: database created from file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+{'npy_input': 'tests/data/letter_f_3d.npy', 'output_file': 'docs/userguide/src/npy_to_mesh/letter_f_3d.exo', 'remove': [0], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+</code></pre>
+<p>The resulting mesh appears in Cubit as</p>
+<p><img src="letter_f_3d.png" alt="letter_f_3d.png" /></p>
+<p>Tip: To reproduce the view in Cubit to match the NumPy ordering, do the following</p>
+<pre><code class="language-sh">Cubit&gt;
+view iso
+up 0 -1 0
+view from 1000 -500 1500
+</code></pre>
+<h2 id="segmentation-id0"><a class="header" href="#segmentation-id0">Segmentation <code>ID=0</code></a></h2>
+<pre><code class="language-yml">npy_input: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy
+output_file: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo
+remove: [1,]
+scale_x: 10.0 # float
+scale_y: 10.0
+scale_z: 10.0
+translate_x: -15.0 # float
+translate_y: -25.0
+translate_z: -20.0
+</code></pre>
+<p>Run <code>npy_to_mesh</code> on <code>letter_f_3d_inverted.yml</code>,</p>
+<h3 id="static-1"><a class="header" href="#static-1">STATIC</a></h3>
+<pre><code class="language-sh">(.venv)  recon3d&gt; npy_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+This is /Users/chovey/recon3d/src/recon3d/npy_to_mesh.py
+Processing file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+Success: database created from file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo', 'remove': [1], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+Running automesh with the following command:
+mesh -i /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy -o /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo -r 1 --xscale 10.0 --yscale 10.0 --zscale 10.0 --xtranslate -15.0 --ytranslate -25.0 --ztranslate -20.0
+Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+Wrote output file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo
+Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+</code></pre>
+<h3 id="dynamic-1"><a class="header" href="#dynamic-1">DYNAMIC</a></h3>
+<pre><code class="language-sh">npy_to_mesh letter_f_3d_inverted.yml
+
+This is /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/site-packages/recon3d/npy_to_mesh.py
+Processing file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+Success: database created from file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo', 'remove': [1], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+</code></pre>
+<p><img src="letter_f_3d_inverted.png" alt="letter_f_3d_inverted.png" /></p>
+<p>Remark: For consistency with the following two-material case, we have changed the color from green, the original color on import into Cubit, to yellow.</p>
+<h2 id="segmentation-id0-and-id1"><a class="header" href="#segmentation-id0-and-id1">Segmentation <code>ID=0</code> and <code>ID=1</code></a></h2>
+<pre><code class="language-yml">npy_input: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy
+output_file: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo
+remove: []
+scale_x: 10.0 # float
+scale_y: 10.0
+scale_z: 10.0
+translate_x: -15.0 # float
+translate_y: -25.0
+translate_z: -20.0
+</code></pre>
+<p>Run <code>npy_to_mesh</code> on <code>letter_f_3d_inverted.yml</code>,</p>
+<h3 id="static-2"><a class="header" href="#static-2">STATIC</a></h3>
+<pre><code class="language-sh">(.venv)  recon3d&gt; npy_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.yml
+This is /Users/chovey/recon3d/src/recon3d/npy_to_mesh.py
+Processing file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.yml
+Success: database created from file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo', 'remove': [], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+Running automesh with the following command:
+mesh -i /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy -o /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo --xscale 10.0 --yscale 10.0 --zscale 10.0 --xtranslate -15.0 --ytranslate -25.0 --ztranslate -20.0
+Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+Wrote output file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo
+Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+</code></pre>
+<h3 id="dynamic-2"><a class="header" href="#dynamic-2">DYNAMIC</a></h3>
+<pre><code class="language-sh">npy_to_mesh letter_f_3d_two_material.yml
+
+&lt;!-- npy_to_mesh letter_f_3d_two_material.yml --&gt;
+</code></pre>
+<p><img src="letter_f_3d_two_material.png" alt="letter_f_3d_two_material.png" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../downscale/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../utilities/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../downscale/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../utilities/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

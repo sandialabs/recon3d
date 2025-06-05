@@ -1,0 +1,22 @@
+cli_entry_points:
+- downscale
+downscale_tolerance: 0.0001
+image_dir: null
+image_limit_factor: 2.0
+image_type: .tif
+out_dir: null
+output_stack_type: padded
+padding:
+  nx: 1
+  ny: 1
+  nz: 1
+resolution_input:
+  dx: 10.0
+  dy: 10.0
+  dz: 10.0
+resolution_output:
+  dx: 100.0
+  dy: 100.0
+  dz: 10.0
+save_npy: true
+writeVTR: true

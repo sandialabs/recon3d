@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>binary_to_semantic (and reverse) - User Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="binary_to_semantic-and-reverse"><a class="header" href="#binary_to_semantic-and-reverse"><code>binary_to_semantic</code> (and reverse)</a></h1>
+<hr />
+<p><code>binary_to_semantic</code> converts segmented binary images, where metal is labeled as True (white) and air/pores as False (black), into semantic image stacks with distinct integer labels for each constituent (air, metal, and porosity), facilitating separate analyses for each class in the context of x-ray computed tomography data of additively manufactured tensile samples containing porosity.</p>
+<hr />
+<p>Segmented data broadly encompasses any annotated image that can be used for subsequent image processing or analysis, and a binarized image can be considered to be the simplest case of an image segmentation. Often, grayscale x-ray computed tomography data (a key application of the <code>recon3d</code> module), a binarized image for a metallic sample containing internal voids can easily distinguish the metal and air, with air encompassing both the region outside the metal sample and any internal porosity.</p>
+<hr />
+<p>Following is an example of the <code>binary_to_semantic</code> and <code>semantic_to_binary</code> workflow <strong>specifically designed for the NOMAD 2024 binarized CT data, where metal is labelled as "True" and the air/pores are labelled as "False"</strong>.</p>
+<hr />
+<p>Here an example image from a x-ray CT cross-section of a metal cylinder with voids will be used for demonstration. The segmented binary image contains pixel values where metal = 1 or True <em><strong>(white)</strong></em> and everything else = 0 or False <em><strong>(black)</strong></em></p>
+<figure>
+<p align="center" width="100%">
+    <img src="binary_016.png" width="60%"
+         alt="Binary Image">
+    <figcaption>
+    <div style="text-align: center; font-style: italic;">
+    Segmented binary image
+</div>
+</figcaption>
+</p>
+</figure>
+<p>Semantic image stacks are one of the key data types used in the <code>recon3d</code> module, and are a key class of segmented data in the broader field of image processing. To perform statistical analyses on the metal or the pores independently for these images, we must convert binary image stacks to a semantic image stack, in which each separate constituent (air, metal, and porosity) is labelled with a unique integer label. In this way, semantic images group objects based on defined categories. Following the example above, the classes are labeled as air = 0 <em><strong>(black)</strong></em>, metal = 1 <em><strong>(gray)</strong></em> and internal porosity = 2 <em><strong>(white)</strong></em>.</p>
+<figure>
+<p align="center" width="100%">
+    <img src="semantic_016.png" width="60%"
+         alt="Semantic Image">
+    <figcaption>
+    <div style="text-align: center; font-style: italic;">
+    Semantic image
+</div>
+</figcaption>
+</p>
+</figure>
+<p>With recon3d installed in a virtual environment called .venv, the <code>binary_to_semantic</code> and <code>semantic_to_binary</code> functionality is provided as a command line interface.</p>
+<p>Contents of <code>binary_to_semantic.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- binary_to_semantic
+
+image_dir: tests/data/cylinder_machined_binary # (str) path to images
+out_dir: tests/data/output/binary_to_semantic  # (str) path for the processed files
+</code></pre>
+<p>Contents of <code>semantic_to_binary.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- semantic_to_binary
+
+image_dir: tests/data/cylinder_machined_semantic # (str) path to images
+out_dir: tests/data/output/semantic_to_binary # (str) path for the processed files
+
+selected_class: pores
+
+class_labels:
+  air:
+    value: 0
+  metal:
+    value: 1
+  pores:
+    value: 2
+</code></pre>
+<p>To further illustrate the semantic image stack, binary images from the class labels are shown. On the (left) air is 1 or True <em><strong>(white)</strong></em>, (center) metal is 1 or True <em><strong>(white)</strong></em>, (right) internal porosity is 1 or True <em><strong>(white)</strong></em></p>
+<p align="center" width="100%">
+  <img src="binary_air.png" alt="Air" width="30%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="binary_metal.png" alt="Metal" width="30%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="binary_pores.png" alt="Pores" width="30%" />
+</p>
+<p>With <code>recon3d</code> installed in a virtual environment called <code>.venv</code>, the <code>instance_analysis</code> functionality is provided as a command line interface. Provided a segmented image stack containing a continuous phase, such as the metal, containing pores, the semantic image stack can be generated.</p>
+<p><code>binary_to_semantic binary_to_semantic.yml</code> produces:</p>
+<pre><code class="language-sh">Processing specification file: binary_to_semantic.yml
+Success: database created from file: binary_to_semantic.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['binary_to_semantic'], &lt;class 'list'&gt;
+image_dir, tests/data/cylinder_machined_binary, &lt;class 'str'&gt;
+out_dir, tests/data/output/binary_to_semantic, &lt;class 'str'&gt;
+</code></pre>
+<p>Provided a semantic image stack with labeled classes, binary image stacks of each class can be generated.</p>
+<p><code>semantic_to_binary semantic_to_binary.yml</code> produces:</p>
+<pre><code class="language-sh">Processing specification file: semantic_to_binary.yml
+Success: database created from file: semantic_to_binary.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['semantic_to_binary'], &lt;class 'list'&gt;
+image_dir, tests/data/cylinder_machined_semantic, &lt;class 'str'&gt;
+out_dir, tests/data/output/semantic_to_binary, &lt;class 'str'&gt;
+selected_class, pores, &lt;class 'str'&gt;
+class_labels, {'air': {'value': 0}, 'metal': {'value': 1}, 'pores': {'value': 2}}, &lt;class 'dict'&gt;
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../image_to_hdf/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../image_to_hdf/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

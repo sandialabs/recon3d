@@ -1,0 +1,1011 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>User Guide</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<hr />
+<p><code>recon3d</code> is a collection of tools developed at Sandia National Laboratories for reconstruction of finite element discretizations from a 3D stack of images (often experimental x-ray Computed Tomography data).</p>
+<hr />
+<p><img src="snl.jpg" alt="snl.jpg" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>Choose one of the installation types,</p>
+<ol>
+<li><a href="installation.html#full-client-installation">Full Client</a>,</li>
+<li><a href="installation.html#developer-installation">Developer</a>, or</li>
+<li><a href="installation.html#minimal-client-installation">Minimal Client</a>.</li>
+</ol>
+<p>The <strong>Client Installations</strong> are recommended for users who will <strong>use</strong> <code>recon3d</code> in an analysis workflow.</p>
+<ul>
+<li>Knowledge of the Python programming language is not necessary.</li>
+<li>The Full Client includes the tutorial files.</li>
+<li>The Minimal Client does <em>not</em> include the tutorial files.</li>
+</ul>
+<p>The <strong>Developer Installation</strong> is recommended for users who will <strong>create</strong> or <strong>update</strong> functionality.  Knowledge of the Python programming language is required.</p>
+<div class="warning">
+<strong>Warning:</strong>
+For all installations, <a href="https://www.python.org/downloads">Python 3.11</a> is required.  Most HPC hosts have this version of Python.  If your host does not have this version, install it before proceeding.
+Git is required as well (except for the Minimal Client installation).  Git is present on most HPC hosts.  For a local host, install <a href="https://git-scm.com">Git</a> if it is not present.
+</div>
+<h2 id="full-client-installation"><a class="header" href="#full-client-installation">Full Client Installation</a></h2>
+<p>Clone the repository,</p>
+<pre><code class="language-sh">git clone git@github.com:sandialabs/recon3d.git
+</code></pre>
+<p>The preceding <code>git clone</code> command will clone the <code>recon3d</code> <a href="https://github.com/sandialabs/recon3d">repository</a> into your current working directory by making a new folder called <code>recon3d</code>.</p>
+<div class="note">
+<strong>Note:</strong>
+Use of SSH for cloning <em>may</em> require the user to setup SSH keys in GitHub. Details of this process can be found <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">here</a>.
+</div>
+<p>Change into the <code>recon3d</code> directory,</p>
+<pre><code class="language-sh">cd recon3d
+</code></pre>
+<h3 id="virtual-environment"><a class="header" href="#virtual-environment">Virtual Environment</a></h3>
+<p>For all installations,
+a <a href="https://docs.python.org/3/library/venv.html">virtual environment</a>
+is recommended but not necessary.</p>
+<p>HPC users may have to load a module to use Python 3.11, e.g.,</p>
+<pre><code class="language-sh">module load python3.11  # or similar command specific to your host
+</code></pre>
+<p>Select an installation path.  For example, these instructions show how to install to your home (<code>~</code>) directory.</p>
+<pre><code class="language-sh">cd ~                       # change to the destination directory, e.g., home (~)
+deactivate                 # deactivate any active virtual environment
+rm -rf .venv               # remove any previous virtual environment, e.g., ".venv"
+python3.11 -m venv .venv   # create a new virtual environment called ".venv"
+                           # with Python version 3.11
+</code></pre>
+<p>Activate the virtual environment based on your shell type,</p>
+<pre><code class="language-sh">source .venv/bin/activate       # for bash shell
+source .venv/bin/activate.csh   # for c shell
+source .venv/bin/activate.fish  # for fish shell
+.\.venv\Scripts\activate        # for powershell
+</code></pre>
+<h3 id="automesh-prerequisite"><a class="header" href="#automesh-prerequisite"><code>automesh</code> Prerequisite</a></h3>
+<p>If the host has an out-of-date <code>rust</code> compiler, then <code>automesh</code> Python wheel
+must be built for the specific host,</p>
+<pre><code class="language-sh">cd ~/temp
+git clone git@github.com:sandialabs/recon3d.git
+module load ...
+python3.11 -m venv .venv
+# pip install build
+# python -m build  # makes the .whl
+pip install maturin
+python3.11 -m maturin build --release -F python -i /usr/bin/python3.11
+pip install . --force-reinstall --no-cache-dir
+pip install automesh-0.3.1-cp311-cp311-manylinux_2_28_x86_64.whl
+twine upload automesh-0.3.1-cp311-cp311-manylinux_2_28_x86_64.whl
+pip install --trusted-host pypi.org automesh-0.3.1-cp311-cp311-manylinux_2_28_x86_64.whl
+</code></pre>
+<h3 id="install-recon3d"><a class="header" href="#install-recon3d">Install <code>recon3d</code></a></h3>
+<p>Install the <code>recon3d</code> module,</p>
+<pre><code class="language-sh">pip install .
+</code></pre>
+<h2 id="developer-installation"><a class="header" href="#developer-installation">Developer Installation</a></h2>
+<p>Follow the instructions for the <a href="installation.html#full-client-installation">Full Client Installation</a>, replacing the <code>pip install .</code> command with the following:</p>
+<pre><code class="language-sh">pip install -e .[dev]
+</code></pre>
+<p>The <code>-e</code> installs the code in editable form, suitable for development updates.</p>
+<h2 id="minimal-client-installation"><a class="header" href="#minimal-client-installation">Minimal Client Installation</a></h2>
+<p>Install <code>recon3d</code> from the <a href="https://pypi.org/project/recon3d/">Python Package Index (PyPI)</a>.</p>
+<pre><code class="language-sh">pip install recon3d
+</code></pre>
+<!-- The simplest method to install the package is to utilize a wheel file, which can be found in the `dist` folder of the repository. This procedure should be platform independent and has been tested on macOS, Windows, and Linux. Download the wheel (`.whl` file) to install the package. -->
+<!-- Install the wheel file, which includes all dependencies (internet connection required):
+
+```sh
+# current release name is "recon3d-1.0.7-py3-none-any.whl"
+pip install .\dist\recon3d-1.0.7-py3-none-any.whl
+``` -->
+<h2 id="all-installations"><a class="header" href="#all-installations">All Installations</a></h2>
+<p>Confirm the installation was successful by running the following from the command line:</p>
+<pre><code class="language-sh">recon3d
+</code></pre>
+<p>which will provide the following output:</p>
+<!-- No longer use the ```sh cmdrun recon3d ``` because mdbook cannot format ANSI codes -->
+<!-- So this is hardcoded and needs to be manually updated each time the API changes. -->
+<pre><code class="language-sh">-------
+recon3d
+-------
+
+recon3d
+
+  (this command) Lists the recon3d command line entry points
+
+binary_to_semantic &lt;path_to_file&gt;.yml
+
+  Converts binary image stack to semantic image stack in a
+  folder specified in the user input .yml file.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/binary_to_semantic/binary_to_semantic.yml
+  (.venv) recon3d&gt; binary_to_semantic binary_to_semantic.yml
+
+downscale &lt;path_to_file&gt;.yml
+
+  Downscales images in a folder specified in the user input .yml file.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/downscale/downscale_thunder.yml
+  (.venv) recon3d&gt; downscale downscale_thunder.yml
+
+grayscale_image_stack_to_segmentation &lt;path_to_file&gt;.yml
+
+  Converts a series of grayscale images to a segmentation.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/utilities/grayscale_image_stack_to_segmentation.yml
+  (.venv) recon3d&gt; grayscale_image_stack_to_segmentation grayscale_image_stack_to_segmentation.yml
+
+hello
+
+  Prints 'Hello world!' to the terminal to illustrate a command line entry point.
+
+hdf_to_image &lt;path_to_file&gt;.yml
+
+  From a dataset contained within a .hdf file specified by the input
+  .yml file, creates an image stack with the same dataset name in
+  the specified parent output folder.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/hdf_to_image/hdf_to_image.yml
+  (.venv) recon3d&gt; hdf_to_image hdf_to_image.yml
+
+hdf_to_npy &lt;path_to_file&gt;.yml
+
+  From a dataset contained within a .hdf file specified by the input
+  .yml file, creates a NumPy .npy file from the segmentation data.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/to_npy/hdf_to_npy.yml
+  (.venv) recon3d&gt; hdf_to_npy hdf_to_npy.yml
+
+image_to_hdf &lt;path_to_file&gt;.yml
+
+  From a single image (or image stack) in a folder specified in the
+  user input .yml file, creates a .hdf file in the specified
+  output folder.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/image_to_hdf/image_to_hdf.yml
+  (.venv) recon3d&gt; image_to_hdf image_to_hdf.yml
+
+image_to_npy &lt;path_to_file&gt;.yml
+
+  From a series of images in a folder specified in the user input
+  .yml file, creates a NumPy .npy file in the specified output folder.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/to_npy/image_to_npy.yml
+  (.venv) recon3d&gt; image_to_npy image_to_npy.yml
+
+instance_analysis &lt;path_to_file&gt;.yml
+
+  Digest a semantic segmentation accessible as a folder containing an image
+  stack specified in the user input .yml file.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/instance_analysis/instance_analysis.yml
+  (.venv) recon3d&gt; instance_analysis instance_analysis.yml
+
+npy_to_mesh &lt;path_to_file&gt;.yml
+
+  Converts an instance or semantic segmentation, encoded as a .npy file,
+  to an Exodus II finite element mesh using automesh.
+  See https://autotwin.github.io/automesh/
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+  (.venv) recon3d&gt; npy_to_mesh letter_f_3d.yml
+
+semantic_to_binary &lt;path_to_file&gt;.yml
+
+  Converts semantic image stack to series of binary image stacks in
+  a folder specified in the user input .yml file
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/binary_to_semantic/semantic_to_binary.yml
+  (.venv) recon3d&gt; semantic_to_binary semantic_to_binary.yml
+
+void_descriptor &lt;path_to_file&gt;.yml
+
+  Work in progress, not yet implemented.
+  From a pore dataset contained within a hdf file specified by
+  the input .yml file, compute the void descriptor attributes
+  for the void descriptor function.
+
+  Example:
+  # Edit path variables in
+  # ~/recon3d/docs/userguide/src/void_descriptor/void_descriptor.yml
+  (.venv) recon3d&gt; void_descriptor void_descriptor.yml
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="binary_to_semantic-and-reverse"><a class="header" href="#binary_to_semantic-and-reverse"><code>binary_to_semantic</code> (and reverse)</a></h1>
+<hr />
+<p><code>binary_to_semantic</code> converts segmented binary images, where metal is labeled as True (white) and air/pores as False (black), into semantic image stacks with distinct integer labels for each constituent (air, metal, and porosity), facilitating separate analyses for each class in the context of x-ray computed tomography data of additively manufactured tensile samples containing porosity.</p>
+<hr />
+<p>Segmented data broadly encompasses any annotated image that can be used for subsequent image processing or analysis, and a binarized image can be considered to be the simplest case of an image segmentation. Often, grayscale x-ray computed tomography data (a key application of the <code>recon3d</code> module), a binarized image for a metallic sample containing internal voids can easily distinguish the metal and air, with air encompassing both the region outside the metal sample and any internal porosity.</p>
+<hr />
+<p>Following is an example of the <code>binary_to_semantic</code> and <code>semantic_to_binary</code> workflow <strong>specifically designed for the NOMAD 2024 binarized CT data, where metal is labelled as "True" and the air/pores are labelled as "False"</strong>.</p>
+<hr />
+<p>Here an example image from a x-ray CT cross-section of a metal cylinder with voids will be used for demonstration. The segmented binary image contains pixel values where metal = 1 or True <em><strong>(white)</strong></em> and everything else = 0 or False <em><strong>(black)</strong></em></p>
+<figure>
+<p align="center" width="100%">
+    <img src="binary_to_semantic/binary_016.png" width="60%"
+         alt="Binary Image">
+    <figcaption>
+    <div style="text-align: center; font-style: italic;">
+    Segmented binary image
+</div>
+</figcaption>
+</p>
+</figure>
+<p>Semantic image stacks are one of the key data types used in the <code>recon3d</code> module, and are a key class of segmented data in the broader field of image processing. To perform statistical analyses on the metal or the pores independently for these images, we must convert binary image stacks to a semantic image stack, in which each separate constituent (air, metal, and porosity) is labelled with a unique integer label. In this way, semantic images group objects based on defined categories. Following the example above, the classes are labeled as air = 0 <em><strong>(black)</strong></em>, metal = 1 <em><strong>(gray)</strong></em> and internal porosity = 2 <em><strong>(white)</strong></em>.</p>
+<figure>
+<p align="center" width="100%">
+    <img src="binary_to_semantic/semantic_016.png" width="60%"
+         alt="Semantic Image">
+    <figcaption>
+    <div style="text-align: center; font-style: italic;">
+    Semantic image
+</div>
+</figcaption>
+</p>
+</figure>
+<p>With recon3d installed in a virtual environment called .venv, the <code>binary_to_semantic</code> and <code>semantic_to_binary</code> functionality is provided as a command line interface.</p>
+<p>Contents of <code>binary_to_semantic.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- binary_to_semantic
+
+image_dir: tests/data/cylinder_machined_binary # (str) path to images
+out_dir: tests/data/output/binary_to_semantic  # (str) path for the processed files
+</code></pre>
+<p>Contents of <code>semantic_to_binary.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- semantic_to_binary
+
+image_dir: tests/data/cylinder_machined_semantic # (str) path to images
+out_dir: tests/data/output/semantic_to_binary # (str) path for the processed files
+
+selected_class: pores
+
+class_labels:
+  air:
+    value: 0
+  metal:
+    value: 1
+  pores:
+    value: 2
+</code></pre>
+<p>To further illustrate the semantic image stack, binary images from the class labels are shown. On the (left) air is 1 or True <em><strong>(white)</strong></em>, (center) metal is 1 or True <em><strong>(white)</strong></em>, (right) internal porosity is 1 or True <em><strong>(white)</strong></em></p>
+<p align="center" width="100%">
+  <img src="binary_to_semantic/binary_air.png" alt="Air" width="30%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="binary_to_semantic/binary_metal.png" alt="Metal" width="30%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="binary_to_semantic/binary_pores.png" alt="Pores" width="30%" />
+</p>
+<p>With <code>recon3d</code> installed in a virtual environment called <code>.venv</code>, the <code>instance_analysis</code> functionality is provided as a command line interface. Provided a segmented image stack containing a continuous phase, such as the metal, containing pores, the semantic image stack can be generated.</p>
+<p><code>binary_to_semantic binary_to_semantic.yml</code> produces:</p>
+<pre><code class="language-sh">Processing specification file: binary_to_semantic.yml
+Success: database created from file: binary_to_semantic.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['binary_to_semantic'], &lt;class 'list'&gt;
+image_dir, tests/data/cylinder_machined_binary, &lt;class 'str'&gt;
+out_dir, tests/data/output/binary_to_semantic, &lt;class 'str'&gt;
+</code></pre>
+<p>Provided a semantic image stack with labeled classes, binary image stacks of each class can be generated.</p>
+<p><code>semantic_to_binary semantic_to_binary.yml</code> produces:</p>
+<pre><code class="language-sh">Processing specification file: semantic_to_binary.yml
+Success: database created from file: semantic_to_binary.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['semantic_to_binary'], &lt;class 'list'&gt;
+image_dir, tests/data/cylinder_machined_semantic, &lt;class 'str'&gt;
+out_dir, tests/data/output/semantic_to_binary, &lt;class 'str'&gt;
+selected_class, pores, &lt;class 'str'&gt;
+class_labels, {'air': {'value': 0}, 'metal': {'value': 1}, 'pores': {'value': 2}}, &lt;class 'dict'&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="image_to_hdf"><a class="header" href="#image_to_hdf"><code>image_to_hdf</code></a></h1>
+<hr />
+<p>The <code>image_to_hdf</code> function converts image data into a hdf representation suitable for 3D analysis.</p>
+<hr />
+<p>Some analyses may require the extraction of voxel data contained within an hdf file and conversion to an internal Python type. One extension of this application is the direct conversion of an image stack into a HDF, which may be utilized for instance analysis.</p>
+<p>The <code>image_to_hdf</code> functionality is provided as a command line interface.  A HDF file can be produced from a folder of images.</p>
+<p>Contents of <code>image_to_hdf.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- image_to_hdf
+
+semantic_images_dir: tests/data/letter_f
+semantic_images_type: .tif
+semantic_imagestack_name: letter_f_test
+
+voxel_size:
+  dx: 1.0
+  dy: 1.0
+  dz: 1.0
+origin:
+  x0: 0.0 # (float), real space units of the origin in x
+  y0: 0.0 # (float), real space units of the origin in y
+  z0: 0.0 # (float), real space units of the origin in z
+pixel_units: "voxel"
+
+out_dir: recon3d/data/temp
+h5_filename: letter_f_test
+</code></pre>
+<p><code>image_to_hdf image_to_hdf.yml</code> produces:</p>
+<pre><code class="language-sh">Success: database created from file: image_to_hdf.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['image_to_hdf'], &lt;class 'list'&gt;
+semantic_images_dir, tests/data/letter_f, &lt;class 'str'&gt;
+semantic_images_type, .tif, &lt;class 'str'&gt;
+semantic_imagestack_name, letter_f_test, &lt;class 'str'&gt;
+voxel_size, {'dx': 1.0, 'dy': 1.0, 'dz': 1.0}, &lt;class 'dict'&gt;
+origin, {'x0': 0.0, 'y0': 0.0, 'z0': 0.0}, &lt;class 'dict'&gt;
+pixel_units, voxel, &lt;class 'str'&gt;
+out_dir, recon3d/data/temp, &lt;class 'str'&gt;
+h5_filename, letter_f_test, &lt;class 'str'&gt;
+Processing specification file: image_to_hdf.yml
+Success: database created from file: image_to_hdf.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['image_to_hdf'], &lt;class 'list'&gt;
+semantic_images_dir, tests/data/letter_f, &lt;class 'str'&gt;
+semantic_images_type, .tif, &lt;class 'str'&gt;
+semantic_imagestack_name, letter_f_test, &lt;class 'str'&gt;
+voxel_size, {'dx': 1.0, 'dy': 1.0, 'dz': 1.0}, &lt;class 'dict'&gt;
+origin, {'x0': 0.0, 'y0': 0.0, 'z0': 0.0}, &lt;class 'dict'&gt;
+pixel_units, voxel, &lt;class 'str'&gt;
+out_dir, recon3d/data/temp, &lt;class 'str'&gt;
+h5_filename, letter_f_test, &lt;class 'str'&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="instance_analysis"><a class="header" href="#instance_analysis"><code>instance_analysis</code></a></h1>
+<hr />
+<p><code>instance_analysis</code> takes a semantic image stack and generates an instance image stack for one semantic label at a time, as well as statistics on those instances, such as size, shape from a best-fit ellipsoid, as well as neighborhood metrics.</p>
+<hr />
+<p>As opposed to semantic segmentation, which groups objects in an image based on defined categories, instance segmentation can be considered a refined version of semantic segmentation wherein individual instances are independently labelled. For example, an image can be semantically segmented to distinguish between different animals (person, sheep, or dog) in an image, while an instance segmentation will label the various individual animals in the image:</p>
+<p>Instance analysis provides the user with various metrics for each <em>instance</em> of a <strong>semantic label</strong>, such as the size, shape, or orientation of each individual <em>instance</em>, enabling a statistical assessment of instance populations from a dataset. This is typically done on individual populations of semantic labels, so an image with multiple sheep and multiple dogs would return separate data for both the sheep and dog populations. Instance analysis on combined semantic labels would require the generation of a new semantic label (e.g. four-legged animals).</p>
+<p><img src="instance_analysis/semantic_vs_instance.png" alt="semantic_vs_instance.png" /></p>
+<p>With <code>recon3d</code> installed in a virtual environment called <code>.venv</code>, the <code>instance_analysis</code> functionality is provided as a command line interface.  Following is an example of the instance_analysis workflow. Providing a semantic image stack with labeled classes, the instances of each class and associated instance properties can be generated.</p>
+<p>Contents of <code>instance_analysis.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- instance_analysis
+- image_to_hdf
+
+semantic_images_dir: tests/data/cylinder_machined_semantic # (str) path to images, e.g., /Users/chovey/recon3d/examples/fimage/
+semantic_images_type: .tif # (str) .tif | .tiff options are supported
+semantic_imagestack_name: machined_cylinder # (str) name for the image stack
+
+class_labels:
+  air:
+    value: 0
+    instance_analysis:
+      include: False
+      min_feature_size: 0
+  metal:
+    value: 1
+    instance_analysis:
+      include: False
+      min_feature_size: 0
+  pore:
+    value: 2
+    instance_analysis:
+      include: True
+      min_feature_size: 12
+
+voxel_size:
+  dx: 1.0 # (float), real space units of the voxel size in x
+  dy: 1.0 # (float), real space units of the voxel size in y
+  dz: 1.0 # (float), real space units of the voxel size in z
+
+origin:
+  x0: 0.0 # (float), real space units of the origin in x
+  y0: 0.0 # (float), real space units of the origin in y
+  z0: 0.0 # (float), real space units of the origin in z
+
+pixel_units: micron # (str), real length dimension of eacah pixel
+
+out_dir: recon3d/data/output # output path for the processed files
+h5_filename: cylinder_machined # output h5 file name, no extension needed
+
+</code></pre>
+<p><code>instance_analysis instance_analysis.yml</code> produces:</p>
+<pre><code class="language-sh">Processing specification file: instance_analysis.yml
+Success: database created from file: instance_analysis.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['instance_analysis', 'image_to_hdf'], &lt;class 'list'&gt;
+semantic_images_dir, tests/data/cylinder_machined_semantic, &lt;class 'str'&gt;
+semantic_images_type, .tif, &lt;class 'str'&gt;
+semantic_imagestack_name, machined_cylinder, &lt;class 'str'&gt;
+class_labels, {'air': {'value': 0, 'instance_analysis': {'include': False, 'min_feature_size': 0}}, 'metal': {'value': 1, 'instance_analysis': {'include': False, 'min_feature_size': 0}}, 'pore': {'value': 2, 'instance_analysis': {'include': True, 'min_feature_size': 12}}}, &lt;class 'dict'&gt;
+voxel_size, {'dx': 1.0, 'dy': 1.0, 'dz': 1.0}, &lt;class 'dict'&gt;
+origin, {'x0': 0.0, 'y0': 0.0, 'z0': 0.0}, &lt;class 'dict'&gt;
+pixel_units, micron, &lt;class 'str'&gt;
+out_dir, recon3d/data/output, &lt;class 'str'&gt;
+h5_filename, cylinder_machined, &lt;class 'str'&gt;
+</code></pre>
+<p>This always outputs an <code>hdf</code> file.  The current version of <code>hdf</code> file is <code>hdf5</code>, so file extensions will terminate in <code>.h5</code>. The <code>hdf</code> file output can be opened in <a href="https://www.hdfgroup.org/download-hdfview/">HDFView</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hdf_to_image"><a class="header" href="#hdf_to_image"><code>hdf_to_image</code></a></h1>
+<hr />
+<p>The <code>hdf_to_image</code> function  converts a hdf representation into a stack of images.</p>
+<hr />
+<p>Some analyses may require the extraction of voxel data contained within an hdf file and conversion to an internal Python type. One extension of this application is the direct conversion of a voxel array into an image stack, which may be utilized for subsequent downscaling and meshing activities.</p>
+<p>The <code>hdf_to_image</code> functionality is provided as a command line interface. Providing a HDF file with voxel dataset of interest, image data can be extracted to a separate folder.</p>
+<p>Contents of <code>hdf_to_image.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- hdf_to_image
+
+hdf_data_path: tests/data/machined_cylinder.h5 #input hdf file
+voxel_data_location: VoxelData/machined_cylinder #internal dataset path in hdf file
+
+image_parent_dir: tests/data/output/ # folder to contain folder of images
+image_slice_normal: Z
+image_output_type: .tif
+</code></pre>
+<p><code>hdf_to_image hdf_to_image.yml</code> produces:</p>
+<pre><code class="language-sh">Success: database created from file: hdf_to_image.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['hdf_to_image'], &lt;class 'list'&gt;
+hdf_data_path, tests/data/machined_cylinder.h5, &lt;class 'str'&gt;
+voxel_data_location, VoxelData/machined_cylinder, &lt;class 'str'&gt;
+image_parent_dir, tests/data/output/, &lt;class 'str'&gt;
+image_slice_normal, Z, &lt;class 'str'&gt;
+image_output_type, .tif, &lt;class 'str'&gt;
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hdf_to_npy-and-image_to_npy"><a class="header" href="#hdf_to_npy-and-image_to_npy"><code>hdf_to_npy</code> and <code>image_to_npy</code></a></h1>
+<hr />
+<p>The <code>hdf_to_npy</code> function converts a hdf representation into a NumPy .npy file.</p>
+<hr />
+<p>Some analyses may require the extraction of voxel data contained within an hdf file and conversion to an internal Python type.</p>
+<p>The <code>hdf_to_npy</code> functionality is provided as a command line interface. Providing a HDF file with voxel dataset of interest, image data can be extracted to a separate folder.</p>
+<p>Contents of <code>hdf_to_npy.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- hdf_to_npy
+
+hdf_data_path: tests/data/machined_cylinder.h5 #input hdf file
+voxel_data_location: VoxelData/machined_cylinder #internal dataset path in hdf file
+
+output_dir: tests/data/output/ # folder to contain folder of images
+# image_slice_normal: Z  # not needed for npy conversion
+output_type: .npy
+</code></pre>
+<p><code>hdf_to_image hdf_to_npy.yml</code> produces:</p>
+<pre><code class="language-sh">Success: database created from file: hdf_to_npy.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['hdf_to_npy'], &lt;class 'list'&gt;
+hdf_data_path, tests/data/machined_cylinder.h5, &lt;class 'str'&gt;
+voxel_data_location, VoxelData/machined_cylinder, &lt;class 'str'&gt;
+output_dir, tests/data/output/, &lt;class 'str'&gt;
+output_type, .npy, &lt;class 'str'&gt;
+</code></pre>
+<hr />
+<p>The <code>image_to_npy</code> function converts an image stack into a NumPy .npy file.</p>
+<hr />
+<p>Some analyses may require the extraction of image stacks to an internal Python type.</p>
+<p>The <code>image_to_npy</code> functionality is provided as a command line interface. Providing an image stack path with voxel dataset of interest, image data can be extracted to a separate folder.</p>
+<p>Contents of <code>image_to_npy.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- image_to_numpy
+
+# (str) absolute path to images
+image_dir: ~/recon3d/tests/data/cylinder_machined_grayscale
+
+# (str) .tif | .tiff options are supported
+image_type: .tif
+
+# (str) absolute path for the processed files
+out_dir: ~/recon3d/tests/data/output
+</code></pre>
+<p><code>image_to_npy image_to_npy.yml</code> produces:</p>
+<pre><code class="language-sh">This is /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/site-packages/recon3d/image_stack_to_array.py
+Processing file: /home/runner/work/recon3d/recon3d/docs/userguide/src/to_npy/image_to_npy.yml
+Success: database created from file: /home/runner/work/recon3d/recon3d/docs/userguide/src/to_npy/image_to_npy.yml
+{'cli_entry_points': ['image_to_numpy'], 'image_dir': '~/recon3d/tests/data/cylinder_machined_grayscale', 'image_type': '.tif', 'out_dir': '~/recon3d/tests/data/output'}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="downscale"><a class="header" href="#downscale"><code>downscale</code></a></h1>
+<hr />
+<p><code>downscale</code> pads an image stack to make its dimensions evenly divisible by a target resolution, then downscales it to that resolution, effectively reducing the number of voxels for computations like Finite Element Analysis, resulting in a significant reduction in image resolution while adding padding to maintain dimension compatibility.</p>
+<hr />
+<p>With <code>recon3d</code> installed in a virtual environment called <code>.venv</code>, the <code>downscale</code> functionality is provided as a command line interface.</p>
+<p>We will use the subject <code>thunder_gray.tif</code> for demonstration:</p>
+<p><img src="downscale/thunder_gray_input_illustrated.png" alt="thunder_gray_input_illustrated.png" /></p>
+<p>The subject file, a grayscale image with <code>734x348</code> of pixel resolution, is shown in the Graphic app to demonstrate pixel height and width.</p>
+<p>Contents of <code>downscale_thunder.yml</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- downscale
+downscale_tolerance: 0.0001
+image_dir: tests/data/thunder_gray
+image_limit_factor: 2.0
+image_type: .tif
+out_dir: tests/data/output # output path for the processed files
+output_stack_type: padded
+padding:
+  nx: 10
+  ny: 10
+  nz: 0
+resolution_input:
+  dx: 10.0
+  dy: 10.0
+  dz: 10.0
+resolution_output:
+  dx: 50.0
+  dy: 50.0
+  dz: 10.0
+save_npy: true
+writeVTR: true
+</code></pre>
+<p><code>downscale downscale_thunder.yml</code> produces:</p>
+<pre><code class="language-sh">Processing file: downscale_thunder.yml
+Success: database created from file: downscale_thunder.yml
+key, value, type
+---, -----, ----
+cli_entry_points, ['downscale'], &lt;class 'list'&gt;
+downscale_tolerance, 0.0001, &lt;class 'float'&gt;
+image_dir, tests/data/thunder_gray, &lt;class 'str'&gt;
+image_limit_factor, 2.0, &lt;class 'float'&gt;
+image_type, .tif, &lt;class 'str'&gt;
+out_dir, tests/data/output, &lt;class 'str'&gt;
+output_stack_type, padded, &lt;class 'str'&gt;
+padding, {'nx': 10, 'ny': 10, 'nz': 0}, &lt;class 'dict'&gt;
+resolution_input, {'dx': 10.0, 'dy': 10.0, 'dz': 10.0}, &lt;class 'dict'&gt;
+resolution_output, {'dx': 50.0, 'dy': 50.0, 'dz': 10.0}, &lt;class 'dict'&gt;
+save_npy, True, &lt;class 'bool'&gt;
+writeVTR, True, &lt;class 'bool'&gt;
+</code></pre>
+<p>The output file is shown below:</p>
+<p><img src="downscale/thunder_gray_output_illustrated.png" alt="thunder_gray_output_illustrated.png" /></p>
+<p>Shown together, the grayscale image went from <code>734x348</code> to <code>147x70</code> (<code>5x</code> reduction) plus <code>10+10</code> padding to <code>167x90</code> of pixel resolution. The downscales image is shown atop the subject image in the Graphic app to demonstrate pixel height and width.  Note the black border padding width of <code>10</code> pixels.</p>
+<p>A <code>50_dx.npy</code> and <code>50_dx.vtr</code> file are also saved to the specified <code>out_dir</code> that can be used for additional analysis and visualization.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="npy_to_mesh"><a class="header" href="#npy_to_mesh"><code>npy_to_mesh</code></a></h1>
+<hr />
+<p><code>npy_to_image</code> takes a semantic segmentation, encoded as a <code>.npy</code> file, plus a <code>.yml</code> recipe that holds configuration details, and create an Exodus finite element mesh, suitable for analysis with Sierra Solid Mechanics (SSM).</p>
+<hr />
+<p>Consider, as an example, the following four images:</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">letter_f_slice_0.tif</th><th style="text-align: center">letter_f_slice_1.tif</th><th style="text-align: center">letter_f_slice_2.tif</th><th style="text-align: center">letter_f_slice_3.tif</th></tr></thead><tbody>
+</tbody></table>
+</div><p align="center" width="100%">
+  <img src="npy_to_mesh/letter_f_slice_0.png" alt="Slice_0" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="npy_to_mesh/letter_f_slice_1.png" alt="Slice_1" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="npy_to_mesh/letter_f_slice_2.png" alt="Slice_2" width="20%" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="npy_to_mesh/letter_f_slice_3.png" alt="Slice_3" width="20%" />
+</p>
+<p>This stack of images as a NumPy array, saved to the <code>letter_f_3d.npy</code>, has the form:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; aa = np.load("letter_f_3d.npy")
+&gt;&gt;&gt; aa
+array([[[1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]],
+
+       [[1, 0, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [1, 0, 0],
+        [1, 1, 1]],
+
+       [[1, 0, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [1, 0, 0],
+        [1, 1, 1]],
+
+       [[1, 0, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [1, 0, 0],
+        [1, 1, 1]]], dtype=uint8)
+</code></pre>
+<p>where there are four <code>z</code> images, and each image is spanned by the <code>y-x</code> plane.</p>
+<p>Three <code>.yml</code> recipes are considered:</p>
+<ul>
+<li>A mesh composed of only of material 1 (<code>ID=1</code> in the segmentation)</li>
+<li>A mesh composed only of material 0 (<code>ID=0</code>), and</li>
+<li>A mesh composed of bht materials (<code>ID=0</code> and <code>ID=1</code>).</li>
+</ul>
+<h2 id="segmentation-id1"><a class="header" href="#segmentation-id1">Segmentation <code>ID=1</code></a></h2>
+<pre><code class="language-yml">#npy_input: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy
+# npy_input: ~/recon3d/tests/data/letter_f_3d.npy
+# output_file: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo
+npy_input: tests/data/letter_f_3d.npy
+output_file: docs/userguide/src/npy_to_mesh/letter_f_3d.exo
+remove: [0,]
+scale_x: 10.0 # float
+scale_y: 10.0
+scale_z: 10.0
+translate_x: -15.0 # float
+translate_y: -25.0
+translate_z: -20.0
+</code></pre>
+<p><code>npy_to_mesh letter_f_3d.yml</code> produces:</p>
+<h3 id="static"><a class="header" href="#static">STATIC</a></h3>
+<pre><code class="language-sh">(.venv)  recon3d&gt; npy_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+This is /Users/chovey/recon3d/src/recon3d/npy_to_mesh.py
+Processing file: /Users/chovey/recon3d/docs/userguide/src/numpy_to_mesh/letter_f_3d.yml
+Success: database created from file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo', 'remove': [0], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+Running automesh with the following command:
+mesh -i /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy -o /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo -r 0 --xscale 10.0 --yscale 10.0 --zscale 10.0 --xtranslate -15.0 --ytranslate -25.0 --ztranslate -20.0
+Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+Wrote output file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.exo
+Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+</code></pre>
+<h3 id="dynamic"><a class="header" href="#dynamic">DYNAMIC</a></h3>
+<pre><code class="language-sh">npy_to_mesh letter_f_3d.yml
+
+This is /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/site-packages/recon3d/npy_to_mesh.py
+Processing file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+Success: database created from file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.yml
+{'npy_input': 'tests/data/letter_f_3d.npy', 'output_file': 'docs/userguide/src/npy_to_mesh/letter_f_3d.exo', 'remove': [0], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+</code></pre>
+<p>The resulting mesh appears in Cubit as</p>
+<p><img src="npy_to_mesh/letter_f_3d.png" alt="letter_f_3d.png" /></p>
+<p>Tip: To reproduce the view in Cubit to match the NumPy ordering, do the following</p>
+<pre><code class="language-sh">Cubit&gt;
+view iso
+up 0 -1 0
+view from 1000 -500 1500
+</code></pre>
+<h2 id="segmentation-id0"><a class="header" href="#segmentation-id0">Segmentation <code>ID=0</code></a></h2>
+<pre><code class="language-yml">npy_input: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy
+output_file: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo
+remove: [1,]
+scale_x: 10.0 # float
+scale_y: 10.0
+scale_z: 10.0
+translate_x: -15.0 # float
+translate_y: -25.0
+translate_z: -20.0
+</code></pre>
+<p>Run <code>npy_to_mesh</code> on <code>letter_f_3d_inverted.yml</code>,</p>
+<h3 id="static-1"><a class="header" href="#static-1">STATIC</a></h3>
+<pre><code class="language-sh">(.venv)  recon3d&gt; npy_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+This is /Users/chovey/recon3d/src/recon3d/npy_to_mesh.py
+Processing file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+Success: database created from file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo', 'remove': [1], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+Running automesh with the following command:
+mesh -i /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy -o /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo -r 1 --xscale 10.0 --yscale 10.0 --zscale 10.0 --xtranslate -15.0 --ytranslate -25.0 --ztranslate -20.0
+Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+Wrote output file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo
+Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+</code></pre>
+<h3 id="dynamic-1"><a class="header" href="#dynamic-1">DYNAMIC</a></h3>
+<pre><code class="language-sh">npy_to_mesh letter_f_3d_inverted.yml
+
+This is /opt/hostedtoolcache/Python/3.11.12/x64/lib/python3.11/site-packages/recon3d/npy_to_mesh.py
+Processing file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+Success: database created from file: /home/runner/work/recon3d/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_inverted.exo', 'remove': [1], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+</code></pre>
+<p><img src="npy_to_mesh/letter_f_3d_inverted.png" alt="letter_f_3d_inverted.png" /></p>
+<p>Remark: For consistency with the following two-material case, we have changed the color from green, the original color on import into Cubit, to yellow.</p>
+<h2 id="segmentation-id0-and-id1"><a class="header" href="#segmentation-id0-and-id1">Segmentation <code>ID=0</code> and <code>ID=1</code></a></h2>
+<pre><code class="language-yml">npy_input: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy
+output_file: ~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo
+remove: []
+scale_x: 10.0 # float
+scale_y: 10.0
+scale_z: 10.0
+translate_x: -15.0 # float
+translate_y: -25.0
+translate_z: -20.0
+</code></pre>
+<p>Run <code>npy_to_mesh</code> on <code>letter_f_3d_inverted.yml</code>,</p>
+<h3 id="static-2"><a class="header" href="#static-2">STATIC</a></h3>
+<pre><code class="language-sh">(.venv)  recon3d&gt; npy_to_mesh docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.yml
+This is /Users/chovey/recon3d/src/recon3d/npy_to_mesh.py
+Processing file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.yml
+Success: database created from file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.yml
+{'npy_input': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy', 'output_file': '~/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo', 'remove': [], 'scale_x': 10.0, 'scale_y': 10.0, 'scale_z': 10.0, 'translate_x': -15.0, 'translate_y': -25.0, 'translate_z': -20.0}
+Running automesh with the following command:
+mesh -i /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d.npy -o /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo --xscale 10.0 --yscale 10.0 --zscale 10.0 --xtranslate -15.0 --ytranslate -25.0 --ztranslate -20.0
+Created temporary file in xyz order for automesh: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+Wrote output file: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_two_material.exo
+Temporary file successfully deleted: /Users/chovey/recon3d/docs/userguide/src/npy_to_mesh/letter_f_3d_xyz.npy
+</code></pre>
+<h3 id="dynamic-2"><a class="header" href="#dynamic-2">DYNAMIC</a></h3>
+<pre><code class="language-sh">npy_to_mesh letter_f_3d_two_material.yml
+
+&lt;!-- npy_to_mesh letter_f_3d_two_material.yml --&gt;
+</code></pre>
+<p><img src="npy_to_mesh/letter_f_3d_two_material.png" alt="letter_f_3d_two_material.png" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="utilities"><a class="header" href="#utilities">Utilities</a></h1>
+<h2 id="grayscale_image_stack_to_segmentation"><a class="header" href="#grayscale_image_stack_to_segmentation"><code>grayscale_image_stack_to_segmentation</code></a></h2>
+<p>This utility takes</p>
+<ul>
+<li>a stack of images in a directory, encoded as 8-bit grayscale (integers <code>0...255</code>), and</li>
+<li>a threshold value (defaults to <a href="https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_otsu">Otsu</a> if no threshold value is provided),</li>
+</ul>
+<p>to create</p>
+<ul>
+<li>a NumPy (<code>.npy</code>) segmentation, ready for additional image processing.</li>
+</ul>
+<p>Contents of <code>grayscale_image_stack_to_segmentation</code>:</p>
+<pre><code class="language-yml">cli_entry_points:
+- grayscale_image_stack_to_segmentation
+
+# (str) absolute path to images
+image_dir: ~/recon3d/tests/data/cylinder_machined_grayscale
+
+# (str) .tif | .tiff options are supported
+image_type: .tif
+
+# (int) threshold, between 0 and 255, optional
+# if absent, then Otsu's method is used
+# threshold: 128
+
+# (str) absolute path for the processed files
+out_dir: ~/recon3d/tests/data/output
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="deployment"><a class="header" href="#deployment">Deployment</a></h1>
+<p>The purpose of this section is to describe deployment from a Linux system with internet connection (machine 1) to a second similar Linux system without internet connection (machine 2).</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<p>Both machines must have compatible versions of Python 3.11.   The use of <code>anaconda3/2023.09</code> is illustrated below:</p>
+<h2 id="on-machine-1"><a class="header" href="#on-machine-1">On Machine 1</a></h2>
+<ol>
+<li>Create a virtual environment:</li>
+</ol>
+<pre><code class="language-sh">module load anaconda3/2023.09
+python3.11 -m venv recon3d_env
+</code></pre>
+<ol start="2">
+<li>Activate the virtual environment:</li>
+</ol>
+<pre><code class="language-sh">source recon3d_env/bin/activate
+</code></pre>
+<ol start="3">
+<li>Install <code>recond3d</code>:</li>
+</ol>
+<pre><code class="language-sh"># pip install recon3d # is not currently recommended
+git clone git@github.com:sandialabs/recon3d.git
+pip install recon3d/.
+</code></pre>
+<ol start="4">
+<li>Deactivate and Zip the virtual environment:</li>
+</ol>
+<pre><code class="language-sh">deactivate
+tar -czf recon3d_env.tar.gz recon3d_env
+</code></pre>
+<ol start="5">
+<li>Transfer to machine 2.  Move the zip file using a USB drive, SCP, or equivalent method:</li>
+</ol>
+<pre><code class="language-sh">scp recon3d_env.tar.gz user@second_machine:/path/to/destination
+</code></pre>
+<h2 id="on-machine-2"><a class="header" href="#on-machine-2">On Machine 2</a></h2>
+<ol start="6">
+<li>Extract and then use</li>
+</ol>
+<pre><code class="language-sh">tar -xzf recon3d_env.tar.gz
+module load anaconda3/2023.09
+source recon3d_env/bin/activate
+recon3d
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contributors"><a class="header" href="#contributors">Contributors</a></h1>
+<hr />
+<p><strong>Andrew Polonsky</strong>: apolon@sandia.gov
+<strong>Chad Hovey</strong>: chovey@sandia.gov
+<strong>John Emery</strong>: jmemery@sandia.gov
+<strong>Paul Chao</strong>: pchao@sandia.gov</p>
+<hr />
+<p><img src="snl.jpg" alt="snl.jpg" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

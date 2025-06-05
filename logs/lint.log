@@ -1,0 +1,420 @@
+************* Module recon3d.hdf_io
+src/recon3d/hdf_io.py:188:0: C0301: Line too long (109/100) (line-too-long)
+src/recon3d/hdf_io.py:234:0: C0301: Line too long (125/100) (line-too-long)
+src/recon3d/hdf_io.py:715:0: C0301: Line too long (118/100) (line-too-long)
+src/recon3d/hdf_io.py:901:0: C0301: Line too long (117/100) (line-too-long)
+src/recon3d/hdf_io.py:903:0: C0301: Line too long (147/100) (line-too-long)
+src/recon3d/hdf_io.py:1036:0: C0301: Line too long (113/100) (line-too-long)
+src/recon3d/hdf_io.py:1139:0: C0301: Line too long (115/100) (line-too-long)
+src/recon3d/hdf_io.py:1:0: C0302: Too many lines in module (1188/1000) (too-many-lines)
+src/recon3d/hdf_io.py:209:21: W0511: compression="gzip", #TODO 4/2/24 compression not allowing read in HDF_View (fixme)
+src/recon3d/hdf_io.py:291:5: W0511: TODO 4/2/2024 write metadata as attributes (fixme)
+src/recon3d/hdf_io.py:293:5: W0511: TODO 5/7/2024 make metadata strings add to h5 (fixme)
+src/recon3d/hdf_io.py:685:5: W0511: TODO: AP, write out as single variable length data instead of (fixme)
+src/recon3d/hdf_io.py:715:5: W0511: ):  # TODO: why does the instance_indices.labels not return the correct type, instead it provides the ndarray... (fixme)
+src/recon3d/hdf_io.py:1026:5: W0511: TODO add alternative to ingest npy data dir (fixme)
+src/recon3d/hdf_io.py:76:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/hdf_io.py:77:0: E0401: Unable to import 'h5py' (import-error)
+src/recon3d/hdf_io.py:128:0: R0913: Too many arguments (6/5) (too-many-arguments)
+src/recon3d/hdf_io.py:128:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/recon3d/hdf_io.py:203:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/recon3d/hdf_io.py:220:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/recon3d/hdf_io.py:238:0: R1711: Useless return at end of function or method (useless-return)
+src/recon3d/hdf_io.py:689:4: W0101: Unreachable code (unreachable)
+src/recon3d/hdf_io.py:78:0: C0411: standard import "functools.singledispatch" should be placed before third party imports "numpy", "h5py" (wrong-import-order)
+************* Module recon3d.constants
+src/recon3d/constants.py:29:0: E0401: Unable to import 'numpy' (import-error)
+************* Module recon3d.utility
+src/recon3d/utility.py:154:0: C0301: Line too long (102/100) (line-too-long)
+src/recon3d/utility.py:174:0: C0301: Line too long (102/100) (line-too-long)
+src/recon3d/utility.py:181:0: C0301: Line too long (164/100) (line-too-long)
+src/recon3d/utility.py:191:0: C0301: Line too long (104/100) (line-too-long)
+src/recon3d/utility.py:192:0: C0301: Line too long (105/100) (line-too-long)
+src/recon3d/utility.py:192:0: C0301: Line too long (105/100) (line-too-long)
+src/recon3d/utility.py:325:0: C0301: Line too long (114/100) (line-too-long)
+src/recon3d/utility.py:326:0: C0301: Line too long (107/100) (line-too-long)
+src/recon3d/utility.py:327:0: C0301: Line too long (103/100) (line-too-long)
+src/recon3d/utility.py:357:0: C0301: Line too long (114/100) (line-too-long)
+src/recon3d/utility.py:358:0: C0301: Line too long (107/100) (line-too-long)
+src/recon3d/utility.py:359:0: C0301: Line too long (103/100) (line-too-long)
+src/recon3d/utility.py:411:0: C0301: Line too long (1046/100) (line-too-long)
+src/recon3d/utility.py:522:0: C0301: Line too long (476/100) (line-too-long)
+src/recon3d/utility.py:586:0: C0301: Line too long (111/100) (line-too-long)
+src/recon3d/utility.py:587:0: C0301: Line too long (111/100) (line-too-long)
+src/recon3d/utility.py:588:0: C0301: Line too long (110/100) (line-too-long)
+src/recon3d/utility.py:631:0: C0301: Line too long (111/100) (line-too-long)
+src/recon3d/utility.py:632:0: C0301: Line too long (111/100) (line-too-long)
+src/recon3d/utility.py:633:0: C0301: Line too long (110/100) (line-too-long)
+src/recon3d/utility.py:636:0: C0301: Line too long (115/100) (line-too-long)
+src/recon3d/utility.py:637:0: C0301: Line too long (116/100) (line-too-long)
+src/recon3d/utility.py:638:0: C0301: Line too long (110/100) (line-too-long)
+src/recon3d/utility.py:752:0: C0301: Line too long (118/100) (line-too-long)
+src/recon3d/utility.py:1206:0: C0301: Line too long (104/100) (line-too-long)
+src/recon3d/utility.py:1:0: C0302: Too many lines in module (1284/1000) (too-many-lines)
+src/recon3d/utility.py:113:5: W0511: TODO remove hardcodes and impart flexibility from here to ut.ndarray_to_img call (fixme)
+src/recon3d/utility.py:14:0: E0401: Unable to import 'h5py' (import-error)
+src/recon3d/utility.py:15:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/utility.py:16:0: E0401: Unable to import 'yaml' (import-error)
+src/recon3d/utility.py:17:0: E0401: Unable to import 'PIL' (import-error)
+src/recon3d/utility.py:18:0: E0401: Unable to import 'scipy' (import-error)
+src/recon3d/utility.py:19:0: E0401: Unable to import 'skimage' (import-error)
+src/recon3d/utility.py:20:0: E0401: Unable to import 'skimage.io' (import-error)
+src/recon3d/utility.py:23:0: W0401: Wildcard import recon3d.types (wildcard-import)
+src/recon3d/utility.py:107:4: R1720: Unnecessary "else" after "raise", remove the "else" and de-indent the code inside it (no-else-raise)
+src/recon3d/utility.py:310:30: W0612: Unused variable 'params' (unused-variable)
+src/recon3d/utility.py:384:0: R0914: Too many local variables (24/15) (too-many-locals)
+src/recon3d/utility.py:497:0: R0914: Too many local variables (19/15) (too-many-locals)
+src/recon3d/utility.py:606:0: R0914: Too many local variables (16/15) (too-many-locals)
+src/recon3d/utility.py:1162:0: R0913: Too many arguments (6/5) (too-many-arguments)
+src/recon3d/utility.py:19:0: W0611: Unused import skimage (unused-import)
+src/recon3d/utility.py:20:0: W0611: Unused skimage.io imported as skio (unused-import)
+src/recon3d/utility.py:23:0: W0614: Unused import(s) npt, CartesianAxis2D, Angle, NthNearestNeighbors, EquivalentSphereDiameters, ImageStack, InstanceImageStack, InstanceIndices, SemanticImageStack, VoidDescriptorEllipsoidAngles, VoidDescriptorFittingParameters, VoidDescriptorProperties, VoidDescriptorPoreProperties, NamedTuple, Enum and IntEnum from wildcard import of recon3d.types (unused-wildcard-import)
+************* Module recon3d.static_test_paths
+src/recon3d/static_test_paths.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module recon3d.types
+src/recon3d/types.py:15:0: C0301: Line too long (105/100) (line-too-long)
+src/recon3d/types.py:59:0: C0301: Line too long (121/100) (line-too-long)
+src/recon3d/types.py:146:0: C0301: Line too long (105/100) (line-too-long)
+src/recon3d/types.py:343:0: C0301: Line too long (137/100) (line-too-long)
+src/recon3d/types.py:345:0: C0301: Line too long (130/100) (line-too-long)
+src/recon3d/types.py:415:0: C0301: Line too long (150/100) (line-too-long)
+src/recon3d/types.py:417:0: C0301: Line too long (171/100) (line-too-long)
+src/recon3d/types.py:436:0: C0301: Line too long (169/100) (line-too-long)
+src/recon3d/types.py:438:0: C0301: Line too long (189/100) (line-too-long)
+src/recon3d/types.py:457:0: C0301: Line too long (118/100) (line-too-long)
+src/recon3d/types.py:459:0: C0301: Line too long (119/100) (line-too-long)
+src/recon3d/types.py:500:0: C0301: Line too long (146/100) (line-too-long)
+src/recon3d/types.py:502:0: C0301: Line too long (169/100) (line-too-long)
+src/recon3d/types.py:525:0: C0301: Line too long (154/100) (line-too-long)
+src/recon3d/types.py:527:0: C0301: Line too long (173/100) (line-too-long)
+src/recon3d/types.py:639:0: C0301: Line too long (121/100) (line-too-long)
+src/recon3d/types.py:87:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/types.py:88:0: E0401: Unable to import 'numpy.typing' (import-error)
+src/recon3d/types.py:300:10: E1136: Value 'np.ndarray' is unsubscriptable (unsubscriptable-object)
+src/recon3d/types.py:350:17: E1136: Value 'np.ndarray' is unsubscriptable (unsubscriptable-object)
+src/recon3d/types.py:678:18: E1136: Value 'np.ndarray' is unsubscriptable (unsubscriptable-object)
+************* Module recon3d.instance_analysis
+src/recon3d/instance_analysis.py:169:0: C0301: Line too long (121/100) (line-too-long)
+src/recon3d/instance_analysis.py:170:0: C0301: Line too long (113/100) (line-too-long)
+src/recon3d/instance_analysis.py:172:0: C0301: Line too long (135/100) (line-too-long)
+src/recon3d/instance_analysis.py:227:0: C0301: Line too long (120/100) (line-too-long)
+src/recon3d/instance_analysis.py:228:0: C0301: Line too long (121/100) (line-too-long)
+src/recon3d/instance_analysis.py:229:0: C0301: Line too long (113/100) (line-too-long)
+src/recon3d/instance_analysis.py:231:0: C0301: Line too long (135/100) (line-too-long)
+src/recon3d/instance_analysis.py:266:0: C0301: Line too long (101/100) (line-too-long)
+src/recon3d/instance_analysis.py:267:0: C0301: Line too long (101/100) (line-too-long)
+src/recon3d/instance_analysis.py:306:0: C0301: Line too long (101/100) (line-too-long)
+src/recon3d/instance_analysis.py:307:0: C0301: Line too long (101/100) (line-too-long)
+src/recon3d/instance_analysis.py:406:0: C0301: Line too long (117/100) (line-too-long)
+src/recon3d/instance_analysis.py:407:0: C0301: Line too long (121/100) (line-too-long)
+src/recon3d/instance_analysis.py:408:0: C0301: Line too long (113/100) (line-too-long)
+src/recon3d/instance_analysis.py:410:0: C0301: Line too long (562/100) (line-too-long)
+src/recon3d/instance_analysis.py:458:0: C0301: Line too long (111/100) (line-too-long)
+src/recon3d/instance_analysis.py:614:0: C0301: Line too long (807/100) (line-too-long)
+src/recon3d/instance_analysis.py:645:0: C0301: Line too long (124/100) (line-too-long)
+src/recon3d/instance_analysis.py:676:0: C0301: Line too long (111/100) (line-too-long)
+src/recon3d/instance_analysis.py:677:0: C0301: Line too long (111/100) (line-too-long)
+src/recon3d/instance_analysis.py:678:0: C0301: Line too long (110/100) (line-too-long)
+src/recon3d/instance_analysis.py:681:0: C0301: Line too long (275/100) (line-too-long)
+src/recon3d/instance_analysis.py:789:0: C0301: Line too long (102/100) (line-too-long)
+src/recon3d/instance_analysis.py:855:0: C0301: Line too long (107/100) (line-too-long)
+src/recon3d/instance_analysis.py:983:0: C0301: Line too long (586/100) (line-too-long)
+src/recon3d/instance_analysis.py:1112:0: C0301: Line too long (2574/100) (line-too-long)
+src/recon3d/instance_analysis.py:1208:0: C0301: Line too long (108/100) (line-too-long)
+src/recon3d/instance_analysis.py:1312:0: C0301: Line too long (102/100) (line-too-long)
+src/recon3d/instance_analysis.py:1313:0: C0301: Line too long (106/100) (line-too-long)
+src/recon3d/instance_analysis.py:1314:0: C0301: Line too long (108/100) (line-too-long)
+src/recon3d/instance_analysis.py:1315:0: C0301: Line too long (106/100) (line-too-long)
+src/recon3d/instance_analysis.py:1:0: C0302: Too many lines in module (1342/1000) (too-many-lines)
+src/recon3d/instance_analysis.py:12:1: W0511: TODO Integrate with HDF writing (fixme)
+src/recon3d/instance_analysis.py:13:1: W0511: TODO Integrate with feature measurements (fixme)
+src/recon3d/instance_analysis.py:14:1: W0511: TODO Use constants for Z axis in other module (fixme)
+src/recon3d/instance_analysis.py:15:1: W0511: TODO Simplify/Impose structure for image directory (dataset directory in HDF) (fixme)
+src/recon3d/instance_analysis.py:17:1: W0511: TODO Devise better solution for multiphase support without if/else blocks (fixme)
+src/recon3d/instance_analysis.py:444:5: W0511: TODO: math to account for change in length as function (fixme)
+src/recon3d/instance_analysis.py:650:1: W0511: TODO (fixme)
+src/recon3d/instance_analysis.py:830:5: W0511: # TODO: test functionality (fixme)
+src/recon3d/instance_analysis.py:1012:1: W0511: TODO remove hardcoding here with yml config type (fixme)
+src/recon3d/instance_analysis.py:1273:9: W0511: TODO not implemented instance indices yet (fixme)
+src/recon3d/instance_analysis.py:24:0: E0401: Unable to import 'h5py' (import-error)
+src/recon3d/instance_analysis.py:25:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/instance_analysis.py:26:0: E0401: Unable to import 'numpy.typing' (import-error)
+src/recon3d/instance_analysis.py:28:0: E0401: Unable to import 'PIL' (import-error)
+src/recon3d/instance_analysis.py:29:0: E0401: Unable to import 'skimage.io' (import-error)
+src/recon3d/instance_analysis.py:30:0: E0401: Unable to import 'sklearn.neighbors' (import-error)
+src/recon3d/instance_analysis.py:32:0: E0401: Unable to import 'scipy' (import-error)
+src/recon3d/instance_analysis.py:33:0: E0401: Unable to import 'skimage.measure' (import-error)
+src/recon3d/instance_analysis.py:34:0: E0401: Unable to import 'cc3d' (import-error)
+src/recon3d/instance_analysis.py:35:0: E0401: Unable to import 'fastremap' (import-error)
+src/recon3d/instance_analysis.py:41:0: W0401: Wildcard import recon3d.types (wildcard-import)
+src/recon3d/instance_analysis.py:72:13: E1136: Value 'np.ndarray' is unsubscriptable (unsubscriptable-object)
+src/recon3d/instance_analysis.py:142:13: E1136: Value 'np.ndarray' is unsubscriptable (unsubscriptable-object)
+src/recon3d/instance_analysis.py:372:0: R0914: Too many local variables (26/15) (too-many-locals)
+src/recon3d/instance_analysis.py:737:0: R0914: Too many local variables (24/15) (too-many-locals)
+src/recon3d/instance_analysis.py:1063:0: R0914: Too many local variables (23/15) (too-many-locals)
+src/recon3d/instance_analysis.py:1228:4: W0612: Unused variable 'n_semantic_labels' (unused-variable)
+src/recon3d/instance_analysis.py:27:0: C0411: standard import "pathlib.Path" should be placed before third party imports "h5py", "numpy", "numpy.typing" (wrong-import-order)
+src/recon3d/instance_analysis.py:20:0: W0611: Unused import glob (unused-import)
+src/recon3d/instance_analysis.py:21:0: W0611: Unused Final imported from typing (unused-import)
+src/recon3d/instance_analysis.py:21:0: W0611: Unused NamedTuple imported from typing (unused-import)
+src/recon3d/instance_analysis.py:21:0: W0611: Unused Type imported from typing (unused-import)
+src/recon3d/instance_analysis.py:21:0: W0611: Unused List imported from typing (unused-import)
+src/recon3d/instance_analysis.py:24:0: W0611: Unused import h5py (unused-import)
+src/recon3d/instance_analysis.py:26:0: W0611: Unused numpy.typing imported as npt (unused-import)
+src/recon3d/instance_analysis.py:28:0: W0611: Unused Image imported from PIL (unused-import)
+src/recon3d/instance_analysis.py:29:0: W0611: Unused skimage.io imported as skio (unused-import)
+src/recon3d/instance_analysis.py:32:0: W0611: Unused ndimage imported from scipy (unused-import)
+src/recon3d/instance_analysis.py:33:0: W0611: Unused label imported from skimage.measure (unused-import)
+src/recon3d/instance_analysis.py:33:0: W0611: Unused regionprops imported from skimage.measure (unused-import)
+src/recon3d/instance_analysis.py:41:0: W0614: Unused import(s) npt, CartesianAxis2D, CartesianAxis3D, Angle, EquivalentSphereDiameters, ImageStack, VoidDescriptorEllipsoidAngles, VoidDescriptorFittingParameters, VoidDescriptorProperties, VoidDescriptorPoreProperties, Enum and IntEnum from wildcard import of recon3d.types (unused-wildcard-import)
+************* Module recon3d.npy_to_mesh
+src/recon3d/npy_to_mesh.py:218:5: W0511: TODO: Check if the z-order needs to be reveresed based on the CT serial (fixme)
+src/recon3d/npy_to_mesh.py:9:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/npy_to_mesh.py:10:0: E0401: Unable to import 'yaml' (import-error)
+src/recon3d/npy_to_mesh.py:13:0: E0401: Unable to import 'automesh' (import-error)
+src/recon3d/npy_to_mesh.py:115:0: R0914: Too many local variables (17/15) (too-many-locals)
+src/recon3d/npy_to_mesh.py:242:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/recon3d/npy_to_mesh.py:115:0: R0915: Too many statements (56/50) (too-many-statements)
+************* Module recon3d.image_stack_to_array
+src/recon3d/image_stack_to_array.py:7:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/image_stack_to_array.py:8:0: E0401: Unable to import 'yaml' (import-error)
+src/recon3d/image_stack_to_array.py:49:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module recon3d.downscale
+src/recon3d/downscale.py:52:0: C0301: Line too long (103/100) (line-too-long)
+src/recon3d/downscale.py:92:0: C0301: Line too long (123/100) (line-too-long)
+src/recon3d/downscale.py:153:0: C0301: Line too long (138/100) (line-too-long)
+src/recon3d/downscale.py:343:0: C0301: Line too long (155/100) (line-too-long)
+src/recon3d/downscale.py:111:5: W0511: TODO: check this function with RGB image stack as input (fixme)
+src/recon3d/downscale.py:172:33: W0511: TODO should we restrict the dimensions to 3? (fixme)
+src/recon3d/downscale.py:181:33: W0511: TODO should we restrict the dimensions to 3 (fixme)
+src/recon3d/downscale.py:221:5: W0511: TODO: functionalize and test (fixme)
+src/recon3d/downscale.py:228:5: W0511: TODO: functionalize and test (fixme)
+src/recon3d/downscale.py:35:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/downscale.py:36:0: E0401: Unable to import 'scipy' (import-error)
+src/recon3d/downscale.py:37:0: E0401: Unable to import 'pyevtk.hl' (import-error)
+src/recon3d/downscale.py:113:4: C0103: Variable name "N" doesn't conform to snake_case naming style (invalid-name)
+src/recon3d/downscale.py:118:4: W0632: Possible unbalanced tuple unpacking with sequence '()': left side has 6 labels, right side has 0 values (unbalanced-tuple-unpacking)
+src/recon3d/downscale.py:123:0: R0914: Too many local variables (30/15) (too-many-locals)
+src/recon3d/downscale.py:148:8: R1714: Consider merging these comparisons with 'in' by using 'output_stack_type in ('downscaled', 'bounding_box', 'padded')'. Use a set instead if elements are hashable. (consider-using-in)
+************* Module recon3d.grayscale_image_stack_to_segmentation
+src/recon3d/grayscale_image_stack_to_segmentation.py:9:0: W0622: Redefining built-in 'filter' (redefined-builtin)
+src/recon3d/grayscale_image_stack_to_segmentation.py:8:0: E0401: Unable to import 'numpy' (import-error)
+src/recon3d/grayscale_image_stack_to_segmentation.py:9:0: E0401: Unable to import 'skimage.filters' (import-error)
+src/recon3d/grayscale_image_stack_to_segmentation.py:10:0: E0401: Unable to import 'yaml' (import-error)
+src/recon3d/grayscale_image_stack_to_segmentation.py:106:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/recon3d/grayscale_image_stack_to_segmentation.py:1:0: R0801: Similar lines in 2 files
+==recon3d.grayscale_image_stack_to_segmentation:[131:162]
+==recon3d.image_stack_to_array:[112:143]
+    print(f"This is {Path(__file__).resolve()}")
+
+    fin = yml_input_file.resolve().expanduser()
+
+    print(f"Processing file: {fin}")
+
+    if not fin.is_file():
+        raise FileNotFoundError(f"File not found: {str(fin)}")
+
+    file_type = fin.suffix.casefold()
+    supported_types = (".yaml", ".yml")
+
+    if file_type not in supported_types:
+        raise TypeError("Only file types .yaml, and .yml are supported.")
+
+    db = []
+
+    try:
+        with open(file=fin, mode="r", encoding="utf-8") as stream:
+            db = yaml.load(stream, Loader=yaml.SafeLoader)  # overwrite
+    except yaml.YAMLError as error:
+        print(f"Error with yml module: {error}")
+        print(f"Could not open or decode: {fin}")
+        raise OSError from error
+
+    print(f"Success: database created from file: {fin}")
+    print(db)
+
+    recipe = Recipe(
+        image_dir=Path(db["image_dir"]).expanduser(),
+        image_type=db["image_type"], (duplicate-code)
+src/recon3d/grayscale_image_stack_to_segmentation.py:1:0: R0801: Similar lines in 2 files
+==recon3d.image_stack_to_array:[87:140]
+==recon3d.npy_to_mesh:[111:171]
+    return True
+
+
+def npy_to_mesh(*, yml_input_file: Path) -> bool:
+    """
+    Convert a .npy file specified in a yml recipe to a finite element mesh.
+
+    Parameters
+    ----------
+    yml_input_file : Path
+        The .yml recipe that specifies path variables.
+
+    Returns
+    -------
+    True if successful, False otherwise.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the input .yml file is not found.
+    TypeError
+        If the input file type is not supported.
+    OSError
+        If there is an error with the yml module.
+
+    Examples
+    --------
+    >>> yml_input_file = Path("/path/to/recipe.yml")
+    >>> npy_to_mesh(yml_input_file=yml_input_file)
+    0
+    """
+
+    print(f"This is {Path(__file__).resolve()}")
+
+    fin = yml_input_file.resolve().expanduser()
+
+    print(f"Processing file: {fin}")
+
+    if not fin.is_file():
+        raise FileNotFoundError(f"File not found: {str(fin)}")
+
+    file_type = fin.suffix.casefold()
+    supported_types = (".yaml", ".yml")
+
+    if file_type not in supported_types:
+        raise TypeError("Only file types .yaml, and .yml are supported.")
+
+    db = []
+
+    try:
+        with open(file=fin, mode="r", encoding="utf-8") as stream:
+            db = yaml.load(stream, Loader=yaml.SafeLoader)  # overwrite
+    except yaml.YAMLError as error:
+        print(f"Error with yml module: {error}")
+        print(f"Could not open or decode: {fin}")
+        raise OSError from error
+
+    print(f"Success: database created from file: {fin}")
+    print(db)
+ (duplicate-code)
+src/recon3d/grayscale_image_stack_to_segmentation.py:1:0: R0801: Similar lines in 2 files
+==recon3d.grayscale_image_stack_to_segmentation:[131:159]
+==recon3d.npy_to_mesh:[143:171]
+    print(f"This is {Path(__file__).resolve()}")
+
+    fin = yml_input_file.resolve().expanduser()
+
+    print(f"Processing file: {fin}")
+
+    if not fin.is_file():
+        raise FileNotFoundError(f"File not found: {str(fin)}")
+
+    file_type = fin.suffix.casefold()
+    supported_types = (".yaml", ".yml")
+
+    if file_type not in supported_types:
+        raise TypeError("Only file types .yaml, and .yml are supported.")
+
+    db = []
+
+    try:
+        with open(file=fin, mode="r", encoding="utf-8") as stream:
+            db = yaml.load(stream, Loader=yaml.SafeLoader)  # overwrite
+    except yaml.YAMLError as error:
+        print(f"Error with yml module: {error}")
+        print(f"Could not open or decode: {fin}")
+        raise OSError from error
+
+    print(f"Success: database created from file: {fin}")
+    print(db)
+ (duplicate-code)
+src/recon3d/grayscale_image_stack_to_segmentation.py:1:0: R0801: Similar lines in 2 files
+==recon3d.grayscale_image_stack_to_segmentation:[52:62]
+==recon3d.image_stack_to_array:[77:87]
+    assert isinstance(recipe.image_dir, Path), "image_dir must be a Path object"
+    assert recipe.image_dir.is_dir(), "image_dir must be a directory"
+    assert isinstance(recipe.image_type, str), "image_type must be a string"
+    assert recipe.image_type in [
+        ".tif",
+        ".tiff",
+    ], "image_type must be .tif or .tiff"
+    assert isinstance(recipe.out_dir, Path), "out_path must be a Path object"
+    assert recipe.out_dir.is_dir(), "out_path must be a directory"
+ (duplicate-code)
+src/recon3d/grayscale_image_stack_to_segmentation.py:1:0: R0801: Similar lines in 2 files
+==recon3d.grayscale_image_stack_to_segmentation:[172:205]
+==recon3d.image_stack_to_array:[151:184]
+        out_dir=recipe.out_dir,
+    )
+
+    return True  # success
+
+
+def main():
+    """
+    Runs the module from the command line.
+
+    This function serves as the entry point for terminal-based access to the
+    module. It uses the argparse library to parse command-line arguments.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    To run the module, use the following command in the terminal:
+    $ image_to_stack_array path/to/input.yml
+    """
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_file", help="the .yml input file")
+    args = parser.parse_args()
+    input_file = args.input_file
+    input_file = Path(input_file).expanduser()
+ (duplicate-code)
+src/recon3d/grayscale_image_stack_to_segmentation.py:1:0: R0801: Similar lines in 2 files
+==recon3d.downscale:[401:431]
+==recon3d.instance_analysis:[1304:1335]
+    return True
+
+
+def main():
+    """
+    Command-line interface for running instance analysis on image stacks.
+
+    This function serves as the entry point for terminal-based access to the instance analysis module.
+    It is invoked from the command line using the 'instance_analysis' command specified in pyproject.toml.
+    The function processes a YAML input file to create a semantic image stack and performs instance analysis
+    on all semantic label classes within the stack. The results, including instance stacks and properties,
+    are saved into an HDF5 file.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    To run the instance analysis, use the following command in the terminal:
+    $ instance_analysis path/to/input.yml
+    """
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_file", help="the .yml user input file")
+    args = parser.parse_args()
+    input_file = args.input_file (duplicate-code)
+src/recon3d/grayscale_image_stack_to_segmentation.py:1:0: R0401: Cyclic import (recon3d.hdf_io -> recon3d.instance_analysis) (cyclic-import)
+
+-----------------------------------
+Your code has been rated at 7.08/10
+

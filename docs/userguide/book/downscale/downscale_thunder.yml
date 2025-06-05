@@ -1,0 +1,22 @@
+cli_entry_points:
+- downscale
+downscale_tolerance: 0.0001
+image_dir: tests/data/thunder_gray
+image_limit_factor: 2.0
+image_type: .tif
+out_dir: tests/data/output # output path for the processed files
+output_stack_type: padded
+padding:
+  nx: 10
+  ny: 10
+  nz: 0
+resolution_input:
+  dx: 10.0
+  dy: 10.0
+  dz: 10.0
+resolution_output:
+  dx: 50.0
+  dy: 50.0
+  dz: 10.0
+save_npy: true
+writeVTR: true
