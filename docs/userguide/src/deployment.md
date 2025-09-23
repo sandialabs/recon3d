@@ -2,6 +2,8 @@
 
 The purpose of this section is to describe deployment from a Linux system with internet connection (machine 1) to a second similar Linux system without internet connection (machine 2).
 
+Use a virtual environment. A virtual environment is a self-contained directory that holds a specific Python interpreter and its own set of installed libraries. It allows you  to create isolated project spaces, preventing conflicts between dependencies for different projects.
+
 ## Prerequisites
 
 Both machines must have compatible versions of Python 3.11.   The use of `anaconda3/2023.09` is illustrated below:
@@ -11,9 +13,20 @@ Both machines must have compatible versions of Python 3.11.   The use of `anacon
 1. Create a virtual environment:
 
 ```sh
+# see what modules are available
+module avail
+
+# activate a version that uses Python 3.11, for example:
 module load anaconda3/2023.09
+
+# verify Python 3.11 is loaded
+python --version
+
+# create the virtual virtual environment called recon3d_env
 python3.11 -m venv recon3d_env
 ```
+
+The `recon3d_env` folder will contain the virtual environment.
 
 2. Activate the virtual environment:
 
@@ -21,22 +34,26 @@ python3.11 -m venv recon3d_env
 source recon3d_env/bin/activate
 ```
 
-3. Install `recond3d`:
+3. Update `pip`:
 
 ```sh
-# pip install recon3d # is not currently recommended
-git clone git@github.com:sandialabs/recon3d.git
-pip install recon3d/.
+pip install --upgrade pip
 ```
 
-4. Deactivate and Zip the virtual environment:
+4. Install `recond3d`:
+
+```sh
+pip install recon3d
+```
+
+5. Deactivate and zip the virtual environment:
 
 ```sh
 deactivate
 tar -czf recon3d_env.tar.gz recon3d_env
 ```
 
-5. Transfer to machine 2.  Move the zip file using a USB drive, SCP, or equivalent method:
+6. Transfer to machine 2.  Move the zip file using a USB drive, SCP, or equivalent method:
 
 ```sh
 scp recon3d_env.tar.gz user@second_machine:/path/to/destination
