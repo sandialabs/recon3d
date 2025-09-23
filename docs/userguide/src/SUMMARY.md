@@ -17,7 +17,6 @@
 
 - [Utilities](utilities/README.md)
 - [Deployment](deployment.md)
-- [Development](development.md)
 
 -----------
 

@@ -2,9 +2,9 @@
 
 Choose one of the installation types,
 
-1. [Full Client](#full-client-installation),
-2. [Developer](#developer-installation), or
-3. [Minimal Client](#minimal-client-installation).
+1. [Full Client](#option-1-of-3-full-client-installation)
+2. [Developer](#option-2-of-3-developer-installation), or
+3. [Minimal Client](#option-3-of-3-minimal-client-installation).
 
 The **Client Installations** are recommended for users who will **use** `recon3d` in an analysis workflow.
   - Knowledge of the Python programming language is not necessary.
@@ -19,7 +19,7 @@ For all installations, <a href="https://www.python.org/downloads">Python 3.11</a
 Git is required as well (except for the Minimal Client installation).  Git is present on most HPC hosts.  For a local host, install <a href="https://git-scm.com">Git</a> if it is not present.
 </div>
 
-## Full Client Installation
+## Option 1 of 3: Full Client Installation
 
 Clone the repository,
 
@@ -99,7 +99,7 @@ Install the `recon3d` module,
 pip install .
 ```
 
-## Developer Installation
+## Option 2 of 3: Developer Installation
 
 Follow the instructions for the [Full Client Installation](#full-client-installation), replacing the `pip install .` command with the following:
 
@@ -109,7 +109,7 @@ pip install -e .[dev]
 
 The `-e` installs the code in editable form, suitable for development updates.
 
-## Minimal Client Installation
+## Option 3 of 3: Minimal Client Installation
 
 Install `recon3d` from the [Python Package Index (PyPI)](https://pypi.org/project/recon3d/).
 
