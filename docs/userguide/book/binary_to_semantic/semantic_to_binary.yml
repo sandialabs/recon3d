@@ -1,0 +1,15 @@
+cli_entry_points:
+- semantic_to_binary
+
+image_dir: tests/data/cylinder_machined_semantic # (str) path to images
+out_dir: tests/data/output/semantic_to_binary # (str) path for the processed files
+
+selected_class: pores
+
+class_labels:
+  air:
+    value: 0
+  metal:
+    value: 1
+  pores:
+    value: 2

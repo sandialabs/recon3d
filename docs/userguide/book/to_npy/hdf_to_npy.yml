@@ -1,0 +1,9 @@
+cli_entry_points:
+- hdf_to_npy
+
+hdf_data_path: tests/data/machined_cylinder.h5 #input hdf file
+voxel_data_location: VoxelData/machined_cylinder #internal dataset path in hdf file
+
+output_dir: tests/data/output/ # folder to contain folder of images
+# image_slice_normal: Z  # not needed for npy conversion
+output_type: .npy

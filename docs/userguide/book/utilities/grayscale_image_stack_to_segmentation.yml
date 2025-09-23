@@ -1,0 +1,15 @@
+cli_entry_points:
+- grayscale_image_stack_to_segmentation
+
+# (str) absolute path to images
+image_dir: ~/recon3d/tests/data/cylinder_machined_grayscale
+
+# (str) .tif | .tiff options are supported
+image_type: .tif
+
+# (int) threshold, between 0 and 255, optional
+# if absent, then Otsu's method is used
+# threshold: 128
+
+# (str) absolute path for the processed files
+out_dir: ~/recon3d/tests/data/output

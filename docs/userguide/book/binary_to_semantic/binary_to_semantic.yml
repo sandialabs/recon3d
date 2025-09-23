@@ -1,0 +1,5 @@
+cli_entry_points:
+- binary_to_semantic
+
+image_dir: tests/data/cylinder_machined_binary # (str) path to images
+out_dir: tests/data/output/binary_to_semantic  # (str) path for the processed files

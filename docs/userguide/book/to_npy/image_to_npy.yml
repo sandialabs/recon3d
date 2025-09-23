@@ -1,0 +1,11 @@
+cli_entry_points:
+- image_to_numpy
+
+# (str) absolute path to images
+image_dir: ~/recon3d/tests/data/cylinder_machined_grayscale
+
+# (str) .tif | .tiff options are supported
+image_type: .tif
+
+# (str) absolute path for the processed files
+out_dir: ~/recon3d/tests/data/output
