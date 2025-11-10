@@ -106,3 +106,7 @@ grayscale_image_stack_to_segmentation="recon3d.grayscale_image_stack_to_segmenta
 
 # tutorial to come
 void_descriptor="recon3d.void_descriptor:main"
+
+[tool.uv]
+native-tls = true
+
