@@ -1128,7 +1128,7 @@ def dict_to_yaml(db: dict, file: str) -> Path:
     """
 
     with open(file, "w", encoding="utf-8") as out_file:
-        yaml.dump(db, out_file, default_flow_style=False)  # Write dictionary to YAML
+        yaml.dump(db, out_file, default_flow_style=False, sort_keys=False,)  # Write dictionary to YAML
 
     return Path(file)
 

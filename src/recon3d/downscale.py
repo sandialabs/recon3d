@@ -36,7 +36,7 @@ import numpy as np
 from scipy import ndimage
 from pyevtk.hl import gridToVTK
 
-from recon3d.types import CartesianAxis3D
+import recon3d.types as rtt
 import recon3d.utility as ut
 
 
@@ -152,6 +152,8 @@ def downscale(path_file_input: str) -> bool:
         raise ValueError(
             f'Invalid "output_stack_type" of "{output_stack_type}" input. Valid options inclue "downscaled", "bounding_box", or "padded".'
         )
+    
+    interpolation_mode = rtt.InterpolationMode.from_string(db["interpolation_mode"])
 
     segmented_stack = ut.read_images(
         Path(db["image_dir"]).expanduser(), db["image_type"]
@@ -185,8 +187,8 @@ def downscale(path_file_input: str) -> bool:
     downscaled_stack = ndimage.zoom(
         padded_stack,
         (z_ratio, y_ratio, x_ratio, c_ratio),
-        order=0,
-        # order=interpolation_mode.value,
+        # order=0,
+        order=interpolation_mode.value,
         mode="grid-constant",
         grid_mode=True,
     )
@@ -429,7 +431,7 @@ def save_downscale_stack(
     print(f"Saving cropped image stack in {path} > {image_folder_name}")
     ut.ndarray_to_img(
         data=image_stack,
-        slice_axis=CartesianAxis3D.Z,
+        slice_axis=rtt.CartesianAxis3D.Z,
         parent_dir=path,
         folder_name=image_folder_name,
     )

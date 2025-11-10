@@ -1,6 +1,7 @@
 cli_entry_points:
 - downscale
 downscale_tolerance: 0.0001
+interpolation_mode: nearest
 image_dir: null
 image_limit_factor: 2.0
 image_type: .tif

@@ -13,6 +13,8 @@ CartesianAxis3D
     Constant axis ordering in Python for 3D arrays (Z, Y, X) ordering.
 DataVolume
     The integer counts of the data that compose a single image or a volume composed of a stack of images.
+InterpolationMode
+    The type of interpolation used for scaling images.
 Units
     Unit enum for metadata.
 UnitVector
@@ -171,6 +173,39 @@ class DataVolume(NamedTuple):
     z_image_count: int
     c_channels: int
 
+
+class InterpolationMode(IntEnum):
+    """
+    The type of interpolation used for scaling images.
+
+    Attributes
+    ----------
+    NEAREST : int
+        Nearest neighbor interpolation.
+    LINEAR : int
+        Linear interpolation.
+    CUBIC : int
+        Cubic interpolation.
+
+    Examples
+    --------
+    >>> mode = InterpolationMode.LINEAR
+    >>> print(mode)
+    InterpolationMode.LINEAR
+    """
+
+    NEAREST: int = 0
+    LINEAR: int = 1
+    CUBIC: int = 3
+
+    @classmethod
+    def from_string(cls, name: str) -> "InterpolationMode":
+        try:
+            return cls[name.upper()]
+        except KeyError:
+            valid = ", ".join(m.name.lower() for m in cls)
+            raise ValueError(f"Unknown interpolation mode {name!r}.  "
+                             f"Choose one of: {valid}")
 
 class Units(Enum):
     """

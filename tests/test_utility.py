@@ -180,6 +180,7 @@ def test_dict_to_yaml():
     db = {
         "cli_entry_points": ["downscale"],
         "downscale_tolerance": 0.0001,
+        "interpolation_mode": "nearest",
         "image_dir": None,
         "image_limit_factor": 2.0,
         "image_type": ".tif",
@@ -355,6 +356,7 @@ def test_yaml_to_dict():
     known_db = {
         "cli_entry_points": ["downscale"],
         "downscale_tolerance": 0.0001,
+        "interpolation_mode": "nearest",
         "image_dir": None,
         "image_limit_factor": 2.0,
         "image_type": ".tif",
