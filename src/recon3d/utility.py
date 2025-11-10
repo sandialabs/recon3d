@@ -98,14 +98,14 @@ def binary_with_pores_to_semantic(input_path: Path, output_path: Path) -> dict:
     print("\tIsolating Sample...")
     sample = np.zeros_like(bw_data, dtype=bool)
     for c in range(bw_data.shape[-1]):
-        sample[...,c] = ndimage.binary_fill_holes(bw_data[..., c])
+        sample[..., c] = ndimage.binary_fill_holes(bw_data[..., c])
     np.place(output_data, sample, 1)
 
     # isolate holes within 'metal', assign as 'pore', 2
     print("\tIsolating Voids...")
     voids = np.zeros_like(bw_data, dtype=bool)
     for c in range(bw_data.shape[-1]):
-        voids[..., c] = np.logical_xor(sample [...,c], bw_data[..., c])
+        voids[..., c] = np.logical_xor(sample[..., c], bw_data[..., c])
     np.place(output_data, voids, 2)
 
     # thus, everything else is 'air', 0
@@ -363,7 +363,9 @@ def main_semantic_to_binary():
     print(f"{yml_input_file} processed!")
 
 
-def hdf_to_instance_properties(hdf_path: Path, group_path: str) -> rtt.InstanceProperties:
+def hdf_to_instance_properties(
+    hdf_path: Path, group_path: str
+) -> rtt.InstanceProperties:
     """
     Read instance analysis data from an HDF5 file and create an InstanceProperties object.
 
@@ -754,8 +756,6 @@ def rmdir(directory: Path) -> None:
     shutil.rmtree(str(directory), ignore_errors=True)
 
 
-
-
 def compare_files(file1: Path, file2: Path, ignore_words: list[str]) -> bool:
     """
     Compare two files line-by-line, ignoring lines that contain specified words.
@@ -1128,7 +1128,12 @@ def dict_to_yaml(db: dict, file: str) -> Path:
     """
 
     with open(file, "w", encoding="utf-8") as out_file:
-        yaml.dump(db, out_file, default_flow_style=False, sort_keys=False,)  # Write dictionary to YAML
+        yaml.dump(
+            db,
+            out_file,
+            default_flow_style=False,
+            sort_keys=False,
+        )  # Write dictionary to YAML
 
     return Path(file)
 
@@ -1260,14 +1265,16 @@ def read_images(
     for p in files:
         with Image.open(p) as img:
             if first_file:
-               print(f"Reading {p!r}  mode={img.mode!r}  size={img.size}  info={img.info}")
+                print(
+                    f"Reading {p!r}  mode={img.mode!r}  size={img.size}  info={img.info}"
+                )
 
             # 2) optional uniform conversion
             if convert_mode is not None:
                 img = img.convert(convert_mode)
                 if first_file:
                     print(f"  -> converted to mode={img.mode!r}")
-            
+
             first_file = False
 
             # 3) pull out numpy array (PIL will give you uint8 for "L"/"RGB",

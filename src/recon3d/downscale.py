@@ -152,7 +152,7 @@ def downscale(path_file_input: str) -> bool:
         raise ValueError(
             f'Invalid "output_stack_type" of "{output_stack_type}" input. Valid options inclue "downscaled", "bounding_box", or "padded".'
         )
-    
+
     interpolation_mode = rtt.InterpolationMode.from_string(db["interpolation_mode"])
 
     segmented_stack = ut.read_images(
@@ -173,8 +173,10 @@ def downscale(path_file_input: str) -> bool:
         )
         for dim in range(0, 3)  # 3 spatial dimensions, with channel support below
     ]
-    c_pad = (0,0)  # no padding for channel dimension
-    padded_stack = np.pad(segmented_stack, (z_pad, y_pad, x_pad, c_pad)) #uses constant 0 padding by default
+    c_pad = (0, 0)  # no padding for channel dimension
+    padded_stack = np.pad(
+        segmented_stack, (z_pad, y_pad, x_pad, c_pad)
+    )  # uses constant 0 padding by default
     print(f"New array size: {padded_stack.shape}")
 
     # Use list comprehension
@@ -213,7 +215,13 @@ def downscale(path_file_input: str) -> bool:
                 db["padding"]["nx"],
             )
             padded_stack = np.pad(
-                cropped_stack, ((box_pad_z,), (box_pad_y,), (box_pad_x,), (0,))  # no padding for channel dimension
+                cropped_stack,
+                (
+                    (box_pad_z,),
+                    (box_pad_y,),
+                    (box_pad_x,),
+                    (0,),
+                ),  # no padding for channel dimension
             )
             output_stack = padded_stack
 
@@ -240,9 +248,9 @@ def downscale(path_file_input: str) -> bool:
 
         # define your grid coordinates
         # (for a uniform grid you can just use arange)
-        x = np.arange(nx+1, dtype=np.float32)
-        y = np.arange(ny+1, dtype=np.float32)
-        z = np.arange(nz+1, dtype=np.float32)
+        x = np.arange(nx + 1, dtype=np.float32)
+        y = np.arange(ny + 1, dtype=np.float32)
+        z = np.arange(nz + 1, dtype=np.float32)
 
         # deal with channels
         cell_fields = {}

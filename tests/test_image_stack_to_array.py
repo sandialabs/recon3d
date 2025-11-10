@@ -40,7 +40,7 @@ def test_image_stack_to_array():
     input_img = Path(__file__).parent.joinpath(
         "data", "cylinder_machined_grayscale", "0010.tif"
     )
-    input_img_data= np.array(Image.open(input_img))
+    input_img_data = np.array(Image.open(input_img))
 
     found_img_data = np.squeeze(array_data[slice_num])
 

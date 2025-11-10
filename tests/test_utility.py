@@ -1,5 +1,4 @@
-"""This module tests the utility module.
-"""
+"""This module tests the utility module."""
 
 # python standard libraries
 from pathlib import Path

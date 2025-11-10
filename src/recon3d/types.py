@@ -204,8 +204,10 @@ class InterpolationMode(IntEnum):
             return cls[name.upper()]
         except KeyError:
             valid = ", ".join(m.name.lower() for m in cls)
-            raise ValueError(f"Unknown interpolation mode {name!r}.  "
-                             f"Choose one of: {valid}")
+            raise ValueError(
+                f"Unknown interpolation mode {name!r}.  " f"Choose one of: {valid}"
+            )
+
 
 class Units(Enum):
     """

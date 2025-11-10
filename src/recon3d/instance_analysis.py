@@ -41,7 +41,6 @@ import recon3d.hdf_io as hio
 import recon3d.types as rtt
 
 
-
 def calc_moment(
     indices: np.ndarray[np.int32],
     p: int,
@@ -253,9 +252,7 @@ def ellipsoid_surface_area(ellipsoid: rtt.BestFitEllipsoid) -> rtt.Area:
     )
 
     surface_area = (
-        4
-        * math.pi
-        * ((((a**p * b**p) + (a**p * c**p) + (b**p * c**p)) / 3) ** (1 / p))
+        4 * math.pi * ((((a**p * b**p) + (a**p * c**p) + (b**p * c**p)) / 3) ** (1 / p))
     )
     return rtt.Area(value=surface_area, unit_squared=unit)
 
@@ -770,7 +767,9 @@ def process_image_stack(yml_input_file: Path) -> rtt.SemanticImageStack:
 
     # create meta data
     (nz, ny, nx, nc) = data.shape
-    data_volume = rtt.DataVolume(z_image_count=nz, y_height=ny, x_width=nx, c_channels=nc)
+    data_volume = rtt.DataVolume(
+        z_image_count=nz, y_height=ny, x_width=nx, c_channels=nc
+    )
     print(
         f"image stack, {semantic_seg_stack_name}, has dimensions (num_images, row, col): {data.shape}"
     )
@@ -957,8 +956,6 @@ def semantic_to_instance(
     InstanceImageStack(name='example_instance_stack', metadata=MetaData(data_volume=DataVolume(z_image_count=10, y_height=256, x_width=256), resolution=Resolution(dx=Length(value=1.0, unit=<Units.MICRON: 'micron'>), dy=Length(value=1.0, unit=<Units.MICRON: 'micron'>), dz=Length(value=1.0, unit=<Units.MICRON: 'micron'>)), pixel_units=<Units.MICRON: 'micron'>, origin=Origin(x0=Length(value=0.0, unit=<Units.MICRON: 'micron'>), y0=Length(value=0.0, unit=<Units.MICRON: 'micron'>), z0=Length(value=0.0, unit=<Units.MICRON: 'micron'>))), data=array(...), nlabels=..., min_feature_size=10)
     """
 
-
-
     # Create a boolean mask of the array
     masked_stack = semantic_stack.data == instance_value
 
@@ -966,7 +963,6 @@ def semantic_to_instance(
     # This was previously enforced, as well as limit to 256 classes
     masked_stack = np.squeeze(masked_stack, axis=-1).astype(np.uint8)
     print(f"\tlabelling connected components in '{instance_name}'")
-
 
     # Use cc3d for connected components labeling
     cc3d_instance_stack, cc3d_nlabels = cc3d.connected_components(
