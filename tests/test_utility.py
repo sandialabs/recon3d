@@ -6,6 +6,7 @@ import numpy as np
 
 # third-party libraries
 import pytest
+import yaml
 
 # local libraries
 import recon3d.types as rtt
@@ -370,3 +371,46 @@ def test_yaml_to_dict():
     found_db = ut.yaml_to_dict(aa)
 
     assert known_db == found_db
+
+
+def test_update_yml(tmp_path):
+    ## top level update
+    cfg_file = tmp_path / "config.yml"
+    cfg_file.write_text(yaml.safe_dump({"a": 1, "b": 2}), encoding="utf-8")
+    # update existing top-level key
+    ut.update_yml(cfg_file, ["a"], 42)
+    data = yaml.safe_load(cfg_file.read_text(encoding="utf-8"))
+    assert data["a"] == 42
+    # ensure other keys unchanged
+    assert data["b"] == 2
+
+    ## update nested key
+    cfg_file = tmp_path / "config.yml"
+    original = {"parent": {"child": "old"}}
+    cfg_file.write_text(yaml.safe_dump(original), encoding="utf-8")
+    # update a deeply nested key
+    ut.update_yml(cfg_file, ["parent", "child"], "newval")
+    data = yaml.safe_load(cfg_file.read_text(encoding="utf-8"))
+    assert data["parent"]["child"] == "newval"
+
+    ## new key
+    cfg_file = tmp_path / "config.yml"
+    original = {"parent": {}}
+    cfg_file.write_text(yaml.safe_dump(original), encoding="utf-8")
+    # create a new key under an existing dict
+    ut.update_yml(cfg_file, ["parent", "new_key"], [1, 2, 3])
+    data = yaml.safe_load(cfg_file.read_text(encoding="utf-8"))
+    assert data["parent"]["new_key"] == [1, 2, 3]
+
+    ## missing key in path
+    cfg_file = tmp_path / "config.yml"
+    # 'parent' exists but is not a dict
+    cfg_file.write_text(yaml.safe_dump({"parent": 99}), encoding="utf-8")
+    with pytest.raises(KeyError):
+        ut.update_yml(cfg_file, ["parent", "child"], "x")
+
+    ## completely missing path
+    # no file on disk
+    cfg_file = tmp_path / "does_not_exist.yml"
+    with pytest.raises(FileNotFoundError):
+        ut.update_yml(cfg_file, ["any"], "value")

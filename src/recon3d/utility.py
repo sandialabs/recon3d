@@ -10,7 +10,7 @@ from typing import Iterable, Tuple
 import glob
 import argparse
 import shutil
-from typing import Optional
+from typing import Optional, Sequence, Any
 
 # Third-party library imports
 import h5py
@@ -1136,6 +1136,69 @@ def dict_to_yaml(db: dict, file: str) -> Path:
         )  # Write dictionary to YAML
 
     return Path(file)
+
+
+def update_yml(
+    path: Path,
+    key_path: Sequence[str],
+    new_value: Any,
+) -> None:
+    """
+    Update a nested key in a YAML file in place.
+
+    This function loads the YAML document at `path`, walks down through nested
+    dicts according to `key_path`, sets the final key to `new_value`, and
+    writes the updated document back to the same file (preserving key order).
+
+    Parameters
+    ----------
+    path : Path
+        Path to the YAML file to update.
+    key_path : sequence of str
+        List of nested dictionary keys, e.g. `['images','input']`.  All keys
+        except the last must already exist and map to dicts.
+    new_value : any
+        The value to assign at the final key.
+
+    Returns
+    -------
+    None
+        The file at `path` is overwritten with the updated YAML.
+
+    Raises
+    ------
+    FileNotFoundError
+        If `path` does not exist or cannot be read.
+    KeyError
+        If any intermediate key in `key_path[:-1]` is missing or not a dict.
+
+    Examples
+    --------
+    >>> from pathlib import Path
+    >>> from your_module import update_yml
+    >>> cfg = Path("config.yml")
+    >>> cfg.write_text(
+    ...   "database:\\n  host: old.example.com\\n",
+    ...   encoding="utf-8",
+    ... )
+    >>> update_yml(cfg, ["database","host"], "db.example.com")
+    >>> print(cfg.read_text())
+    database:
+      host: db.example.com
+    """
+    # 1. Load
+    data = yaml.safe_load(path.read_text())
+
+    # 2. Navigate to the nested key, setting the new value
+    d = data
+    for k in key_path[:-1]:
+        if k not in d or not isinstance(d[k], dict):
+            raise KeyError(f"Cannot find nested key {'.'.join(key_path)} in {path}")
+        d = d[k]
+    d[key_path[-1]] = new_value
+
+    # 3. Write back
+    path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
 
 
 def ndarray_to_img(
