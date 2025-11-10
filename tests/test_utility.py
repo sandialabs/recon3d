@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 
 # local libraries
-import recon3d.types as cs
+import recon3d.types as rtt
 
 # from recon3d import downscale as ds
 import recon3d.utility as ut
@@ -66,7 +66,7 @@ def create_binary_data(test_data) -> Path:
 
     ut.ndarray_to_img(
         data=bw_data,
-        slice_axis=cs.CartesianAxis3D.Z,
+        slice_axis=rtt.CartesianAxis3D.Z,
         parent_dir=outputdir_basepath,
         folder_name=outputdir_name,
     )
@@ -238,7 +238,7 @@ def test_nd_to_img():
 
     ut.ndarray_to_img(
         data=image_stack,
-        slice_axis=cs.CartesianAxis3D.Z,
+        slice_axis=rtt.CartesianAxis3D.Z,
         parent_dir=img_save_path,
         folder_name="XY_slices",
     )
@@ -251,7 +251,7 @@ def test_nd_to_img():
 
     ut.ndarray_to_img(
         data=image_stack,
-        slice_axis=cs.CartesianAxis3D.X,
+        slice_axis=rtt.CartesianAxis3D.X,
         parent_dir=img_save_path,
         folder_name="YZ_slices",
     )
@@ -264,7 +264,7 @@ def test_nd_to_img():
 
     ut.ndarray_to_img(
         data=image_stack,
-        slice_axis=cs.CartesianAxis3D.Y,
+        slice_axis=rtt.CartesianAxis3D.Y,
         parent_dir=img_save_path,
         folder_name="XZ_slices",
     )

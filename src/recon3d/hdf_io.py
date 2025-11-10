@@ -92,7 +92,7 @@ from recon3d.types import (
 )
 import recon3d.utility as ut
 import recon3d.instance_analysis as ia
-import recon3d.types as cs
+import recon3d.types as rtt
 
 
 ### BASE/HELPER FUNCTIONS ###
@@ -1030,12 +1030,12 @@ def hdf_to_image(yml_path: Path) -> Path:
     output_image_type = yml_vals["image_output_type"]
 
     slice_normal = yml_vals["image_slice_normal"]
-    valid_slice_normal = set(item.name for item in cs.CartesianAxis3D)
+    valid_slice_normal = set(item.name for item in rtt.CartesianAxis3D)
     if slice_normal not in valid_slice_normal:
         raise ValueError(
             f"Error, '{slice_normal}' is not a valid slicing direction, accepted units are: {valid_slice_normal}"
         )
-    slice_axis = cs.CartesianAxis3D[slice_normal]
+    slice_axis = rtt.CartesianAxis3D[slice_normal]
 
     with h5py.File(hdf_path, "r") as f:
         data = np.squeeze(f[hdf_dataset_location][:])

@@ -18,29 +18,9 @@ import numpy as np
 import yaml
 from PIL import Image
 from scipy import ndimage
-# import skimage
-# import skimage.io as skio
 
 # Local imports
 import recon3d.types as rtt
-
-# import recon3d.feature_analysis as fa
-# from recon3d.feature_analysis import SemanticImageStack
-
-
-# def instance_to_ndarray(data: InstanceImageStack) -> np.ndarray:
-#     """Extract the array data within the Instance ImageStack object"""
-
-# return data.data # Trivial, do we need a function?
-
-
-# def hdf_dataset_to_npy(hdf_path:Path, hdf_dataset_location: str, save_path: Path):
-#     # read
-#     with h5py.File(hdf_path, "r") as f:
-#         data = np.squeeze(f[hdf_dataset_location][:])
-
-#     instance_to_ndarray
-#     np.save(save_path, data)
 
 
 def binary_with_pores_to_semantic(input_path: Path, output_path: Path) -> dict:
@@ -1237,58 +1217,6 @@ def ndarray_to_img(
 
     return True
 
-
-# def read_images(
-#     file_dir: Path,
-#     file_type: str = ".tif",
-# ) -> np.ndarray:
-#     """
-#     Read images from a directory and return a NumPy array representation of
-#     the images.
-
-#     Parameters
-#     ----------
-#     file_dir : Path
-#         The fully pathed location of the images.
-#     file_type : str, optional
-#         The image type (default is ".tif").
-
-#     Returns
-#     -------
-#     np.ndarray
-#         A NumPy array representation of the images.
-
-#     Raises
-#     ------
-#     FileNotFoundError
-#         If no images of the specified type are found in the directory.
-
-#     Examples
-#     --------
-#     >>> file_dir = Path("path/to/images")
-#     >>> read_images(file_dir, file_type=".tif")
-#     array([[[...], [...], ...], [[...], [...], ...], ...])
-#     """
-
-#     image_list = list(glob.glob(f"{str(file_dir.as_posix())}/*{file_type}"))
-
-#     if len(image_list) == 0:
-#         raise FileNotFoundError(
-#             f"File type of {file_type} not found in directory: {str(file_dir)}"
-#         )
-
-#     image_list.sort()  # Sort images in ascending order
-
-#     image_stack = np.array([np.array(Image.open(f)) for f in image_list])
-
-#     # Handle the case where only a single image is read
-#     if image_stack.ndim < 3:
-#         image_stack = np.expand_dims(image_stack, axis=-1)
-#         print(f"Only single image read, new image array size: {image_stack.shape}")
-#     else:
-#         print(f"Images read, image array size: {image_stack.shape}")
-
-#     return image_stack
 
 def read_images(
     file_dir: Path,

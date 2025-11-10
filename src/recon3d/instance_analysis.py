@@ -38,34 +38,8 @@ import recon3d.constants as cs
 import recon3d.types
 import recon3d.utility as ut
 import recon3d.hdf_io as hio
-from recon3d.types import *
+import recon3d.types as rtt
 
-
-# # ----------------------------------
-# # USER INPUT DATA HARD CODES - begin
-# # ----------------------------------
-# # NEED TO PUT INTO A .yml file instead of hard codes
-# # input_dir: str = "/Users/apolon/Desktop/test_recon/input/"
-# # save_dir: str = "/Users/apolon/Desktop/test_recon/output/"
-
-# input_dir: Final[str] = "/Users/chovey/temp/test_recon/input/"
-# save_dir: Final[str] = "/Users/chovey/temp/test_recon/output/"
-
-# file_type: Final[str] = ".tif"
-# gray_path: Final[str] = f"{save_dir}/gray/"
-# threshold: Final[int] = 185
-# segmented_path: Final[str] = f"{save_dir}/segmented/"
-# # first phase is always assumed to be the sample (1 or 255 in segmented images)
-# phase_paths: np.ndarray = np.array(
-#     [f"{save_dir}/sample_mask/", f"{save_dir}/void_mask/"]
-# )
-# # first label path is always assumed to the first phase after the sample,
-# # same ordering as phase_paths
-# label_paths: np.ndarray = np.array([f"{save_dir}/void_ids/"])
-
-# # --------------------------------
-# # USER INPUT DATA HARD CODES - end
-# # --------------------------------
 
 
 def calc_moment(
@@ -73,7 +47,7 @@ def calc_moment(
     p: int,
     q: int,
     r: int,
-    centroid_px: Centroid,
+    centroid_px: rtt.Centroid,
 ) -> float:
     """
     Calculate 3D moment invariants of a feature based on its voxel locations.
@@ -120,7 +94,7 @@ def calc_moment(
     """
 
     unit = centroid_px.cx.unit
-    if unit != Units.VOXEL:
+    if unit != rtt.Units.VOXEL:
         raise ValueError(
             f"Moment invariants are calculated using pixel/voxel units, but {unit} units were given"
         )
@@ -139,8 +113,8 @@ def calc_moment(
 
 
 def center_of_mass(
-    indices: np.ndarray[np.int32], resolution: Resolution, origin: Origin
-) -> Centroid:
+    indices: np.ndarray[np.int32], resolution: rtt.Resolution, origin: rtt.Origin
+) -> rtt.Centroid:
     """
     Calculates the center of mass (centroid) of an instance object.
     Requires that the instance object has uniform density (is homogeneous).
@@ -195,16 +169,16 @@ def center_of_mass(
     cy = centroid_zyx[1]
     cz = centroid_zyx[0]
     unit = resolution.dx.unit
-    return Centroid(
-        cx=Length(cx, unit=unit),
-        cy=Length(cy, unit=unit),
-        cz=Length(cz, unit=unit),
+    return rtt.Centroid(
+        cx=rtt.Length(cx, unit=unit),
+        cy=rtt.Length(cy, unit=unit),
+        cz=rtt.Length(cz, unit=unit),
     )
 
 
 def centroid_pix(
-    centroid: Centroid, resolution: Resolution, origin: Origin
-) -> Centroid:
+    centroid: rtt.Centroid, resolution: rtt.Resolution, origin: rtt.Origin
+) -> rtt.Centroid:
     """
     Convert between real space units and pixel units.
 
@@ -236,16 +210,16 @@ def centroid_pix(
     cy = (centroid.cy.value - origin.y0.value) / resolution.dy.value
     cz = (centroid.cz.value - origin.z0.value) / resolution.dz.value
 
-    unit = Units.VOXEL
+    unit = rtt.Units.VOXEL
 
-    return Centroid(
-        cx=Length(cx, unit=unit),
-        cy=Length(cy, unit=unit),
-        cz=Length(cz, unit=unit),
+    return rtt.Centroid(
+        cx=rtt.Length(cx, unit=unit),
+        cy=rtt.Length(cy, unit=unit),
+        cz=rtt.Length(cz, unit=unit),
     )
 
 
-def ellipsoid_surface_area(ellipsoid: BestFitEllipsoid) -> Area:
+def ellipsoid_surface_area(ellipsoid: rtt.BestFitEllipsoid) -> rtt.Area:
     """
     Calculate the surface area of the best fit ellipsoid using the Knud Thomsen formula.
     Applicable to scalene ellipsoids (semi-axes a > b > c), with a relative error of at most 1.061%.
@@ -283,10 +257,10 @@ def ellipsoid_surface_area(ellipsoid: BestFitEllipsoid) -> Area:
         * math.pi
         * ((((a**p * b**p) + (a**p * c**p) + (b**p * c**p)) / 3) ** (1 / p))
     )
-    return Area(value=surface_area, unit_squared=unit)
+    return rtt.Area(value=surface_area, unit_squared=unit)
 
 
-def ellipsoid_volume(ellipsoid: BestFitEllipsoid) -> Volume:
+def ellipsoid_volume(ellipsoid: rtt.BestFitEllipsoid) -> rtt.Volume:
     """
     Calculate the volume of the best fit ellipsoid using semi-axes lengths.
 
@@ -320,13 +294,13 @@ def ellipsoid_volume(ellipsoid: BestFitEllipsoid) -> Volume:
 
     volume = 4 / 3 * math.pi * a * b * c
 
-    return Volume(value=volume, unit_cubed=unit)
+    return rtt.Volume(value=volume, unit_cubed=unit)
 
 
 def equivalent_spherical_diameter(
     n_voxels: int,
-    resolution: Resolution,
-) -> Length:
+    resolution: rtt.Resolution,
+) -> rtt.Length:
     """
     Calculate the equivalent spherical diameter of a feature.
 
@@ -366,15 +340,15 @@ def equivalent_spherical_diameter(
         ),
         (1 / 3),
     )
-    return Length(value=value, unit=resolution.dx.unit)
+    return rtt.Length(value=value, unit=resolution.dx.unit)
 
 
 def fit_ellipsoid(
     indices: np.ndarray,
-    centroid: Centroid,
-    resolution: Resolution,
-    origin: Origin,
-) -> BestFitEllipsoid:
+    centroid: rtt.Centroid,
+    resolution: rtt.Resolution,
+    origin: rtt.Origin,
+) -> rtt.BestFitEllipsoid:
     """
     Fit a 3D ellipsoid to a set of voxel indices.
 
@@ -465,41 +439,41 @@ def fit_ellipsoid(
     )
     ax_vectors = np.reshape(ax_vectors, (9))
 
-    a_vector = UnitVector(
+    a_vector = rtt.UnitVector(
         u=ax_vectors[0],
         v=ax_vectors[1],
         w=ax_vectors[2],
     )
-    a = EllipsoidAxis(
-        length=Length(semi_ax_lengths[0], unit=unit),
+    a = rtt.EllipsoidAxis(
+        length=rtt.Length(semi_ax_lengths[0], unit=unit),
         orientation=a_vector,
     )
-    b_vector = UnitVector(
+    b_vector = rtt.UnitVector(
         u=ax_vectors[3],
         v=ax_vectors[4],
         w=ax_vectors[5],
     )
-    b = EllipsoidAxis(
-        length=Length(semi_ax_lengths[1], unit=unit),
+    b = rtt.EllipsoidAxis(
+        length=rtt.Length(semi_ax_lengths[1], unit=unit),
         orientation=b_vector,
     )
-    c_vector = UnitVector(
+    c_vector = rtt.UnitVector(
         u=ax_vectors[6],
         v=ax_vectors[7],
         w=ax_vectors[8],
     )
-    c = EllipsoidAxis(
-        length=Length(semi_ax_lengths[2], unit=unit),
+    c = rtt.EllipsoidAxis(
+        length=rtt.Length(semi_ax_lengths[2], unit=unit),
         orientation=c_vector,
     )
 
-    ellipsoid = BestFitEllipsoid(a=a, b=b, c=c)
+    ellipsoid = rtt.BestFitEllipsoid(a=a, b=b, c=c)
     return ellipsoid
 
 
 def instance_indices(
-    instance_stack: InstanceImageStack,
-) -> InstanceIndices:
+    instance_stack: rtt.InstanceImageStack,
+) -> rtt.InstanceIndices:
     """
     Returns an array of instances and a list of N-dimensional arrays of indices
     of the unique values in the instance stack.
@@ -553,18 +527,18 @@ def instance_indices(
     ix_ndim = np.c_[ix_ndim] if x.ndim > 1 else ix_flat
     indices = np.split(ix_ndim, ix_u[1:])
     labels = u
-    instance_ids = InstanceIndices(
+    instance_ids = rtt.InstanceIndices(
         source_name=instance_stack.name,
         indices=indices,
-        labels=InstanceLabels(data=labels),
+        labels=rtt.InstanceLabels(data=labels),
     )
     return instance_ids
 
 
 def minimum_size_filter(
-    initial_stack: InstanceImageStack,
-    initial_indices: InstanceIndices,
-) -> Tuple[InstanceImageStack, InstanceIndices]:
+    initial_stack: rtt.InstanceImageStack,
+    initial_indices: rtt.InstanceIndices,
+) -> Tuple[rtt.InstanceImageStack, rtt.InstanceIndices]:
     """
     Removes features below minimum size from InstanceIndices and corresponding
     InstanceImageStack. Should be done before shape metrics are determined.
@@ -631,7 +605,7 @@ def minimum_size_filter(
     )
     nlabels = np.max(np.unique(remapped_instance_ids))
 
-    filtered_stack = InstanceImageStack(
+    filtered_stack = rtt.InstanceImageStack(
         name=initial_stack.name,
         metadata=initial_stack.metadata,
         data=remapped_instance_ids,
@@ -653,8 +627,8 @@ def map_features_to_voxels():
 
 
 def nearest_neighbor_distance(
-    centroids: Centroids,
-) -> NthNearestNeighbors:
+    centroids: rtt.Centroids,
+) -> rtt.NthNearestNeighbors:
     """
     Calculate the nearest neighbor distance for a set of centroids.
     With nth_nearest_neighbor=1 returning the features themselves
@@ -693,8 +667,8 @@ def nearest_neighbor_distance(
     distances[0], instance_id[0] = 0, 0  # set feature 0 to 0 distance and neighbor 0
 
     unit = centroids.data[0].cx.unit
-    distances_list = [Length(value=i, unit=unit) for i in distances.tolist()]
-    nth_nearest = NthNearestNeighbors(
+    distances_list = [rtt.Length(value=i, unit=unit) for i in distances.tolist()]
+    nth_nearest = rtt.NthNearestNeighbors(
         nth_nearest=2,
         distances=distances_list,
         instance_id=instance_id,
@@ -702,7 +676,7 @@ def nearest_neighbor_distance(
     return nth_nearest
 
 
-def num_voxels(indices: InstanceIndices) -> list[NVoxel]:
+def num_voxels(indices: rtt.InstanceIndices) -> list[rtt.NVoxel]:
     """
     Returns the number of voxels for each instance ID from an InstanceImageStack.
 
@@ -728,13 +702,13 @@ def num_voxels(indices: InstanceIndices) -> list[NVoxel]:
     """
 
     indices = indices.indices
-    data = [NVoxel(value=len(i)) for i in indices]
+    data = [rtt.NVoxel(value=len(i)) for i in indices]
     # n_voxels = np.asarray(data, dtype=NVoxel)
     n_voxels = data
     return n_voxels
 
 
-def process_image_stack(yml_input_file: Path) -> SemanticImageStack:
+def process_image_stack(yml_input_file: Path) -> rtt.SemanticImageStack:
     """
     Given a yml input file, converts it to a SemanticImageStack.
 
@@ -796,28 +770,28 @@ def process_image_stack(yml_input_file: Path) -> SemanticImageStack:
 
     # create meta data
     (nz, ny, nx, nc) = data.shape
-    data_volume = DataVolume(z_image_count=nz, y_height=ny, x_width=nx, c_channels=nc)
+    data_volume = rtt.DataVolume(z_image_count=nz, y_height=ny, x_width=nx, c_channels=nc)
     print(
         f"image stack, {semantic_seg_stack_name}, has dimensions (num_images, row, col): {data.shape}"
     )
 
     pixel_units = db["pixel_units"]
-    valid_units = set(item.value for item in Units)
+    valid_units = set(item.value for item in rtt.Units)
     if pixel_units not in valid_units:
         raise ValueError(
             f"Error, '{pixel_units}' is not a valid unit, accepted units are: {valid_units}"
         )
-    pixel_units = Units(db["pixel_units"])
+    pixel_units = rtt.Units(db["pixel_units"])
 
     dx, dy, dz = (
         db["voxel_size"]["dx"],
         db["voxel_size"]["dy"],
         db["voxel_size"]["dz"],
     )
-    resolution = Resolution(
-        dx=Length(dx, unit=pixel_units),
-        dy=Length(dy, unit=pixel_units),
-        dz=Length(dz, unit=pixel_units),
+    resolution = rtt.Resolution(
+        dx=rtt.Length(dx, unit=pixel_units),
+        dy=rtt.Length(dy, unit=pixel_units),
+        dz=rtt.Length(dz, unit=pixel_units),
     )
 
     x0, y0, z0 = (
@@ -825,13 +799,13 @@ def process_image_stack(yml_input_file: Path) -> SemanticImageStack:
         db["origin"]["y0"],
         db["origin"]["z0"],
     )
-    origin = Origin(
-        x0=Length(x0, unit=pixel_units),
-        y0=Length(y0, unit=pixel_units),
-        z0=Length(z0, unit=pixel_units),
+    origin = rtt.Origin(
+        x0=rtt.Length(x0, unit=pixel_units),
+        y0=rtt.Length(y0, unit=pixel_units),
+        z0=rtt.Length(z0, unit=pixel_units),
     )
 
-    meta = MetaData(
+    meta = rtt.MetaData(
         data_volume=data_volume,
         resolution=resolution,
         pixel_units=pixel_units,
@@ -839,7 +813,7 @@ def process_image_stack(yml_input_file: Path) -> SemanticImageStack:
     )
 
     # create SemanticImageStack
-    semantic_seg_image_stack = SemanticImageStack(
+    semantic_seg_image_stack = rtt.SemanticImageStack(
         name=semantic_seg_stack_name, metadata=meta, data=data
     )
 
@@ -847,7 +821,7 @@ def process_image_stack(yml_input_file: Path) -> SemanticImageStack:
 
 
 def save_instance_images(
-    input_volumes: list[InstanceImageStack], save_path: Path
+    input_volumes: list[rtt.InstanceImageStack], save_path: Path
 ) -> bool:
     """
     Save InstanceImageStack objects to image files.
@@ -928,11 +902,11 @@ def save_instance_images(
 
 
 def semantic_to_instance(
-    semantic_stack: SemanticImageStack,
+    semantic_stack: rtt.SemanticImageStack,
     instance_name: str,
     instance_value: int,
     min_feature_size: int,
-) -> InstanceImageStack:
+) -> rtt.InstanceImageStack:
     """
     Isolate each unique class in the semantic segmentation (e.g., Cats or Dogs)
     and create the Instance Image Stacks.
@@ -1007,7 +981,7 @@ def semantic_to_instance(
     # #re-expand dims to include channel axis
     # cc3d_instance_stack = np.expand_dims(cc3d_instance_stack, axis=-1)
 
-    return InstanceImageStack(
+    return rtt.InstanceImageStack(
         name=instance_name,
         data=cc3d_instance_stack,
         metadata=semantic_stack.metadata,
@@ -1071,9 +1045,9 @@ def instance_analysis_included(settings: dict, key: str) -> bool:
 
 
 def instance_properties(
-    instance_stack: InstanceImageStack,
-    inst_indices: InstanceIndices,
-) -> InstanceProperties:
+    instance_stack: rtt.InstanceImageStack,
+    inst_indices: rtt.InstanceIndices,
+) -> rtt.InstanceProperties:
     """
     Calculate various properties for each instance in an InstanceImageStack.
 
@@ -1135,26 +1109,26 @@ def instance_properties(
     origin = instance_stack.metadata.origin
 
     # null types
-    null_length = Length(value=0.0, unit=resolution.dx.unit)
-    null_area = Area(value=0.0, unit_squared=resolution.dx.unit)
-    null_volume = Volume(value=0.0, unit_cubed=resolution.dx.unit)
-    null_axis = EllipsoidAxis(
+    null_length = rtt.Length(value=0.0, unit=resolution.dx.unit)
+    null_area = rtt.Area(value=0.0, unit_squared=resolution.dx.unit)
+    null_volume = rtt.Volume(value=0.0, unit_cubed=resolution.dx.unit)
+    null_axis = rtt.EllipsoidAxis(
         length=null_length,
-        orientation=UnitVector(
+        orientation=rtt.UnitVector(
             u=0.0,
             v=0.0,
             w=0.0,
         ),
     )
     # set first entry to correct type of zero for feature 0
-    stack_n_voxels[0] = NVoxel(value=0)
+    stack_n_voxels[0] = rtt.NVoxel(value=0)
     stack_eq_diameters[0] = null_length
-    stack_centroids[0] = Centroid(
+    stack_centroids[0] = rtt.Centroid(
         cx=null_length,
         cy=null_length,
         cz=null_length,
     )
-    stack_ellipsoids[0] = BestFitEllipsoid(
+    stack_ellipsoids[0] = rtt.BestFitEllipsoid(
         a=null_axis,
         b=null_axis,
         c=null_axis,
@@ -1197,15 +1171,15 @@ def instance_properties(
         volume = ellipsoid_volume(ellipsoid=ellipsoid)
         stack_volumes[instance] = volume
 
-    properties = InstanceProperties(
+    properties = rtt.InstanceProperties(
         source_name=instance_stack.name,
         labels=inst_indices.labels,
         n_voxels=stack_n_voxels,
         equivalent_sphere_diameters=stack_eq_diameters.tolist(),
-        centroids=Centroids(data=stack_centroids.tolist()),
-        ellipsoids=BestFitEllipsoids(data=stack_ellipsoids.tolist()),
-        surface_areas=EllipsoidSurfaceAreas(data=stack_surface_areas.tolist()),
-        volumes=EllipsoidVolumes(data=stack_volumes.tolist()),
+        centroids=rtt.Centroids(data=stack_centroids.tolist()),
+        ellipsoids=rtt.BestFitEllipsoids(data=stack_ellipsoids.tolist()),
+        surface_areas=rtt.EllipsoidSurfaceAreas(data=stack_surface_areas.tolist()),
+        volumes=rtt.EllipsoidVolumes(data=stack_volumes.tolist()),
     )
 
     return properties
