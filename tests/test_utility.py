@@ -83,7 +83,7 @@ def test_binarize(test_data):
     found_binary_data = ut.binarize(input_data, 0)
     found_unique, found_counts = np.unique(found_binary_data, return_counts=True)
 
-    assert found_binary_data.shape == (21, 150, 150)
+    assert found_binary_data.shape == (21, 150, 150, 1)
     assert np.allclose(found_unique, [0, 1])
     assert np.allclose(found_counts, [343817, 128683])
 
@@ -91,7 +91,7 @@ def test_binarize(test_data):
     found_binary_data = ut.binarize(input_data, 1)
     found_unique, found_counts = np.unique(found_binary_data, return_counts=True)
 
-    assert found_binary_data.shape == (21, 150, 150)
+    assert found_binary_data.shape == (21, 150, 150, 1)
     assert np.allclose(found_unique, [0, 1])
     assert np.allclose(found_counts, [129114, 343386])
 
@@ -99,7 +99,7 @@ def test_binarize(test_data):
     found_binary_data = ut.binarize(input_data, 2)
     found_unique, found_counts = np.unique(found_binary_data, return_counts=True)
 
-    assert found_binary_data.shape == (21, 150, 150)
+    assert found_binary_data.shape == (21, 150, 150, 1)
     assert np.allclose(found_unique, [0, 1])
     assert np.allclose(found_counts, [472069, 431])
 
@@ -122,9 +122,9 @@ def test_binary_with_pores_to_semantic(test_data):
     print(found_dict)
 
     found_data = ut.read_images(semantic_data_path)
-    assert found_data.shape == (21, 150, 150)
+    assert found_data.shape == (21, 150, 150, 1)
 
-    found_unique, found_counts = np.unique(found_data.data, return_counts=True)
+    found_unique, found_counts = np.unique(found_data, return_counts=True)
 
     # check the existing semantic segmentation
     known_data = ut.read_images(test_data)
@@ -289,7 +289,7 @@ def test_read_images():
 
     image_stack = ut.read_images(dataset_path, image_type)
 
-    correct_shape = (21, 150, 150)
+    correct_shape = (21, 150, 150, 1)
 
     assert image_stack.shape == correct_shape
 
@@ -298,7 +298,7 @@ def test_read_images():
 
     image_stack = ut.read_images(dataset_path, image_type)
 
-    correct_shape = (1, 348, 734)
+    correct_shape = (1, 348, 734, 1)
 
     assert image_stack.shape == correct_shape
 

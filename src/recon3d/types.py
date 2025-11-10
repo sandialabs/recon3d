@@ -156,17 +156,20 @@ class DataVolume(NamedTuple):
         The height of the data volume in the Y dimension.
     z_image_count : int
         The number of images in the Z dimension.
+    c_channels: int
+        The number of channels (1 for grayscale, 3 for RGB, etc.).
 
     Examples
     --------
-    >>> volume = DataVolume(x_width=8, y_height=3, z_image_count=2)
+    >>> volume = DataVolume(x_width=8, y_height=3, z_image_count=2, c_channels=1)
     >>> print(volume)
-    DataVolume(x_width=8, y_height=3, z_image_count=2)
+    DataVolume(x_width=8, y_height=3, z_image_count=2, c_channels=1)
     """
 
     x_width: int
     y_height: int
     z_image_count: int
+    c_channels: int
 
 
 class Units(Enum):
@@ -645,7 +648,7 @@ class InstanceImageStack(NamedTuple):
     metadata : MetaData
         The metadata associated with the image stack.
     data : npt.NDArray[np.int_]
-        The labeled image data.
+        The labeled image data. Each unique integer represents a different instance. Background is typically labeled as 0. Shape is (Z, Y, X) without a channel dimension.
     nlabels : int
         The number of labels.
     min_feature_size : int

@@ -778,13 +778,25 @@ def process_image_stack(yml_input_file: Path) -> SemanticImageStack:
     # semantic_seg_dict = db["class_labels"]
 
     # # load images
-    # imageStack = skio.imread_collection(tiff_files, conserve_memory=True)
     data = ut.read_images(path_input, file_type)
+
+    # semantic image stacks must be single channel only (pre-labelled)
+    if data.shape[-1] != 1:
+        raise ValueError(
+            f"Error, semantic segmentation image stack has {data.shape[-1]} channels, must be single channel (pre-labelled)."
+        )
+    # no support for image stacks with too many classes (above 255 to use np.uint8)
+    if np.max(data) > 255:
+        raise ValueError(
+            f"Error, semantic segmentation image stack has max value of {np.max(data)}, must be less than 256 to use np.uint8 data type."
+        )
+    data = data.astype(np.uint8)
+
     semantic_seg_stack_name = db["semantic_imagestack_name"]
 
     # create meta data
-    (nz, ny, nx) = data.shape
-    data_volume = DataVolume(z_image_count=nz, y_height=ny, x_width=nx)
+    (nz, ny, nx, nc) = data.shape
+    data_volume = DataVolume(z_image_count=nz, y_height=ny, x_width=nx, c_channels=nc)
     print(
         f"image stack, {semantic_seg_stack_name}, has dimensions (num_images, row, col): {data.shape}"
     )
@@ -825,18 +837,6 @@ def process_image_stack(yml_input_file: Path) -> SemanticImageStack:
         pixel_units=pixel_units,
         origin=origin,
     )
-
-    # # Optional, grey image stack
-    # # TODO: test functionality
-    # if db["grey_image_dir"]:
-    #     path_grey_image_dir = Path(db["path_grey_image_dir"]).expanduser()
-    #     assert path_grey_image_dir.is_dir(), "Error, 'image_dir' not found."
-    #     grey_image_name = "Raw greyscale"
-    #     grey_data = ut.read_images(path_grey_image_dir, file_type)
-    #     assert data.shape == grey_data.shape
-    #     semantic_seg_image_stack = ImageStack(
-    #         name=grey_image_name, metadata=meta, data=grey_data
-    #     )
 
     # create SemanticImageStack
     semantic_seg_image_stack = SemanticImageStack(
@@ -983,10 +983,16 @@ def semantic_to_instance(
     InstanceImageStack(name='example_instance_stack', metadata=MetaData(data_volume=DataVolume(z_image_count=10, y_height=256, x_width=256), resolution=Resolution(dx=Length(value=1.0, unit=<Units.MICRON: 'micron'>), dy=Length(value=1.0, unit=<Units.MICRON: 'micron'>), dz=Length(value=1.0, unit=<Units.MICRON: 'micron'>)), pixel_units=<Units.MICRON: 'micron'>, origin=Origin(x0=Length(value=0.0, unit=<Units.MICRON: 'micron'>), y0=Length(value=0.0, unit=<Units.MICRON: 'micron'>), z0=Length(value=0.0, unit=<Units.MICRON: 'micron'>))), data=array(...), nlabels=..., min_feature_size=10)
     """
 
+
+
     # Create a boolean mask of the array
     masked_stack = semantic_stack.data == instance_value
 
+    # CC3D will only work on one channel data
+    # This was previously enforced, as well as limit to 256 classes
+    masked_stack = np.squeeze(masked_stack, axis=-1).astype(np.uint8)
     print(f"\tlabelling connected components in '{instance_name}'")
+
 
     # Use cc3d for connected components labeling
     cc3d_instance_stack, cc3d_nlabels = cc3d.connected_components(
@@ -997,6 +1003,10 @@ def semantic_to_instance(
     print(
         f"\t\twith cc3d package, found {cc3d_nlabels} connected components in '{instance_name}'"
     )
+
+    # #re-expand dims to include channel axis
+    # cc3d_instance_stack = np.expand_dims(cc3d_instance_stack, axis=-1)
+
     return InstanceImageStack(
         name=instance_name,
         data=cc3d_instance_stack,

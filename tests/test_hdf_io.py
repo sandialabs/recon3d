@@ -274,7 +274,7 @@ def test_image_to_hdf():
 
     with h5py.File(output_voxeldata_path, "r") as hdf_file:
         found_dataset = hdf_file["/VoxelData/letter_f_test"]
-        assert found_dataset.shape == (4, 5, 3)
+        assert found_dataset.shape == (4, 5, 3, 1)
 
     # remove at end of test
     output_voxeldata_path.unlink()

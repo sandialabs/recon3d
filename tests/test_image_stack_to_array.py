@@ -40,8 +40,10 @@ def test_image_stack_to_array():
     input_img = Path(__file__).parent.joinpath(
         "data", "cylinder_machined_grayscale", "0010.tif"
     )
-    input_img_data = np.array(Image.open(input_img))
+    input_img_data= np.array(Image.open(input_img))
 
-    assert np.allclose(array_data[slice_num, :, :], input_img_data)
+    found_img_data = np.squeeze(array_data[slice_num])
+
+    assert np.allclose(found_img_data, input_img_data)
 
     out_filename.unlink()  # clean up by removing the just-written file

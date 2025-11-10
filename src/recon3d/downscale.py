@@ -169,22 +169,24 @@ def downscale(path_file_input: str) -> bool:
             db["downscale_tolerance"],
             db["image_limit_factor"],
         )
-        for dim in range(0, 3)  # TODO should we restrict the dimensions to 3?
+        for dim in range(0, 3)  # 3 spatial dimensions, with channel support below
     ]
-
-    padded_stack = np.pad(segmented_stack, (z_pad, y_pad, x_pad))
+    c_pad = (0,0)  # no padding for channel dimension
+    padded_stack = np.pad(segmented_stack, (z_pad, y_pad, x_pad, c_pad)) #uses constant 0 padding by default
     print(f"New array size: {padded_stack.shape}")
 
     # Use list comprehension
     z_ratio, y_ratio, x_ratio = [
         db["resolution_input"][dim_list[dim]] / db["resolution_output"][dim_list[dim]]
-        for dim in range(0, 3)  # TODO should we restrict the dimensions to 3
+        for dim in range(0, 3)  # 3 spatial dimensions, with channel support below
     ]
 
+    c_ratio = 1  # no scaling for channel dimension
     downscaled_stack = ndimage.zoom(
         padded_stack,
-        (z_ratio, y_ratio, x_ratio),
+        (z_ratio, y_ratio, x_ratio, c_ratio),
         order=0,
+        # order=interpolation_mode.value,
         mode="grid-constant",
         grid_mode=True,
     )
@@ -209,7 +211,7 @@ def downscale(path_file_input: str) -> bool:
                 db["padding"]["nx"],
             )
             padded_stack = np.pad(
-                cropped_stack, ((box_pad_z,), (box_pad_y,), (box_pad_x,))
+                cropped_stack, ((box_pad_z,), (box_pad_y,), (box_pad_x,), (0,))  # no padding for channel dimension
             )
             output_stack = padded_stack
 
@@ -227,17 +229,50 @@ def downscale(path_file_input: str) -> bool:
 
     # TODO: functionalize and test
     if db["writeVTR"]:
-        data = output_stack
-        nx, ny, nz = data.shape[0], data.shape[1], data.shape[2]
+        # NumPy array of shape (Z, Y, X, C)
+        # where C is your channel dimension
+        # VTK (and gridToVTK) want your data ordered (X, Y, Z, C)
+        # so we permute axes
+        data_for_vtk = output_stack.transpose(2, 1, 0, 3)
+        nx, ny, nz, nc = data_for_vtk.shape
 
-        x = np.arange(0, nx + 1)
-        y = np.arange(0, ny + 1)
-        z = np.arange(0, nz + 1)
+        # define your grid coordinates
+        # (for a uniform grid you can just use arange)
+        x = np.arange(nx+1, dtype=np.float32)
+        y = np.arange(ny+1, dtype=np.float32)
+        z = np.arange(nz+1, dtype=np.float32)
 
-        # vtk_path = Path(out_dir).joinpath(f"{folder_suffix}")
+        # deal with channels
+        cell_fields = {}
+        if nc == 1:
+            # one‐channel → scalar
+            cell_fields["imagedata"] = data_for_vtk[..., 0]
+        elif nc == 3:
+            # three‐channel → vector
+            cell_fields["imagedata"] = (
+                data_for_vtk[..., 0],
+                data_for_vtk[..., 1],
+                data_for_vtk[..., 2],
+            )
+        else:
+            # >3 channels → write them out as separate scalar fields
+            for c in range(nc):
+                cell_fields[f"imagedata_c{c}"] = data_for_vtk[..., c]
+
         vtk_path = Path(out_dir).expanduser().joinpath(f"{folder_suffix}")
-        gridToVTK(str(vtk_path), x, y, z, cellData={"imagedata": data})
+        gridToVTK(str(vtk_path), x, y, z, cellData=cell_fields)
         print(".vtr file saved.")
+
+        # nx, ny, nz = data.shape[0], data.shape[1], data.shape[2]
+
+        # x = np.arange(0, nx + 1)
+        # y = np.arange(0, ny + 1)
+        # z = np.arange(0, nz + 1)
+
+        # # vtk_path = Path(out_dir).joinpath(f"{folder_suffix}")
+        # vtk_path = Path(out_dir).expanduser().joinpath(f"{folder_suffix}")
+        # gridToVTK(str(vtk_path), x, y, z, cellData={"imagedata": data})
+        # print(".vtr file saved.")
 
     processed = True  # overwrite, if we reach this point, all code is successful
 

@@ -113,6 +113,7 @@ def test_process_image_stack():
                 x_width=923,
                 y_height=925,
                 z_image_count=21,
+                c_channels=1,
             ),
             resolution=Resolution(
                 dx=Length(1, Units.MICRON),

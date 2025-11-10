@@ -10,6 +10,7 @@ from typing import Iterable, Tuple
 import glob
 import argparse
 import shutil
+from typing import Optional
 
 # Third-party library imports
 import h5py
@@ -17,11 +18,11 @@ import numpy as np
 import yaml
 from PIL import Image
 from scipy import ndimage
-import skimage
-import skimage.io as skio
+# import skimage
+# import skimage.io as skio
 
 # Local imports
-from recon3d.types import *
+import recon3d.types as rtt
 
 # import recon3d.feature_analysis as fa
 # from recon3d.feature_analysis import SemanticImageStack
@@ -110,24 +111,24 @@ def binary_with_pores_to_semantic(input_path: Path, output_path: Path) -> dict:
             f"Only two phases expected in segmented image, {n_phases} phase found"
         )
 
-    # elif n_phases == 2:
-    # TODO remove hardcodes and impart flexibility from here to ut.ndarray_to_img call
-    else:  # images are binary
+    # preallocate the output data
+    output_data = np.zeros(shape=bw_data.shape, dtype=np.uint8)
 
-        # preallocate the output data
-        output_data = np.zeros(shape=bw_data.shape, dtype=np.int8)
+    # fill holes and assign as 'metal', 1
+    print("\tIsolating Sample...")
+    sample = np.zeros_like(bw_data, dtype=bool)
+    for c in range(bw_data.shape[-1]):
+        sample[...,c] = ndimage.binary_fill_holes(bw_data[..., c])
+    np.place(output_data, sample, 1)
 
-        # fill holes and assign as 'metal', 1
-        print("\tIsolating Sample...")
-        sample = ndimage.binary_fill_holes(bw_data.astype(np.bool_))
-        np.place(output_data, sample, 1)
+    # isolate holes within 'metal', assign as 'pore', 2
+    print("\tIsolating Voids...")
+    voids = np.zeros_like(bw_data, dtype=bool)
+    for c in range(bw_data.shape[-1]):
+        voids[..., c] = np.logical_xor(sample [...,c], bw_data[..., c])
+    np.place(output_data, voids, 2)
 
-        # isolate holes within 'metal', assign as 'pore', 2
-        print("\tIsolating Voids...")
-        voids = np.logical_xor(sample, bw_data)
-        np.place(output_data, voids, 2)
-
-        # thus, everything else is 'air', 0
+    # thus, everything else is 'air', 0
 
     class_labels = {
         "class_labels": {
@@ -139,7 +140,7 @@ def binary_with_pores_to_semantic(input_path: Path, output_path: Path) -> dict:
 
     ndarray_to_img(
         data=output_data,
-        slice_axis=CartesianAxis3D.Z,
+        slice_axis=rtt.CartesianAxis3D.Z,
         parent_dir=output_path,
         folder_name="",
     )
@@ -233,7 +234,7 @@ def binarize(data: np.ndarray, val: int) -> np.ndarray:
            [0, 0, 1]], dtype=int8)
     """
 
-    bw_data = np.zeros(shape=data.shape, dtype=np.int8)
+    bw_data = np.zeros(shape=data.shape, dtype=np.bool_)
     np.place(bw_data, data == val, 1)
 
     return bw_data
@@ -278,7 +279,7 @@ def semantic_to_binary(yml_input_file: Path) -> bool:
 
     ndarray_to_img(
         data=bw_data,
-        slice_axis=CartesianAxis3D.Z,
+        slice_axis=rtt.CartesianAxis3D.Z,
         parent_dir=output_path,
         folder_name="",
     )
@@ -382,7 +383,7 @@ def main_semantic_to_binary():
     print(f"{yml_input_file} processed!")
 
 
-def hdf_to_instance_properties(hdf_path: Path, group_path: str) -> InstanceProperties:
+def hdf_to_instance_properties(hdf_path: Path, group_path: str) -> rtt.InstanceProperties:
     """
     Read instance analysis data from an HDF5 file and create an InstanceProperties object.
 
@@ -416,68 +417,68 @@ def hdf_to_instance_properties(hdf_path: Path, group_path: str) -> InstancePrope
         instance_data = f[group_path]
         hdf_n_voxels = np.squeeze(instance_data["num_voxels"][:])
         hdf_equiv_diam = np.squeeze(instance_data["equivalent_sphere_diameters"][:])
-        equiv_diam_unit = Units(
+        equiv_diam_unit = rtt.Units(
             instance_data["equivalent_sphere_diameters"].attrs["units"]
         )
         hdf_centroids = np.squeeze(instance_data["centroids"][:])
-        centroid_unit = Units(instance_data["centroids"].attrs["units"])
+        centroid_unit = rtt.Units(instance_data["centroids"].attrs["units"])
         hdf_semi_axes = np.squeeze(instance_data["semi-axis_lengths"][:])
-        semi_axes_unit = Units(instance_data["semi-axis_lengths"].attrs["units"])
+        semi_axes_unit = rtt.Units(instance_data["semi-axis_lengths"].attrs["units"])
         hdf_vectors = np.squeeze(instance_data["axis_vectors"][:])
         hdf_surface_areas = np.squeeze(instance_data["ellipsoid_surface_areas"][:])
-        surface_area_unit = Units(
+        surface_area_unit = rtt.Units(
             instance_data["ellipsoid_surface_areas"].attrs["units_squared"]
         )
         hdf_volumes = np.squeeze(instance_data["ellipsoid_volumes"][:])
-        volume_unit = Units(instance_data["ellipsoid_volumes"].attrs["units_cubed"])
+        volume_unit = rtt.Units(instance_data["ellipsoid_volumes"].attrs["units_cubed"])
 
     labels = np.arange(0, len(hdf_equiv_diam), dtype=int)
-    n_voxels = [NVoxel(value=i) for i in hdf_n_voxels]
+    n_voxels = [rtt.NVoxel(value=i) for i in hdf_n_voxels]
     equivalent_sphere_diameters = [
-        Length(value=i, unit=equiv_diam_unit) for i in hdf_equiv_diam
+        rtt.Length(value=i, unit=equiv_diam_unit) for i in hdf_equiv_diam
     ]
-    centroids = Centroids(
+    centroids = rtt.Centroids(
         data=[
-            Centroid(
-                cx=Length(value=i[0], unit=centroid_unit),
-                cy=Length(value=i[1], unit=centroid_unit),
-                cz=Length(value=i[2], unit=centroid_unit),
+            rtt.Centroid(
+                cx=rtt.Length(value=i[0], unit=centroid_unit),
+                cy=rtt.Length(value=i[1], unit=centroid_unit),
+                cz=rtt.Length(value=i[2], unit=centroid_unit),
             )
             for i in hdf_centroids
         ]
     )
 
-    ellipsoids = BestFitEllipsoids(
+    ellipsoids = rtt.BestFitEllipsoids(
         [
-            BestFitEllipsoid(
-                a=EllipsoidAxis(
-                    length=Length(value=i[0], unit=semi_axes_unit),
-                    orientation=UnitVector(u=j[0], v=j[1], w=j[2]),
+            rtt.BestFitEllipsoid(
+                a=rtt.EllipsoidAxis(
+                    length=rtt.Length(value=i[0], unit=semi_axes_unit),
+                    orientation=rtt.UnitVector(u=j[0], v=j[1], w=j[2]),
                 ),
-                b=EllipsoidAxis(
-                    length=Length(value=i[1], unit=semi_axes_unit),
-                    orientation=UnitVector(u=j[3], v=j[4], w=j[5]),
+                b=rtt.EllipsoidAxis(
+                    length=rtt.Length(value=i[1], unit=semi_axes_unit),
+                    orientation=rtt.UnitVector(u=j[3], v=j[4], w=j[5]),
                 ),
-                c=EllipsoidAxis(
-                    length=Length(value=i[2], unit=semi_axes_unit),
-                    orientation=UnitVector(u=j[6], v=j[7], w=j[8]),
+                c=rtt.EllipsoidAxis(
+                    length=rtt.Length(value=i[2], unit=semi_axes_unit),
+                    orientation=rtt.UnitVector(u=j[6], v=j[7], w=j[8]),
                 ),
             )
             for i, j in zip(hdf_semi_axes, hdf_vectors)
         ]
     )
 
-    surface_areas = EllipsoidSurfaceAreas(
-        [Area(value=i, unit_squared=surface_area_unit) for i in hdf_surface_areas]
+    surface_areas = rtt.EllipsoidSurfaceAreas(
+        [rtt.Area(value=i, unit_squared=surface_area_unit) for i in hdf_surface_areas]
     )
 
-    volumes = EllipsoidVolumes(
-        [Volume(value=i, unit_cubed=volume_unit) for i in hdf_volumes]
+    volumes = rtt.EllipsoidVolumes(
+        [rtt.Volume(value=i, unit_cubed=volume_unit) for i in hdf_volumes]
     )
 
-    instance_props = InstanceProperties(
+    instance_props = rtt.InstanceProperties(
         source_name=group_path,
-        labels=InstanceLabels(data=labels),
+        labels=rtt.InstanceLabels(data=labels),
         n_voxels=n_voxels,
         equivalent_sphere_diameters=equivalent_sphere_diameters,
         centroids=centroids,
@@ -495,7 +496,7 @@ def hdf_to_instance_properties(hdf_path: Path, group_path: str) -> InstancePrope
     return instance_props
 
 
-def hdf_to_metadata(hdf_path: Path, dataset_path: str) -> MetaData:
+def hdf_to_metadata(hdf_path: Path, dataset_path: str) -> rtt.MetaData:
     """
     Extract metadata from an HDF5 dataset containing string metadata attributes.
 
@@ -529,31 +530,31 @@ def hdf_to_metadata(hdf_path: Path, dataset_path: str) -> MetaData:
         x_width = int(dataset.attrs["x_width (pixels)"])
         y_height = int(dataset.attrs["y_height (pixels)"])
         z_image_count = int(dataset.attrs["z_image_count (pixels)"])
-        data_volume = DataVolume(
+        data_volume = rtt.DataVolume(
             x_width=x_width, y_height=y_height, z_image_count=z_image_count
         )
 
-        pixel_units = Units(dataset.attrs["Resolution, units"])
-        dx = Length(value=float(dataset.attrs["Resolution, dx"]), unit=pixel_units)
-        dy = Length(value=float(dataset.attrs["Resolution, dy"]), unit=pixel_units)
-        dz = Length(value=float(dataset.attrs["Resolution, dz"]), unit=pixel_units)
-        resolution = Resolution(
+        pixel_units = rtt.Units(dataset.attrs["Resolution, units"])
+        dx = rtt.Length(value=float(dataset.attrs["Resolution, dx"]), unit=pixel_units)
+        dy = rtt.Length(value=float(dataset.attrs["Resolution, dy"]), unit=pixel_units)
+        dz = rtt.Length(value=float(dataset.attrs["Resolution, dz"]), unit=pixel_units)
+        resolution = rtt.Resolution(
             dx=dx,
             dy=dy,
             dz=dz,
         )
 
-        origin_units = Units(dataset.attrs["Origin, units"])
-        x0 = Length(value=float(dataset.attrs["Origin, x0"]), unit=origin_units)
-        y0 = Length(value=float(dataset.attrs["Origin, y0"]), unit=origin_units)
-        z0 = Length(value=float(dataset.attrs["Origin, z0"]), unit=origin_units)
-        origin = Origin(
+        origin_units = rtt.Units(dataset.attrs["Origin, units"])
+        x0 = rtt.Length(value=float(dataset.attrs["Origin, x0"]), unit=origin_units)
+        y0 = rtt.Length(value=float(dataset.attrs["Origin, y0"]), unit=origin_units)
+        z0 = rtt.Length(value=float(dataset.attrs["Origin, z0"]), unit=origin_units)
+        origin = rtt.Origin(
             x0=x0,
             y0=y0,
             z0=z0,
         )
 
-    metadata = MetaData(
+    metadata = rtt.MetaData(
         data_volume=data_volume,
         resolution=resolution,
         pixel_units=pixel_units,
@@ -563,7 +564,7 @@ def hdf_to_metadata(hdf_path: Path, dataset_path: str) -> MetaData:
     return metadata
 
 
-def centroids_to_ndarray(centroids: Centroids) -> np.ndarray:
+def centroids_to_ndarray(centroids: rtt.Centroids) -> np.ndarray:
     """
     Convert centroid data type into a NumPy array.
 
@@ -605,7 +606,7 @@ def centroids_to_ndarray(centroids: Centroids) -> np.ndarray:
 
 
 def ellipsoids_to_ndarray(
-    ellipsoids: BestFitEllipsoids,
+    ellipsoids: rtt.BestFitEllipsoids,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Convert ellipsoid data type into NumPy arrays.
@@ -675,7 +676,7 @@ def ellipsoids_to_ndarray(
     return axis_lengths, axis_vectors
 
 
-def surface_areas_to_ndarray(surface_areas: EllipsoidSurfaceAreas) -> np.ndarray:
+def surface_areas_to_ndarray(surface_areas: rtt.EllipsoidSurfaceAreas) -> np.ndarray:
     """
     Convert surface area data type into a NumPy array.
 
@@ -711,7 +712,7 @@ def surface_areas_to_ndarray(surface_areas: EllipsoidSurfaceAreas) -> np.ndarray
     return ndarray
 
 
-def volumes_to_ndarray(ellipsoid_volumes: EllipsoidVolumes) -> np.ndarray:
+def volumes_to_ndarray(ellipsoid_volumes: rtt.EllipsoidVolumes) -> np.ndarray:
     """
     Convert ellipsoid volume data type into a NumPy array.
 
@@ -988,7 +989,7 @@ def pairwise_circular(x: Iterable) -> Iterable:
     return zip(x, a)
 
 
-def metadata_to_dict(metadata: MetaData) -> dict:
+def metadata_to_dict(metadata: rtt.MetaData) -> dict:
     """
     Convert MetaData to a dictionary.
 
@@ -1155,7 +1156,7 @@ def dict_to_yaml(db: dict, file: str) -> Path:
 def ndarray_to_img(
     *,
     data: np.ndarray,
-    slice_axis: CartesianAxis3D,
+    slice_axis: rtt.CartesianAxis3D,
     parent_dir: Path,
     folder_name: str,
     pad_length: int = 4,
@@ -1206,72 +1207,160 @@ def ndarray_to_img(
 
     for i in range(n_slices):
         fname = f"{img_dir}/{i:0{pad_length}}{file_type}"
-        mode = "L" if data.dtype == np.int8 else None
 
+        # slice out a [H,W] or [H,W,C] array
         match slice_axis:
-            case CartesianAxis3D.Z:
-                img = Image.fromarray(data[i, :, :], mode=mode)
-            case CartesianAxis3D.Y:
-                img = Image.fromarray(data[:, i, :], mode=mode)
-            case CartesianAxis3D.X:
-                img = Image.fromarray(data[:, :, i], mode=mode)
+            case rtt.CartesianAxis3D.Z:
+                arr = data[i, ...]
+            case rtt.CartesianAxis3D.Y:
+                arr = data[:, i, ...]
+            case rtt.CartesianAxis3D.X:
+                arr = data[:, :, i]
             case _:
-                raise ValueError(
-                    f"Unknown slice_axis value {slice_axis}, value must be 0, 1, or 2."
-                )
+                raise ValueError(f"Bad slice_axis {slice_axis}")
+
+        # if it's [H,W] we leave it
+        # if it's [H,W,1] we drop the trailing channel
+        # if it's [H,W,C] with C=3 or 4 we leave it
+        if arr.ndim == 3 and arr.shape[2] == 1:
+            arr = arr[:, :, 0]
+
+        # optional: if you want to force every slice to RGB or L
+        # uncomment the next two lines:
+        # mode = "RGB" if (arr.ndim == 3 and arr.shape[2] == 3) else "L"
+        # img = Image.fromarray(arr.astype("uint8"), mode=mode)
+
+        # otherwise just let Pillow pick a mode for you
+        img = Image.fromarray(arr)
 
         img.save(fname)
+
     return True
 
+
+# def read_images(
+#     file_dir: Path,
+#     file_type: str = ".tif",
+# ) -> np.ndarray:
+#     """
+#     Read images from a directory and return a NumPy array representation of
+#     the images.
+
+#     Parameters
+#     ----------
+#     file_dir : Path
+#         The fully pathed location of the images.
+#     file_type : str, optional
+#         The image type (default is ".tif").
+
+#     Returns
+#     -------
+#     np.ndarray
+#         A NumPy array representation of the images.
+
+#     Raises
+#     ------
+#     FileNotFoundError
+#         If no images of the specified type are found in the directory.
+
+#     Examples
+#     --------
+#     >>> file_dir = Path("path/to/images")
+#     >>> read_images(file_dir, file_type=".tif")
+#     array([[[...], [...], ...], [[...], [...], ...], ...])
+#     """
+
+#     image_list = list(glob.glob(f"{str(file_dir.as_posix())}/*{file_type}"))
+
+#     if len(image_list) == 0:
+#         raise FileNotFoundError(
+#             f"File type of {file_type} not found in directory: {str(file_dir)}"
+#         )
+
+#     image_list.sort()  # Sort images in ascending order
+
+#     image_stack = np.array([np.array(Image.open(f)) for f in image_list])
+
+#     # Handle the case where only a single image is read
+#     if image_stack.ndim < 3:
+#         image_stack = np.expand_dims(image_stack, axis=-1)
+#         print(f"Only single image read, new image array size: {image_stack.shape}")
+#     else:
+#         print(f"Images read, image array size: {image_stack.shape}")
+
+#     return image_stack
 
 def read_images(
     file_dir: Path,
     file_type: str = ".tif",
+    convert_mode: Optional[str] = None,
 ) -> np.ndarray:
     """
-    Read images from a directory and return a NumPy array representation of
-    the images.
+    Read all images of a given suffix from a directory, inspect their PIL mode,
+    optionally convert them to a uniform mode, and return a single
+    NumPy array of shape (N, H, W, C).
 
     Parameters
     ----------
     file_dir : Path
-        The fully pathed location of the images.
+        Directory containing your images.
     file_type : str, optional
-        The image type (default is ".tif").
+        File extension (default=".tif").
+    convert_mode : str or None, optional
+        If not None, will do `img = img.convert(convert_mode)` on every image.
+        E.g. "L" for 8-bit grayscale, "RGB" for 8-bit 3-channel.
 
     Returns
     -------
     np.ndarray
-        A NumPy array representation of the images.
+        An array of shape (N, H, W, C), where C=1 for grayscale or C=3 for RGB.
+        dtype comes straight from PIL (uint8, uint16 or float32).
 
     Raises
     ------
     FileNotFoundError
-        If no images of the specified type are found in the directory.
-
-    Examples
-    --------
-    >>> file_dir = Path("path/to/images")
-    >>> read_images(file_dir, file_type=".tif")
-    array([[[...], [...], ...], [[...], [...], ...], ...])
+        If no files matching `*{file_type}` are found in `file_dir`.
     """
 
-    image_list = list(glob.glob(f"{str(file_dir.as_posix())}/*{file_type}"))
+    # 1) find & sort
+    files = sorted(glob.glob(f"{file_dir.as_posix()}/*{file_type}"))
+    if not files:
+        raise FileNotFoundError(f"No '*{file_type}' files found in '{file_dir}'")
 
-    if len(image_list) == 0:
-        raise FileNotFoundError(
-            f"File type of {file_type} not found in directory: {str(file_dir)}"
-        )
+    img_arrays = []
+    first_file = True
+    for p in files:
+        with Image.open(p) as img:
+            if first_file:
+               print(f"Reading {p!r}  mode={img.mode!r}  size={img.size}  info={img.info}")
 
-    image_list.sort()  # Sort images in ascending order
+            # 2) optional uniform conversion
+            if convert_mode is not None:
+                img = img.convert(convert_mode)
+                if first_file:
+                    print(f"  -> converted to mode={img.mode!r}")
+            
+            first_file = False
 
-    image_stack = np.array([np.array(Image.open(f)) for f in image_list])
+            # 3) pull out numpy array (PIL will give you uint8 for "L"/"RGB",
+            #    uint16 for "I;16" TIFF, float32 for "F", etc.)
+            arr = np.array(img)
 
-    # Handle the case where only a single image is read
-    if image_stack.ndim < 3:
-        image_stack = np.expand_dims(image_stack, axis=-1)
-        print(f"Only single image read, new image array size: {image_stack.shape}")
-    else:
-        print(f"Images read, image array size: {image_stack.shape}")
+            # 4) if we got (H, W) grayscale, make it (H, W, 1)
+            if arr.ndim == 2:
+                arr = arr[..., None]
 
-    return image_stack
+            # 5) if we got RGBA, drop alpha to force shape (H, W, 3)
+            if arr.ndim == 3 and arr.shape[2] == 4:
+                arr = arr[..., :3]
+
+            img_arrays.append(arr)
+
+    # 6) stack them into one array
+    stack = np.stack(img_arrays, axis=0)
+
+    print(
+        f"Stacked {len(img_arrays)} images -> "
+        f"shape={stack.shape}, dtype={stack.dtype}"
+    )
+    return stack

@@ -67,7 +67,7 @@ def test_apply_bbox():
     threshold = 0
     bb_image_stack = ds.apply_bbox(image_stack, threshold)
 
-    correct_shape = (21, 144, 145)
+    correct_shape = (21, 144, 145, 1)
 
     assert bb_image_stack.shape == correct_shape
 
