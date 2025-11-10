@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Iterable, Tuple
 import glob
 import argparse
+import shutil
 
 # Third-party library imports
 import h5py
@@ -749,8 +750,6 @@ def volumes_to_ndarray(ellipsoid_volumes: EllipsoidVolumes) -> np.ndarray:
 def rmdir(directory: Path) -> None:
     """
     Recursively delete a directory and all its contents.
-    (credit to: https://stackoverflow.com/questions/13118029/deleting-folders-in-python-recursively/49782093#49782093)
-
 
     This function deletes the specified directory and all its contents, including
     subdirectories and files. If the directory does not exist, the function does nothing.
@@ -771,15 +770,9 @@ def rmdir(directory: Path) -> None:
     >>> rmdir(directory)
     """
 
-    if not directory.exists():
-        return
+    shutil.rmtree(str(directory), ignore_errors=True)
 
-    for item in directory.iterdir():
-        if item.is_dir():
-            rmdir(item)
-        else:
-            item.unlink()
-    directory.rmdir()
+
 
 
 def compare_files(file1: Path, file2: Path, ignore_words: list[str]) -> bool:
