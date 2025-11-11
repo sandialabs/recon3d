@@ -44,3 +44,6 @@ coverage_reports/          # Uncomment if you want to ignore API docs
 # Other files to ignore
 *.sqlite3
 *.db
+
+# Scripts
+scripts/
