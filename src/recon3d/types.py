@@ -84,7 +84,7 @@ To use `CartesianAxis2D` in your code:
     CartesianAxis2D.X
 """
 
-from typing import NamedTuple, Optional, Dict, Tuple
+from typing import NamedTuple, Optional, Dict, Tuple, List
 from enum import Enum, IntEnum
 from pathlib import Path
 import numpy as np
@@ -915,4 +915,9 @@ class RescaleConfig(NamedTuple):
 
     save_npy: bool
     writeVTR: bool
-    bbox_threshold: float = 0.0  # default
+    bbox_threshold: float = 0.0  # default value for bounding box cropping
+
+    # TODO separate out into another config
+    post_process: List[str] = None  # e.g. ["histogram_stretch"]
+    clip_percentiles: Tuple[float, float] = None  # for histogram_stretch
+    ignore_values: Tuple[int, ...] = None  # for histogram_stretch

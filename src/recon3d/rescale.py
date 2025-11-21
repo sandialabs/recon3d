@@ -32,11 +32,12 @@ import argparse
 import itertools
 import math
 from pathlib import Path
-from typing import Tuple, Union, Dict
+from typing import Tuple, Union, Dict, List, Any
 
 import numpy as np
 from scipy import ndimage
 from pyevtk.hl import gridToVTK
+from skimage.transform import resize as sk_resize
 
 import recon3d.types as rtt
 import recon3d.utility as ut
@@ -59,7 +60,7 @@ def parse_config(d: dict) -> rtt.RescaleConfig:
                 raise ValueError(f"padding.{axis} must be an int or 2‐tuple, got {v}")
             padding[axis] = (int(v[0]), int(v[1]))
         else:
-            # single int → uniform padding both sides
+            # single int --> uniform padding both sides
             n = int(v)
             padding[axis] = (n, n)
 
@@ -72,6 +73,22 @@ def parse_config(d: dict) -> rtt.RescaleConfig:
             ny=int(raw_fs["ny"]),
             nx=int(raw_fs["nx"]),
         )
+
+    raw_pp = d.get("post_process", [])
+    if isinstance(raw_pp, str):
+        post_process = [raw_pp]
+    else:
+        post_process = list(raw_pp)
+
+    # 2) histogram stretch params (only used if in post_process)
+    clip = d.get("clip_percentiles", [1.0, 99.0])
+    clip_percentiles = (float(clip[0]), float(clip[1]))
+
+    raw_ignore = d.get("ignore_values", [0])
+    if isinstance(raw_ignore, (list, tuple)):
+        ignore_values = tuple(int(x) for x in raw_ignore)
+    else:
+        ignore_values = (int(raw_ignore),)
 
     return rtt.RescaleConfig(
         image_dir=Path(d["image_dir"]).expanduser(),
@@ -88,6 +105,9 @@ def parse_config(d: dict) -> rtt.RescaleConfig:
         save_npy=d["save_npy"],
         writeVTR=d["writeVTR"],
         bbox_threshold=d.get("bbox_threshold", 0.0),
+        post_process=post_process,
+        clip_percentiles=clip_percentiles,
+        ignore_values=ignore_values,
     )
 
 
@@ -327,10 +347,10 @@ def save_rescale_stack(image_stack: np.ndarray, path: Path, folder_suffix: str) 
 
 def pad_to_final_size(arr: np.ndarray, final_size: rtt.FinalSize) -> np.ndarray:
     """
-    Pad (only spatial dims) so that arr.shape[:3] → final_size exactly,
+    Pad (only spatial dims) so that arr.shape[:3] --> final_size exactly,
     splitting extra voxels front/back as evenly as possible.
     """
-    # arr.shape[:3] → (z,y,x)
+    # arr.shape[:3] --> (z,y,x)
     z, y, x = arr.shape[:3]
     # unpack
     fz, fy, fx = final_size.nz, final_size.ny, final_size.nx
@@ -345,7 +365,7 @@ def pad_to_final_size(arr: np.ndarray, final_size: rtt.FinalSize) -> np.ndarray:
     padded = np.pad(
         arr, (pad_z, pad_y, pad_x, (0, 0)), mode="constant", constant_values=0
     )
-    print(f"Padded to final_size {fs} → {padded.shape}")
+    print(f"Padded to final_size {final_size} --> {padded.shape}")
     return padded
 
 
@@ -414,13 +434,28 @@ def rescale_stack(stack: np.ndarray, cfg: rtt.RescaleConfig) -> np.ndarray:
     yf = cfg.resolution_input["dy"] / cfg.resolution_output["dy"]
     xf = cfg.resolution_input["dx"] / cfg.resolution_output["dx"]
     factors = (zf, yf, xf, 1.0)
-    zoomed = ndimage.zoom(
+    # zoomed = ndimage.zoom(
+    #     padded,
+    #     factors,
+    #     order=cfg.interpolation_mode.value,
+    #     mode="grid-constant",
+    #     grid_mode=True,
+    # )
+    zoomed = sk_resize(
         padded,
-        factors,
-        order=cfg.interpolation_mode.value,
-        mode="grid-constant",
-        grid_mode=True,
-    )
+        output_shape=(
+            int(padded.shape[0] * factors[0]),
+            int(padded.shape[1] * factors[1]),
+            int(padded.shape[2] * factors[2]),
+            padded.shape[3],
+        ),
+        order=cfg.interpolation_mode.value,  # 0=nearest,1=bilinear,3=bicubic, etc.
+        mode="constant",
+        cval=0,
+        clip=True,
+        preserve_range=True,
+        anti_aliasing=False,
+    ).astype(padded.dtype)
     print(f"Zoomed to {zoomed.shape}")
 
     # 3) post‐processing
@@ -430,7 +465,7 @@ def rescale_stack(stack: np.ndarray, cfg: rtt.RescaleConfig) -> np.ndarray:
 
     # crop to bounding box first
     cropped = apply_bbox(zoomed, cfg.bbox_threshold)
-    print(f"Cropped→ {cropped.shape}")
+    print(f"Cropped--> {cropped.shape}")
 
     if mode is rtt.OutputStackType.BOUNDING_BOX:
         return cropped
@@ -444,7 +479,7 @@ def rescale_stack(stack: np.ndarray, cfg: rtt.RescaleConfig) -> np.ndarray:
             (0, 0),
         )
         padded2 = np.pad(cropped, pad_spec, mode="constant", constant_values=0)
-        print(f"Padded after crop → {padded2.shape}")
+        print(f"Padded after crop --> {padded2.shape}")
         return padded2
 
     # PAD_TO_SIZE
@@ -457,6 +492,88 @@ def rescale_stack(stack: np.ndarray, cfg: rtt.RescaleConfig) -> np.ndarray:
     raise RuntimeError(f"Unhandled output_stack_type: {mode}")
 
 
+def plan_uniform_downscale(
+    dims_list: List[Tuple[int, int, int, int]],
+    res_list: List[Tuple[float, float, float]],
+    target_res: Tuple[float, float, float],
+    tolerance: float,
+    limit_factor: float,
+) -> Tuple[Tuple[int, int, int], List[Dict[str, Any]]]:
+    """
+    Given a list of input volumes (dims,res) and a desired target_res,
+    figure out for each volume
+      1) how much to pad the input so the zoom factors are integral
+      2) what the exact zoomed shape will be
+    then take the elementwise max over all zoomed shapes to get a
+    single uniform final (Z,Y,X).
+
+    Returns:
+      final_shape:  (Fz, Fy, Fx)
+      plans:        list of per‐volume dicts:
+        {
+          "orig_dims":   (nz,ny,nx,c),
+          "in_res":      (dz,dy,dx),
+          "pad_input":   {"z":(fz,bz), "y":(fy,by), "x":(fx,bx)},
+          "zoomed":      (Z, Y, X),
+        }
+    """
+    plans: List[Dict[str, Any]] = []
+
+    for (nz, ny, nx, _c), (dz, dy, dx) in zip(dims_list, res_list):
+        # compute how much to pad the *input* so that padded_n / downscale_factor
+        # is within tolerance of an integer
+        pad_z = pad_amount(nz, target_res[0], dz, tolerance, limit_factor)
+        pad_y = pad_amount(ny, target_res[1], dy, tolerance, limit_factor)
+        pad_x = pad_amount(nx, target_res[2], dx, tolerance, limit_factor)
+
+        padded_nz = nz + pad_z[0] + pad_z[1]
+        padded_ny = ny + pad_y[0] + pad_y[1]
+        padded_nx = nx + pad_x[0] + pad_x[1]
+
+        # compute the zoomed shape:
+        # zoom_factor = original_res / target_res
+        Z = int(round(padded_nz * dz / target_res[0]))
+        Y = int(round(padded_ny * dy / target_res[1]))
+        X = int(round(padded_nx * dx / target_res[2]))
+
+        plans.append(
+            {
+                "orig_dims": (nz, ny, nx, _c),
+                "in_res": (dz, dy, dx),
+                "pad_input": {"z": pad_z, "y": pad_y, "x": pad_x},
+                "zoomed": (Z, Y, X),
+            }
+        )
+
+    # elementwise maximum of all zoomed shapes --> uniform final shape
+    final_Z = max(p["zoomed"][0] for p in plans)
+    final_Y = max(p["zoomed"][1] for p in plans)
+    final_X = max(p["zoomed"][2] for p in plans)
+
+    return (final_Z, final_Y, final_X), plans
+
+
+def filter_by_resolution_range(
+    metas: List[Dict[str, Any]], axis: str, min_val: float, max_val: float
+) -> List[Dict[str, Any]]:
+    """
+    Return only those metadata dicts whose resolution[axis] is in [min_val, max_val].
+
+    metas is the list of dicts you built in standardize_geometry, each like:
+      { "folder": Path(...),
+        "resolution": (dz,dy,dx),
+        "dimensions": (nz,ny,nx,c), }
+    axis must be one of "dz","dy","dx".
+    """
+    idx = {"dz": 0, "dy": 1, "dx": 2}[axis]
+    out = []
+    for m in metas:
+        r = m["resolution"][idx]
+        if min_val <= r <= max_val:
+            out.append(m)
+    return out
+
+
 def rescale_from_yaml(yaml_path: Union[str, Path]) -> bool:
     """
     Read the YAML, load images, rescale, save, optionally write VTR/npy.
@@ -467,6 +584,25 @@ def rescale_from_yaml(yaml_path: Union[str, Path]) -> bool:
     print(f"Original array size: {stack.shape}")
 
     out_stack = rescale_stack(stack, cfg)
+
+    # postprocessing
+    # now apply any post‐processing steps in order
+    for step in cfg.post_process:
+        if step.lower() == "histogram_stretch":
+            # import your updated function
+            from recon3d.process import histogram_stretch
+
+            out_stack = histogram_stretch(
+                out_stack,
+                clip_percentiles=cfg.clip_percentiles,
+                ignore_values=cfg.ignore_values,
+            )
+            print(
+                f"Applied histogram_stretch; clip={cfg.clip_percentiles}, ignore={cfg.ignore_values}"
+            )
+
+        else:
+            raise ValueError(f"Unknown post_process step '{step}'")
 
     # save to TIFFs
     suffix = f"{int(cfg.resolution_output['dx'])}_dx"

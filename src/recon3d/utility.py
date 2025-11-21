@@ -1420,3 +1420,38 @@ def read_images(
         f"shape={stack.shape}, dtype={stack.dtype}"
     )
     return stack
+
+
+def ask_yes_no(question: str, default: bool = None) -> bool:
+    """
+    Ask the user a yes/no question via input(), returning True for yes, False for no.
+
+    Parameters
+    ----------
+    question : str
+        The prompt to display to the user (without trailing space or default hint).
+    default : bool or None
+        If True, hitting enter returns yes.
+        If False, hitting enter returns no.
+        If None, enter is not accepted and you must type yes/no explicitly.
+
+    Returns
+    -------
+    bool
+        True for yes, False for no.
+    """
+    valid = {"y": True, "yes": True, "n": False, "no": False}
+    if default is True:
+        hint = " [Y/n] "
+    elif default is False:
+        hint = " [y/N] "
+    else:
+        hint = " [y/n] "
+
+    while True:
+        choice = input(question + hint).strip().lower()
+        if choice == "" and default is not None:
+            return default
+        if choice in valid:
+            return valid[choice]
+        print("Please respond with 'y' or 'n' (or 'yes' / 'no').")
