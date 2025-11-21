@@ -84,8 +84,9 @@ To use `CartesianAxis2D` in your code:
     CartesianAxis2D.X
 """
 
-from typing import NamedTuple
+from typing import NamedTuple, Optional, Dict, Tuple
 from enum import Enum, IntEnum
+from pathlib import Path
 import numpy as np
 import numpy.typing as npt
 
@@ -869,3 +870,49 @@ class VoidDescriptorPoreProperties(NamedTuple):
     r_b: Length
     r_c: Length
     vdf_angles: VoidDescriptorEllipsoidAngles
+
+
+##### Config CLASSES #####
+
+
+class OutputStackType(Enum):
+    RESCALED = "rescaled"
+    BOUNDING_BOX = "bounding_box"
+    PAD_AFTER_CROP = "pad_after_crop"
+    PAD_TO_SIZE = "pad_to_size"
+
+    @staticmethod
+    def from_string(s: str) -> "OutputStackType":
+        try:
+            return OutputStackType(s.lower())
+        except ValueError:
+            valid = ", ".join(e.value for e in OutputStackType)
+            raise ValueError(
+                f'"{s}" is not a valid output_stack_type. ' f"Choose one of: {valid}."
+            )
+
+
+class FinalSize(NamedTuple):
+    nx: int
+    ny: int
+    nz: int
+
+
+class RescaleConfig(NamedTuple):
+    image_dir: Path
+    image_type: str
+    out_dir: Path
+
+    resolution_input: Dict[str, float]  # keys: "dx","dy","dz"
+    resolution_output: Dict[str, float]
+    rescale_tolerance: float
+    image_limit_factor: float
+    interpolation_mode: InterpolationMode
+
+    output_stack_type: OutputStackType
+    padding: Dict[str, Tuple[int, int]]  # only for PAD_AFTER_CROP
+    final_size: Optional[FinalSize]  # only for PAD_TO_SIZE
+
+    save_npy: bool
+    writeVTR: bool
+    bbox_threshold: float = 0.0  # default

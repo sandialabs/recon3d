@@ -26,11 +26,13 @@ main()
     Runs the module from the command line, invoked from pyproject.toml with 'downscale' command.
 """
 
+# TODO fix docstring
+
 import argparse
 import itertools
 import math
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Union, Dict
 
 import numpy as np
 from scipy import ndimage
@@ -38,6 +40,55 @@ from pyevtk.hl import gridToVTK
 
 import recon3d.types as rtt
 import recon3d.utility as ut
+
+
+def parse_config(d: dict) -> rtt.RescaleConfig:
+    """
+    Turn the raw YAML dict into a Config NamedTuple.
+    Both `padding:` and `final_size:` are optional in the YAML.
+    """
+    # padding is only used by PAD_AFTER_CROP
+    raw_pad = d.get("padding", {})  # e.g. {"nz":4, "ny":[5,4], ...}
+    padding: Dict[str, Tuple[int, int]] = {}
+    for axis in ("nz", "ny", "nx"):
+        if axis not in raw_pad:
+            continue
+        v = raw_pad[axis]
+        if isinstance(v, (list, tuple)):
+            if len(v) != 2:
+                raise ValueError(f"padding.{axis} must be an int or 2‐tuple, got {v}")
+            padding[axis] = (int(v[0]), int(v[1]))
+        else:
+            # single int → uniform padding both sides
+            n = int(v)
+            padding[axis] = (n, n)
+
+    # final_size is only used by PAD_TO_SIZE
+    raw_fs = d.get("final_size", None)
+    final_size = None
+    if raw_fs is not None:
+        final_size = rtt.FinalSize(
+            nz=int(raw_fs["nz"]),
+            ny=int(raw_fs["ny"]),
+            nx=int(raw_fs["nx"]),
+        )
+
+    return rtt.RescaleConfig(
+        image_dir=Path(d["image_dir"]).expanduser(),
+        image_type=d["image_type"],
+        out_dir=Path(d["out_dir"]).expanduser(),
+        resolution_input=d["resolution_input"],
+        resolution_output=d["resolution_output"],
+        rescale_tolerance=d["rescale_tolerance"],
+        image_limit_factor=d["image_limit_factor"],
+        interpolation_mode=rtt.InterpolationMode.from_string(d["interpolation_mode"]),
+        output_stack_type=rtt.OutputStackType.from_string(d["output_stack_type"]),
+        padding=padding,
+        final_size=final_size,
+        save_npy=d["save_npy"],
+        writeVTR=d["writeVTR"],
+        bbox_threshold=d.get("bbox_threshold", 0.0),
+    )
 
 
 def apply_bbox(image_stack: np.ndarray, min_threshold: float) -> np.ndarray:
@@ -118,177 +169,6 @@ def bbox_range(
     (z_start, z_end, y_start, y_end, x_start, x_end) = tuple(bbox)
 
     return (z_start, z_end, y_start, y_end, x_start, x_end)
-
-
-def downscale(path_file_input: str) -> bool:
-    """
-    Downscale the image stack based on the provided input file.
-
-    This function reads the input file, processes the image stack, and saves the downscaled stack.
-
-    Parameters
-    ----------
-    path_file_input : str
-        The path to the input file.
-
-    Returns
-    -------
-    bool
-        True if the processing is successful, False otherwise.
-    """
-
-    processed = False
-
-    print(f"Processing file: {path_file_input}")
-
-    db = ut.yaml_to_dict(Path(path_file_input))
-
-    output_stack_type = db["output_stack_type"]
-    if not (
-        (output_stack_type == "downscaled")
-        or (output_stack_type == "bounding_box")
-        or (output_stack_type == "padded")
-    ):
-        raise ValueError(
-            f'Invalid "output_stack_type" of "{output_stack_type}" input. Valid options inclue "downscaled", "bounding_box", or "padded".'
-        )
-
-    interpolation_mode = rtt.InterpolationMode.from_string(db["interpolation_mode"])
-
-    segmented_stack = ut.read_images(
-        Path(db["image_dir"]).expanduser(), db["image_type"]
-    )
-    # zyx dimension ordering
-    print(f"Original array size: {segmented_stack.shape}")
-
-    dim_list = ["dz", "dy", "dx"]
-
-    z_pad, y_pad, x_pad = [
-        pad_amount(
-            segmented_stack.shape[dim],
-            db["resolution_output"][dim_list[dim]],
-            db["resolution_input"][dim_list[dim]],
-            db["downscale_tolerance"],
-            db["image_limit_factor"],
-        )
-        for dim in range(0, 3)  # 3 spatial dimensions, with channel support below
-    ]
-    c_pad = (0, 0)  # no padding for channel dimension
-    padded_stack = np.pad(
-        segmented_stack, (z_pad, y_pad, x_pad, c_pad)
-    )  # uses constant 0 padding by default
-    print(f"New array size: {padded_stack.shape}")
-
-    # Use list comprehension
-    z_ratio, y_ratio, x_ratio = [
-        db["resolution_input"][dim_list[dim]] / db["resolution_output"][dim_list[dim]]
-        for dim in range(0, 3)  # 3 spatial dimensions, with channel support below
-    ]
-
-    c_ratio = 1  # no scaling for channel dimension
-    downscaled_stack = ndimage.zoom(
-        padded_stack,
-        (z_ratio, y_ratio, x_ratio, c_ratio),
-        # order=0,
-        order=interpolation_mode.value,
-        mode="grid-constant",
-        grid_mode=True,
-    )
-
-    print(f"Downscaled array size: {downscaled_stack.shape}")
-
-    output_stack_type = db["output_stack_type"]
-    if output_stack_type == "downscaled":
-        output_stack = downscaled_stack
-
-    else:
-        cropped_stack = apply_bbox(downscaled_stack, 0)
-
-        if output_stack_type == "bounding_box":
-            output_stack = cropped_stack
-
-        else:  # output_stack_type == "padded"
-            # Pad after cropping
-            (box_pad_z, box_pad_y, box_pad_x) = (
-                db["padding"]["nz"],
-                db["padding"]["ny"],
-                db["padding"]["nx"],
-            )
-            padded_stack = np.pad(
-                cropped_stack,
-                (
-                    (box_pad_z,),
-                    (box_pad_y,),
-                    (box_pad_x,),
-                    (0,),
-                ),  # no padding for channel dimension
-            )
-            output_stack = padded_stack
-
-    # output new downscaled stack
-    out_dir = db["out_dir"]
-    folder_suffix = f"{int(db['resolution_output']['dx'])}_dx"
-    save_downscale_stack(output_stack, Path(out_dir), folder_suffix)
-
-    # TODO: functionalize and test
-    if db["save_npy"]:
-        # npy_path = Path(out_dir).joinpath(f"{folder_suffix}.npy")
-        npy_path = Path(out_dir).expanduser().joinpath(f"{folder_suffix}.npy")
-        np.save(str(npy_path), output_stack)
-        print(".npy file saved.")
-
-    # TODO: functionalize and test
-    if db["writeVTR"]:
-        # NumPy array of shape (Z, Y, X, C)
-        # where C is your channel dimension
-        # VTK (and gridToVTK) want your data ordered (X, Y, Z, C)
-        # so we permute axes
-        data_for_vtk = output_stack.transpose(2, 1, 0, 3)
-        nx, ny, nz, nc = data_for_vtk.shape
-
-        # define your grid coordinates
-        # (for a uniform grid you can just use arange)
-        x = np.arange(nx + 1, dtype=np.float32)
-        y = np.arange(ny + 1, dtype=np.float32)
-        z = np.arange(nz + 1, dtype=np.float32)
-
-        # deal with channels
-        cell_fields = {}
-        if nc == 1:
-            # one‐channel → scalar
-            cell_fields["imagedata"] = data_for_vtk[..., 0]
-        elif nc == 3:
-            # three‐channel → vector
-            cell_fields["imagedata"] = (
-                data_for_vtk[..., 0],
-                data_for_vtk[..., 1],
-                data_for_vtk[..., 2],
-            )
-        else:
-            # >3 channels → write them out as separate scalar fields
-            for c in range(nc):
-                cell_fields[f"imagedata_c{c}"] = data_for_vtk[..., c]
-
-        vtk_path = Path(out_dir).expanduser().joinpath(f"{folder_suffix}")
-        gridToVTK(str(vtk_path), x, y, z, cellData=cell_fields)
-        print(".vtr file saved.")
-
-        # nx, ny, nz = data.shape[0], data.shape[1], data.shape[2]
-
-        # x = np.arange(0, nx + 1)
-        # y = np.arange(0, ny + 1)
-        # z = np.arange(0, nz + 1)
-
-        # # vtk_path = Path(out_dir).joinpath(f"{folder_suffix}")
-        # vtk_path = Path(out_dir).expanduser().joinpath(f"{folder_suffix}")
-        # gridToVTK(str(vtk_path), x, y, z, cellData={"imagedata": data})
-        # print(".vtr file saved.")
-
-    processed = True  # overwrite, if we reach this point, all code is successful
-
-    print(f"Finished processing file: {path_file_input}")
-
-    return processed
 
 
 def pad_amount(
@@ -407,9 +287,7 @@ def padded_size(
     return new_dim
 
 
-def save_downscale_stack(
-    image_stack: np.ndarray, path: Path, folder_suffix: str
-) -> bool:
+def save_rescale_stack(image_stack: np.ndarray, path: Path, folder_suffix: str) -> bool:
     """
     Save the new stack as a tiff image stack.
 
@@ -447,12 +325,171 @@ def save_downscale_stack(
     return True
 
 
+def pad_to_final_size(arr: np.ndarray, final_size: rtt.FinalSize) -> np.ndarray:
+    """
+    Pad (only spatial dims) so that arr.shape[:3] → final_size exactly,
+    splitting extra voxels front/back as evenly as possible.
+    """
+    # arr.shape[:3] → (z,y,x)
+    z, y, x = arr.shape[:3]
+    # unpack
+    fz, fy, fx = final_size.nz, final_size.ny, final_size.nx
+
+    def split(delta: int) -> Tuple[int, int]:
+        return (math.ceil(delta / 2), math.floor(delta / 2))
+
+    pad_z = split(fz - z)
+    pad_y = split(fy - y)
+    pad_x = split(fx - x)
+
+    padded = np.pad(
+        arr, (pad_z, pad_y, pad_x, (0, 0)), mode="constant", constant_values=0
+    )
+    print(f"Padded to final_size {fs} → {padded.shape}")
+    return padded
+
+
+def write_vtr(arr: np.ndarray, out_dir: Path, suffix: str):
+    """Permute to x,y,z,c order and write via gridToVTK."""
+    data = arr.transpose(2, 1, 0, 3)
+    nx, ny, nz, nc = data.shape
+    x = np.arange(nx + 1, dtype=np.float32)
+    y = np.arange(ny + 1, dtype=np.float32)
+    z = np.arange(nz + 1, dtype=np.float32)
+
+    cell_fields = {}
+    if nc == 1:
+        cell_fields["imagedata"] = data[..., 0]
+    elif nc == 3:
+        cell_fields["imagedata"] = (data[..., 0], data[..., 1], data[..., 2])
+    else:
+        for c in range(nc):
+            cell_fields[f"imagedata_c{c}"] = data[..., c]
+
+    vtk_path = out_dir.joinpath(suffix)
+    gridToVTK(str(vtk_path), x, y, z, cellData=cell_fields)
+    print(f".vtr written to {vtk_path!s}")
+
+
+def rescale_stack(stack: np.ndarray, cfg: rtt.RescaleConfig) -> np.ndarray:
+    """
+    1) Compute & apply input‐padding so that zoom yields integer dims
+    2) Zoom
+    3) Depending on cfg.output_stack_type:
+        - crop to bbox
+        - pad after crop (cfg.padding)
+        - pad to cfg.final_size
+    """
+    # 1) input‐pad
+    z_in, y_in, x_in = stack.shape[:3]
+    z_pad = pad_amount(
+        z_in,
+        cfg.resolution_output["dz"],
+        cfg.resolution_input["dz"],
+        cfg.rescale_tolerance,
+        cfg.image_limit_factor,
+    )
+    y_pad = pad_amount(
+        y_in,
+        cfg.resolution_output["dy"],
+        cfg.resolution_input["dy"],
+        cfg.rescale_tolerance,
+        cfg.image_limit_factor,
+    )
+    x_pad = pad_amount(
+        x_in,
+        cfg.resolution_output["dx"],
+        cfg.resolution_input["dx"],
+        cfg.rescale_tolerance,
+        cfg.image_limit_factor,
+    )
+    c_pad = (0, 0)  # no channel padding
+    padded = np.pad(
+        stack, (z_pad, y_pad, x_pad, c_pad), mode="constant", constant_values=0
+    )
+    print(f"Padded input to {padded.shape}")
+
+    # 2) zoom
+    zf = cfg.resolution_input["dz"] / cfg.resolution_output["dz"]
+    yf = cfg.resolution_input["dy"] / cfg.resolution_output["dy"]
+    xf = cfg.resolution_input["dx"] / cfg.resolution_output["dx"]
+    factors = (zf, yf, xf, 1.0)
+    zoomed = ndimage.zoom(
+        padded,
+        factors,
+        order=cfg.interpolation_mode.value,
+        mode="grid-constant",
+        grid_mode=True,
+    )
+    print(f"Zoomed to {zoomed.shape}")
+
+    # 3) post‐processing
+    mode = cfg.output_stack_type
+    if mode is rtt.OutputStackType.RESCALED:
+        return zoomed
+
+    # crop to bounding box first
+    cropped = apply_bbox(zoomed, cfg.bbox_threshold)
+    print(f"Cropped→ {cropped.shape}")
+
+    if mode is rtt.OutputStackType.BOUNDING_BOX:
+        return cropped
+
+    if mode is rtt.OutputStackType.PAD_AFTER_CROP:
+        # padding specified in cfg.padding as {"nz":(before,after), ...}
+        pad_spec = (
+            cfg.padding["nz"],
+            cfg.padding["ny"],
+            cfg.padding["nx"],
+            (0, 0),
+        )
+        padded2 = np.pad(cropped, pad_spec, mode="constant", constant_values=0)
+        print(f"Padded after crop → {padded2.shape}")
+        return padded2
+
+    # PAD_TO_SIZE
+    if mode is rtt.OutputStackType.PAD_TO_SIZE:
+        if cfg.final_size is None:
+            raise ValueError("final_size must be set for PAD_TO_SIZE mode")
+        return pad_to_final_size(cropped, cfg.final_size)
+
+    # unreachable
+    raise RuntimeError(f"Unhandled output_stack_type: {mode}")
+
+
+def rescale_from_yaml(yaml_path: Union[str, Path]) -> bool:
+    """
+    Read the YAML, load images, rescale, save, optionally write VTR/npy.
+    """
+    yaml_path = Path(yaml_path)
+    cfg = parse_config(ut.yaml_to_dict(yaml_path))
+    stack = ut.read_images(cfg.image_dir, cfg.image_type)
+    print(f"Original array size: {stack.shape}")
+
+    out_stack = rescale_stack(stack, cfg)
+
+    # save to TIFFs
+    suffix = f"{int(cfg.resolution_output['dx'])}_dx"
+    save_rescale_stack(out_stack, cfg.out_dir, suffix)
+
+    if cfg.save_npy:
+        npy_path = cfg.out_dir.joinpath(f"{suffix}.npy")
+        np.save(str(npy_path), out_stack)
+        print(f".npy saved to {npy_path!s}")
+
+    if cfg.writeVTR:
+        write_vtr(out_stack, cfg.out_dir, suffix)
+
+    print(f"Finished processing {yaml_path!s}")
+    return True
+
+
 def main():
     """
-    Runs the module from the command line, invoked from pyproject.toml with 'downscale' command.
+    Runs the module from the command line, invoked from pyproject.toml with 'rescale' command.
 
     This function sets up the command line argument parser, parses the input arguments,
-    and calls the `downscale` function with the provided input file.
+    and calls the `rescale` function with the provided input file.
 
     Parameters
     ----------
@@ -474,7 +511,7 @@ def main():
     args = parser.parse_args()
     input_file = args.input_file
 
-    downscale(path_file_input=input_file)
+    rescale_from_yaml(yaml_path=input_file)
 
 
 if __name__ == "__main__":

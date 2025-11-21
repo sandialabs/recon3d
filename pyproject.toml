@@ -90,7 +90,7 @@ hdf_to_npy="recon3d.hdf_io:hdf_to_npy_command_line" # see note on hdf_io.voxel_t
 image_to_npy="recon3d.image_stack_to_array:main" # formerly image_stack_to_array
 
 # see tutorial 6
-downscale="recon3d.downscale:main"
+rescale="recon3d.rescale:main"
 
 # see tutorial 6, deprecated, npy_to_mesh is now voxel_to_mesh # deprecated
 # npy_to_mesh="recon3d.npy_to_mesh:main"

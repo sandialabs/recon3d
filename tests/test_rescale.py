@@ -11,7 +11,7 @@ import pytest
 # import yaml
 
 # local libraries
-from recon3d import downscale as ds
+from recon3d import rescale as rs
 import recon3d.utility as ut
 from recon3d.static_test_paths import *
 
@@ -22,14 +22,15 @@ from recon3d.static_test_paths import *
 #     return Path(__file__).parent.joinpath("examples", "downscale_example.yml")
 
 
-def test_downscale():
-    """Tests that the test images are downscaled."""
-    aa = DOWNSCALE_YML
+def test_rescale():
+    """Tests that the test images are rescaled."""
+    aa = RESCALE_YML
     db = ut.yaml_to_dict(aa)
 
     # overwrite so that this test runs on any machine
     db["image_dir"] = str(
         Path(__file__).parent.joinpath("data", "cylinder_machined_semantic")
+        # Path(__file__).parent.joinpath("data", "cylinder_machined_grayscale")
     )
     db["out_dir"] = str(
         Path(__file__).parent.joinpath("test_output", "cylinder_machined")
@@ -48,7 +49,7 @@ def test_downscale():
         pass
 
     bb = ut.dict_to_yaml(db, str(temp_path))
-    success = ds.downscale(path_file_input=str(bb))
+    success = rs.rescale_from_yaml(yaml_path=str(bb))
 
     ut.rmdir(temp_path.parent)
     # temp_path.parent.rmdir()  # delete the temp.yml after checking
@@ -65,7 +66,7 @@ def test_apply_bbox():
     image_stack = ut.read_images(dataset_path, image_type)
 
     threshold = 0
-    bb_image_stack = ds.apply_bbox(image_stack, threshold)
+    bb_image_stack = rs.apply_bbox(image_stack, threshold)
 
     correct_shape = (21, 144, 145, 1)
 
@@ -79,14 +80,14 @@ def test_bbox_range():
 
     image_stack = ut.read_images(dataset_path, image_type)
     threshold = 0
-    found_bbox_range = ds.bbox_range(image_stack, threshold)
+    found_bbox_range = rs.bbox_range(image_stack, threshold)
 
     known_bbox_range = (0, 20, 3, 146, 4, 148)
 
     assert found_bbox_range == known_bbox_range
 
 
-def test_downscale_save_stack():
+def test_save_rescale_stack():
     """check the cropped images are saved"""
     dataset_path = Path(__file__).parent.joinpath("data", "cylinder_machined_semantic")
     image_type = ".tif"
@@ -95,7 +96,7 @@ def test_downscale_save_stack():
     save_path = Path(__file__).parent.joinpath("test_output", "cylinder_machined")
     folder_suffix = f"{int(100.0)}_dx"
 
-    ds.save_downscale_stack(image_stack, save_path, folder_suffix)
+    rs.save_rescale_stack(image_stack, save_path, folder_suffix)
 
     known_output_folder_path = save_path.joinpath(
         f"images_at_resolution_{folder_suffix}"
@@ -131,7 +132,7 @@ def test_downscale_save_stack():
 #         "save_npy": True,
 #         "writeVTR": True,
 #     }
-#     temp_yaml = ds.dict_to_yaml(db, str(temp_path))
+#     temp_yaml = rs.dict_to_yaml(db, str(temp_path))
 #     found_yaml = Path(__file__).parent.joinpath("files", "downscale_example.yml")
 
 #     assert ut.compare_files(temp_yaml, found_yaml, [])
@@ -153,7 +154,7 @@ def test_downscale_save_stack():
 #         "save_npy": True,
 #         "writeVTR": True,
 #     }
-#     found_db = ds.yaml_to_dict(aa)
+#     found_db = rs.yaml_to_dict(aa)
 
 #     assert known_db == found_db
 
@@ -165,7 +166,7 @@ def test_padded_dim_small():
     original_res = 3.0
     tolerance = 0.01
     limit_factor = 2
-    found_padded_size = ds.padded_size(
+    found_padded_size = rs.padded_size(
         img_stack_dim_size, target_res, original_res, tolerance, limit_factor
     )
 
@@ -181,7 +182,7 @@ def test_padded_dim_large():
     original_res = 1.08
     tolerance = 0.001
     limit_factor = 2
-    found_padded_size = ds.padded_size(
+    found_padded_size = rs.padded_size(
         img_stack_dim_size, target_res, original_res, tolerance, limit_factor
     )
 
@@ -197,7 +198,7 @@ def test_pad_amount():
     original_res = 1.08
     tolerance = 0.001
     limit_factor = 2
-    found_pad_dim = ds.pad_amount(
+    found_pad_dim = rs.pad_amount(
         img_stack_dim_size, target_res, original_res, tolerance, limit_factor
     )
 

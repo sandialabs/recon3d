@@ -178,24 +178,25 @@ def test_dict_to_yaml():
     """Tests that the dict is converted to a yaml file."""
     temp_path = Path(__file__).parent.joinpath("data", "temp.yml")
     db = {
-        "cli_entry_points": ["downscale"],
-        "downscale_tolerance": 0.0001,
-        "interpolation_mode": "nearest",
+        "cli_entry_points": ["rescale"],
+        "rescale_tolerance": 0.0001,
+        "interpolation_mode": "linear",
         "image_dir": None,
         "image_limit_factor": 2.0,
         "image_type": ".tif",
         "out_dir": None,
-        "output_stack_type": "padded",
-        "padding": {"nx": 1, "ny": 1, "nz": 1},
+        "output_stack_type": "pad_after_crop",
+        "final_size": {"nx": 20, "ny": 30, "nz": 21},
+        "padding": {"nx": 1, "ny": 5, "nz": 4},
         "resolution_input": {"dx": 10.0, "dy": 10.0, "dz": 10.0},
         "resolution_output": {"dx": 100.0, "dy": 100.0, "dz": 10.0},
         "save_npy": True,
         "writeVTR": True,
     }
     temp_yaml = ut.dict_to_yaml(db, str(temp_path))
-    found_yaml = DOWNSCALE_YML  # Path(__file__).parent.joinpath("examples", "downscale_example.yml")
+    found_yaml = RESCALE_YML  # Path(__file__).parent.joinpath("examples", "downscale_example.yml")
 
-    assert ut.compare_files(temp_yaml, found_yaml, [])
+    assert ut.compare_files(temp_yaml, found_yaml)
 
     try:
         temp_path.unlink()  # delete the temp.yml if it exists aready
@@ -352,17 +353,18 @@ def test_pairwise_circular():
 
 def test_yaml_to_dict():
     """Tests that the yaml file is converted to the dict."""
-    aa = DOWNSCALE_YML
+    aa = RESCALE_YML
     known_db = {
-        "cli_entry_points": ["downscale"],
-        "downscale_tolerance": 0.0001,
-        "interpolation_mode": "nearest",
+        "cli_entry_points": ["rescale"],
+        "rescale_tolerance": 0.0001,
+        "interpolation_mode": "linear",
         "image_dir": None,
         "image_limit_factor": 2.0,
         "image_type": ".tif",
         "out_dir": None,
-        "output_stack_type": "padded",
-        "padding": {"nx": 1, "ny": 1, "nz": 1},
+        "output_stack_type": "pad_after_crop",
+        "final_size": {"nx": 20, "ny": 30, "nz": 21},
+        "padding": {"nx": 1, "ny": 5, "nz": 4},
         "resolution_input": {"dx": 10.0, "dy": 10.0, "dz": 10.0},
         "resolution_output": {"dx": 100.0, "dy": 100.0, "dz": 10.0},
         "save_npy": True,

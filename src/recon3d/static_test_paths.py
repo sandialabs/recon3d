@@ -6,8 +6,8 @@ BINARY_TO_SEMANTIC_YML = RECON3D_PATH.joinpath(
     "docs", "userguide", "src", "binary_to_semantic", "binary_to_semantic.yml"
 )
 
-DOWNSCALE_YML = RECON3D_PATH.joinpath(
-    "docs", "userguide", "src", "downscale", "downscale.yml"
+RESCALE_YML = RECON3D_PATH.joinpath(
+    "docs", "userguide", "src", "rescale", "rescale.yml"
 )
 
 IMAGE_TO_HDF_YML = RECON3D_PATH.joinpath(

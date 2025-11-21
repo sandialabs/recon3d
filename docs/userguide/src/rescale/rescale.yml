@@ -1,0 +1,31 @@
+cli_entry_points:
+- rescale
+rescale_tolerance: 0.0001
+# options: nearest, linear, cubic, 
+interpolation_mode: linear
+image_dir: null
+image_limit_factor: 2.0
+image_type: .tif
+out_dir: null
+# options: rescaled, bounding_box, pad_after_crop, pad_to_size
+output_stack_type: pad_after_crop
+# only needed for PAD_TO_SIZE
+final_size:
+  nx: 20
+  ny: 30
+  nz: 21
+# only needed for PAD_AFTER_CROP, uniform on both sides of an axis
+padding:
+  nx: 1
+  ny: 5
+  nz: 4
+resolution_input:
+  dx: 10.0
+  dy: 10.0
+  dz: 10.0
+resolution_output:
+  dx: 100.0
+  dy: 100.0
+  dz: 10.0
+save_npy: true
+writeVTR: true
