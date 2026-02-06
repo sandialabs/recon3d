@@ -601,6 +601,22 @@ def rescale_from_yaml(yaml_path: Union[str, Path]) -> bool:
                 f"Applied histogram_stretch; clip={cfg.clip_percentiles}, ignore={cfg.ignore_values}"
             )
 
+            # TODO add secondary crop operation
+            # recrop here
+            # matlab indices, need inclusive, and index starts at 1, not 0
+            # row_bounds = (200, 1660)
+            # col_bounds = (280, 1580
+            col_bounds = (200, 1660)
+            row_bounds = (280, 1580)
+            page_bounds = (195, 630)
+            out_stack = out_stack[
+                page_bounds[0] - 1 : page_bounds[1],
+                col_bounds[0] - 1 : col_bounds[1],
+                row_bounds[0] - 1 : row_bounds[1],
+            ]
+
+            # TODO: option for 3D Tiff
+
         else:
             raise ValueError(f"Unknown post_process step '{step}'")
 
